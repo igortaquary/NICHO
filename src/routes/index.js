@@ -2,7 +2,7 @@ import React from 'react';
 import MainPages from './main';
 import AuthPages from './auth';
 
-const userLogged = false;
+const userLogged = true;
 
 const Routes = () => {
 
