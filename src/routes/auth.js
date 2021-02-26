@@ -9,7 +9,15 @@ const AuthPages = () => {
     return(
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name='Tela de login' component={LoginPage}/>
+                <Stack.Screen 
+                    name='Tela de login' 
+                    component={LoginPage}
+                    options={
+                        {
+                            headerShown: false,
+                        }
+                    }
+                />
             </Stack.Navigator>
         </NavigationContainer>
     )
