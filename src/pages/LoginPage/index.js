@@ -23,7 +23,7 @@ import {
 import LoginBg from '../../assets/login-bg.jpg';
 import LogoImg from '../../assets/nicho-logo.png';
 
-const LoginPage = () => {
+const LoginPage = ({navigation}) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} enabled style={{ flex: 1 }}>
             <ImageBackground source={LoginBg} style={{flex: 1}} >
@@ -49,7 +49,7 @@ const LoginPage = () => {
                                     Fazer login
                                     </LoginButtonText>
                             </LoginButton>
-                            <RegisterLink>
+                            <RegisterLink onPress={() => navigation.navigate('SignUp')}>
                                 <RegisterLinkText>Ainda não possui cadastro?</RegisterLinkText>
                             </RegisterLink>
                             <ChangePasswordLink>
