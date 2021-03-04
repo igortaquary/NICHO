@@ -1,11 +1,11 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Text, View } from 'react-native';
-import CategoryPage from '../CategoryPage';
+import CategoryPage from '../pages/CategoryPage';
 
 const TopTab = createMaterialTopTabNavigator();
 
-const HomePage = () => {
+const Home = () => {
     return(
          <TopTab.Navigator>
             <TopTab.Screen name="Região" component={CategoryPage}/>
@@ -14,4 +14,4 @@ const HomePage = () => {
     )
 };
 
-export default HomePage;
+export default Home;
