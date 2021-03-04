@@ -6,9 +6,19 @@ const Stack = createStackNavigator();
 
 const AuthPages = () => {
     return(
-        <Stack.Navigator>
-            <Stack.Screen name='Tela de login' component={LoginPage}/>
-        </Stack.Navigator>
+
+            <Stack.Navigator>
+                <Stack.Screen 
+                    name='Tela de login' 
+                    component={LoginPage}
+                    options={
+                        {
+                            headerShown: false,
+                        }
+                    }
+                />
+            </Stack.Navigator>
+
     )
 };
 
