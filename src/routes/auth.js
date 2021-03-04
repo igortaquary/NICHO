@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from '../pages/LoginPage';
 
@@ -7,7 +6,7 @@ const Stack = createStackNavigator();
 
 const AuthPages = () => {
     return(
-        <NavigationContainer>
+
             <Stack.Navigator>
                 <Stack.Screen 
                     name='Tela de login' 
@@ -19,7 +18,7 @@ const AuthPages = () => {
                     }
                 />
             </Stack.Navigator>
-        </NavigationContainer>
+
     )
 };
 
