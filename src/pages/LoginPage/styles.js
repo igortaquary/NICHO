@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 import {View, SafeAreaView, Image, Text, TextInput, TouchableOpacity, ScrollView} from 'react-native';
 import LoginBg from '../../assets/login-bg.jpg';
 

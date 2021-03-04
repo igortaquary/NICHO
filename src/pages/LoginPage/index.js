@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, KeyboardAvoidingView, ImageBackground } from 'react-native';
+import { Text, KeyboardAvoidingView, ImageBackground, Platform } from 'react-native';
 import {
     Container,
     ScrollContainer,
@@ -33,13 +33,13 @@ const LoginPage = ({navigation}) => {
                         <Line />
                         <Logo source={LogoImg} />
                         <TitleText>
-                            Até onde sua criatividade pode te levar?
+                            Até onde sua criatividade pode te levar? 
                             </TitleText>
                         <MainContainer>
                             <MainContainerTitle>ENTRAR</MainContainerTitle>
                             <MainContainerSubTitle>Estamos muito felizes em te ver novamente!</MainContainerSubTitle>
                             <InputContainer>
-                                <Input placeholder='Email' />
+                                <Input placeholder='E-mail' />
                             </InputContainer>
                             <InputContainer>
                                 <Input placeholder='Senha' />
