@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, KeyboardAvoidingView, ImageBackground, Platform } from 'react-native';
+import { Text, KeyboardAvoidingView, ImageBackground, Platform, StatusBar } from 'react-native';
 import {
     Container,
     ScrollContainer,
@@ -26,6 +26,7 @@ import LogoImg from '../../assets/nicho-logo.png';
 const LoginPage = ({navigation}) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} enabled style={{ flex: 1 }}>
+            <StatusBar translucent />
             <ImageBackground source={LoginBg} style={{flex: 1}} >
                 <ScrollContainer>
                     <Container>
