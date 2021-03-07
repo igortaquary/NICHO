@@ -42,6 +42,8 @@ export default function Slider() {
                 <Text style={[Style.label, Style.secondLabel]}>10kg</Text>
                 <DottedLine style={Style.dottedLine} />
               </>
+            ) : sliderValue == 10 ? (
+              <Text style={[Style.label, Style.secondLabel]}>10kg</Text>
             ) : (
               <Text
                 style={[Style.label, Style.lessThanLabel, Style.secondLabel]}
@@ -56,6 +58,8 @@ export default function Slider() {
                 <Text style={[Style.label, Style.thirdLabel]}>20kg</Text>
                 <DottedLine style={Style.dottedLine} />
               </>
+            ) : sliderValue == 20 ? (
+              <Text style={[Style.label, Style.thirdLabel]}>20kg</Text>
             ) : (
               <Text
                 style={[Style.label, Style.lessThanLabel, Style.thirdLabel]}
@@ -70,6 +74,8 @@ export default function Slider() {
                 <Text style={[Style.label, Style.fourthLabel]}>30kg</Text>
                 <DottedLine style={Style.dottedLine} />
               </>
+            ) : sliderValue == 30 ? (
+              <Text style={[Style.label, Style.fourthLabel]}>30kg</Text>
             ) : (
               <Text
                 style={[Style.label, Style.lessThanLabel, Style.fourthLabel]}
@@ -84,6 +90,8 @@ export default function Slider() {
                 <Text style={[Style.label, Style.fifthLabel]}>40kg</Text>
                 <DottedLine style={Style.dottedLine} />
               </>
+            ) : sliderValue == 40 ? (
+              <Text style={[Style.label, Style.fifthLabel]}>40kg</Text>
             ) : (
               <Text
                 style={[Style.label, Style.lessThanLabel, Style.fifthLabel]}
@@ -95,6 +103,8 @@ export default function Slider() {
           <View style={{ left: cw(350) }}>
             {sliderValue >= 50 ? (
               <Text style={[Style.label, Style.sixthLabel]}>50kg+</Text>
+            ) : sliderValue == 50 ? (
+              <Text style={[Style.label, Style.sixthLabel]}>50kg</Text>
             ) : (
               <>
                 <Text
@@ -110,9 +120,8 @@ export default function Slider() {
         <SliderRNE
           animationType={"spring"}
           value={sliderValue}
-          //   onValueChange={(value) => setSliderValue(value)}
-          step={step}
-          onValueChange={(value) => changeStep(value)}
+          onValueChange={(value) => setSliderValue(value)}
+          step={1}
           minimumValue={1}
           maximumValue={50}
           minimumTrackTintColor="#707070"
@@ -123,7 +132,7 @@ export default function Slider() {
           style={Style.sliderStyle}
         ></SliderRNE>
       </View>
-      <Text>{sliderValue}</Text>
+      <Text>{sliderValue}Kg</Text>
     </>
   );
 }

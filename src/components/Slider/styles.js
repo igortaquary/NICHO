@@ -18,7 +18,6 @@ export default StyleSheet.create({
   },
 
   thumbStyle: {
-    // zIndex: 10,
     width: cw(17),
     height: cw(17),
     backgroundColor: "#FFFFFF",
@@ -37,8 +36,7 @@ export default StyleSheet.create({
     alignSelf: "flex-start",
 
     top: ch(26.2),
-    //   right: cw(11),
-    //   marginLeft: cw(7),
+    zIndex: 1,
   },
 
   label: {
@@ -82,7 +80,6 @@ export default StyleSheet.create({
 
   dottedLine: {
     position: "absolute",
-    zIndex: cw(2),
     backgroundColor: "#FFFFFF",
     borderWidth: cw(1),
     borderColor: "#FFFFFF",
