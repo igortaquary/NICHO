@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from '../pages/HomePage';
 import LocationsPage from '../pages/LocationsPage';
+import Teste from '../pages/CategoryPage/Filter/filters'
 
 const Tab = createBottomTabNavigator();
 
@@ -14,6 +15,7 @@ const MainPages = () => {
                 <Tab.Screen name="Locais" component={LocationsPage} />
                 <Tab.Screen name="Salvos" component={HomePage} />
                 <Tab.Screen name="Seguindo" component={HomePage} />
+                <Tab.Screen name="FiltrosTemp" component={Teste} />
             </Tab.Navigator>
         </NavigationContainer>
     )
