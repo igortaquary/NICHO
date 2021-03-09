@@ -23,7 +23,7 @@ import {
 import LoginBg from '../../assets/login-bg.jpg';
 import LogoImg from '../../assets/nicho-logo.png';
 
-const LoginPage = () => {
+const LoginPage = ({navigation}) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} enabled style={{ flex: 1 }}>
             <StatusBar translucent />
@@ -61,8 +61,10 @@ const LoginPage = () => {
                             style={{ marginTop: 24, marginBottom: 24, fontSize: 16, color: 'white', fontFamily: 'Raleway_400Regular' }}>
                             OU
                             </Text>
-                        <ExploreButton>
-                            <ExploreButtonText>Explore o app sem se conectar</ExploreButtonText>
+                        <ExploreButton onPress={ () => navigation.navigate('Main')}>
+                            <ExploreButtonText>
+                                Explore o app sem se conectar
+                            </ExploreButtonText>
                         </ExploreButton>
                     </Container>
                 </ScrollContainer>
