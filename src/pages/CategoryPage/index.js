@@ -2,20 +2,23 @@ import React from 'react';
 import { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-const CategoryPage = () => {
+const CategoryPage = ({navigation}) => {
 
     const [category, setCategory] = useState(0);
 
     return(
         <View >
             <Text>
-                    PAgina de categoria {category}
+                Teste de state {category}
             </Text>
-            <TouchableOpacity onPress={ () => setCategory(category+1)} style={{backgroundColor: 'blue'}}>
+            <TouchableOpacity onPress={ () => setCategory(category+1)}>
                 <Text>
-                    clique aq
+                    Add
                 </Text>
             </TouchableOpacity>
+            <Text onPress={ () => navigation.navigate("NotFound")}>
+                Ir pra pagina solta aleatória
+            </Text>
         </View>
     )
 };
