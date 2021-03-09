@@ -30,17 +30,17 @@ const data = [
   {
     id: 1,
     color: 'yellow',
-    url: 'https://source.unsplash.com/random'
+    url: 'https://source.unsplash.com/featured/?artesanato'
   },
   {
     id: 2,
     color: 'blue',
-    url: 'https://source.unsplash.com/random'
+    url: 'https://source.unsplash.com/featured/?artesanato'
   },
   {
     id: 3,
     color: 'orange',
-    url: 'https://source.unsplash.com/random'
+    url: 'https://source.unsplash.com/featured/?artesanato'
   },
 ]
 

@@ -5,6 +5,7 @@ import MainPages from './main';
 import AuthPages from './auth';
 import { StatusBar } from 'react-native';
 import NotFoundPage from '../pages/NotFoundPage';
+import ProductPage from '../pages/ProductPage';
 
 const userLogged = false;
 const Stack = createStackNavigator();
@@ -19,6 +20,7 @@ const Routes = () => {
                 <Stack.Screen options={{headerShown: false}} name='Main' component={MainPages} /> 
 
                 <Stack.Screen options={{headerShown: true}} name='NotFound' component={NotFoundPage} />
+                <Stack.Screen options={{headerShown: true}} name='ProductPage' component={ProductPage} />
                 
             </Stack.Navigator>
             {

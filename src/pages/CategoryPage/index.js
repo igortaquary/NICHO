@@ -16,7 +16,7 @@ const CategoryPage = ({navigation}) => {
                     Add
                 </Text>
             </TouchableOpacity>
-            <Text onPress={ () => navigation.navigate("NotFound")}>
+            <Text onPress={ () => navigation.navigate("ProductPage")}>
                 Ir pra pagina solta aleatória
             </Text>
         </View>

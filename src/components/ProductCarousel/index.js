@@ -30,6 +30,7 @@ const ProductCarousel = ({ data }) => {
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={100}
           onScroll={handleScroll}
           style={{ height: 450, width: Dimensions.get('window').width, flexDirection: 'row' }}
         >
