@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, KeyboardAvoidingView, ImageBackground, Platform, StatusBar } from 'react-native';
 import {
     Container,
@@ -22,30 +22,58 @@ import {
 } from './styles';
 import LoginBg from '../../assets/login-bg.jpg';
 import LogoImg from '../../assets/nicho-logo.png';
+import {signIn} from '../../api/auth';
 
-const LoginPage = ({navigation}) => {
+const LoginPage = ({ navigation }) => {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handlePress = () => {
+        if (!email) {
+            Alert.alert('Email field is required.');
+        }
+
+        if (!password) {
+            Alert.alert('Password field is required.');
+        }
+
+        signIn(email, password);
+        setEmail('');
+        setPassword('');
+    };
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} enabled style={{ flex: 1 }}>
             <StatusBar translucent />
-            <ImageBackground source={LoginBg} style={{flex: 1}} >
+            <ImageBackground source={LoginBg} style={{ flex: 1 }} >
                 <ScrollContainer>
                     <Container>
 
                         <Line />
                         <Logo source={LogoImg} />
                         <TitleText>
-                            Até onde sua criatividade pode te levar? 
+                            Até onde sua criatividade pode te levar?
                             </TitleText>
                         <MainContainer>
                             <MainContainerTitle>ENTRAR</MainContainerTitle>
                             <MainContainerSubTitle>Estamos muito felizes em te ver novamente!</MainContainerSubTitle>
                             <InputContainer>
-                                <Input placeholder='E-mail' />
+                                <Input
+                                    placeholder='E-mail'
+                                    value={email}
+                                    onChangeText={(email) => setEmail(email)}
+                                />
                             </InputContainer>
                             <InputContainer>
-                                <Input placeholder='Senha' />
+                                <Input 
+                                    placeholder='Senha'
+                                    value={password}
+                                    onChangeText={(password) => setPassword(password)}
+                                    secureTextEntry={true}
+                                />
                             </InputContainer>
-                            <LoginButton>
+                            <LoginButton onPress={handlePress}>
                                 <LoginButtonText>
                                     Fazer login
                                     </LoginButtonText>
@@ -61,7 +89,7 @@ const LoginPage = ({navigation}) => {
                             style={{ marginTop: 24, marginBottom: 24, fontSize: 16, color: 'white', fontFamily: 'Raleway_400Regular' }}>
                             OU
                             </Text>
-                        <ExploreButton onPress={ () => navigation.navigate('Main')}>
+                        <ExploreButton onPress={() => navigation.navigate('Main')}>
                             <ExploreButtonText>
                                 Explore o app sem se conectar
                             </ExploreButtonText>
