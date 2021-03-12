@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
-} from "./../../../components/Converter";
+} from "../../../components/Converter";
 
 export default StyleSheet.create({
   page: {
@@ -114,6 +114,8 @@ export default StyleSheet.create({
   greenButtonContainer: {
     marginTop: cw(40),
     marginBottom: cw(35),
+    borderRadius: cw(43),
+    backgroundColor: "#FFFFFF",
   },
 
   stripe: {
@@ -122,5 +124,19 @@ export default StyleSheet.create({
     top: cw(45),
 
     backgroundColor: "#F1F1F1",
+  },
+
+  checkResultsButton: {
+    borderWidth: 0,
+    borderRadius: cw(43),
+    backgroundColor: "#019B92",
+    width: cw(384),
+    height: cw(46),
+  },
+
+  checkResultsButtonText: {
+    fontFamily: "Raleway_700Bold",
+    fontSize: cw(12),
+    color: "#FFFFFF",
   },
 });

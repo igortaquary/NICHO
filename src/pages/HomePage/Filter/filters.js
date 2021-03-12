@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { View, Text } from "react-native";
 import Style from "./styles";
 import RoundedButton from "../../../components/RoundedButton/RoundedButton";
-import RoundIconButton from "./../../../components/RoundIconButton/RoundIconButton";
+import RoundIconButton from "../../../components/RoundIconButton/RoundIconButton";
 import DottedLine from "../../../components/DottedLine/DottedLine";
 import Slider from "../../../components/Slider/Slider";
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
-} from "./../../../components/Converter";
+} from "../../../components/Converter";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -16,7 +16,6 @@ import {
 import CategoriaFilters from "../../../components/CategoriaFilters/CategoriaFilters";
 import { ScrollView } from "react-native-gesture-handler";
 import { PixelRatio } from "react-native";
-import RoundedGreenButton from "../../../components/RoundedGreenButton/RoundedGreenButton";
 
 export default function Filters() {
   const [todosCategorias, setTodosCategorias] = useState(false);
@@ -308,7 +307,12 @@ export default function Filters() {
 
       <View style={Style.stripe} />
       <View style={Style.greenButtonContainer}>
-        <RoundedGreenButton text="Ver resultados" />
+        <RoundedButton
+          activeOpacity={0.2}
+          text="Ver resultados"
+          style={Style.checkResultsButton}
+          textStyle={Style.checkResultsButtonText}
+        />
       </View>
     </ScrollView>
   );

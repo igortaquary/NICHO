@@ -1,11 +1,10 @@
-import { StyleSheet } from "react-native";
-import { ConvertWidth as cw, ConvertHeight as ch } from "./../Converter";
+﻿import { StyleSheet } from "react-native";
+import { ConvertWidth as cw, ConvertHeight as ch } from "../Converter";
 
 export default StyleSheet.create({
   normalButton: {
     backgroundColor: "#FFFFFF",
 
-    minWidth: cw(34.92),
     height: cw(23),
 
     justifyContent: "center",

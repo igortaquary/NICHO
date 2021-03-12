@@ -4,30 +4,10 @@ import DottedLine from "./../DottedLine/DottedLine";
 import { Slider as SliderRNE } from "react-native-elements";
 import Style from "./styles";
 import { ConvertWidth as cw, ConvertHeight as ch } from "./../Converter";
-import { set } from "react-native-reanimated";
 
 export default function Slider() {
   const [sliderValue, setSliderValue] = useState(1);
-  const [step, setStep] = useState(1);
-  function changeStep(value) {
-    if (sliderValue == 12) {
-      setStep(2);
-    }
-    setSliderValue(value);
-    if (sliderValue < 10) {
-      setStep(1);
-    } else {
-      if (sliderValue >= 10) {
-        setStep(1);
-      }
-    }
-
-    if (sliderValue == 11) {
-      setStep(1);
-    }
-
-    console.log(step);
-  }
+  // const [step, setStep] = useState(1);
 
   return (
     <>
