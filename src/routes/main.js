@@ -17,7 +17,6 @@ const HomePages = () => {
       <Tab.Screen name="Salvos" component={NotFoundPage} />
       <Tab.Screen name="Seguindo" component={NotFoundPage} />
       <Tab.Screen name="Mensagens" component={NotFoundPage} />
-      <Tab.Screen name="Página do Artista" component={ArtistPage} />
     </Tab.Navigator>
   );
 };
@@ -27,6 +26,8 @@ const MainPages = () => {
     <Drawer.Navigator screenOptions={{ headerShown: true }}>
       <Drawer.Screen name="Home" component={HomePages} />
       <Drawer.Screen name="Alone Page" component={NotFoundPage} />
+      <Drawer.Screen name="Página do Artista" component={ArtistPage} />
+
     </Drawer.Navigator>
   );
 };
