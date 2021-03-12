@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 export const Container = styled.View`
   /* flex: 0; */
   height: 22px;
-  border: 1px solid #F1F1F1;
+  border: ${props => props.text ? '1px solid #F1F1F1' : 'none'};
   border-radius: 50px;
   flex-direction: row;
   align-items: center;
@@ -17,6 +17,7 @@ export const Icon = styled.View`
   border: 1px solid #F1F1F1;
   height: 100%;
   width: 22px;
+  background-color: #FFF;
 `;
 
 export const Text = styled.Text`
