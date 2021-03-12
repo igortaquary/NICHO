@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Routes from './src/routes';
 import * as firebase from 'firebase';
-import apiKeys from './config/keys';
 import {
   useFonts,
   Raleway_100Thin,
@@ -26,6 +25,7 @@ import {
   Raleway_900Black,
   Raleway_900Black_Italic,
 } from '@expo-google-fonts/raleway';
+import apiKeys from './config/keys';
 
 export default function App() {
   let [fontsLoaded] = useFonts({

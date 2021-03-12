@@ -24,7 +24,7 @@ import LoginBg from '../../assets/login-bg.jpg';
 import LogoImg from '../../assets/nicho-logo.png';
 import {signIn} from '../../api/auth';
 
-const LoginPage = ({ navigation }) => {
+const LoginPage = ({navigation}) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -43,7 +43,6 @@ const LoginPage = ({ navigation }) => {
         setPassword('');
     };
 
-const LoginPage = ({navigation}) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} enabled style={{ flex: 1 }}>
             <StatusBar translucent />
