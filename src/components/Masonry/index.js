@@ -9,7 +9,7 @@ export default class Masonry extends Component {
 
     constructor(props){
         super(props);
-        this.pageSize = this.props.pageSize | 50;
+        this.pageSize = this.props.pageSize ? this.props.pageSize : 10;
 
         this.vpWidth = Dimensions.get('window').width;
         this.vpHeight = Dimensions.get('window').height;
@@ -21,6 +21,9 @@ export default class Masonry extends Component {
         //add navigation
         this.navigation = this.props.navigation;
 
+        //add await time to generate data
+        this.awaitTime = true;
+
         this.state = {
             data: []
         };
@@ -28,7 +31,8 @@ export default class Masonry extends Component {
         this.styles = StyleSheet.create({
             container: {
                 width: this.vpWidth,
-                flexDirection: 'row'
+                flexDirection: 'row',
+                justifyContent: 'center',
             }
         });
 
@@ -44,14 +48,16 @@ export default class Masonry extends Component {
 
     }
 
-    handleScroll(e){
+    async handleScroll(e){
 
             const { y } = e.nativeEvent.contentOffset;
             const height = this.scrollViewHeight;
 
-            let lastScreenOffset = height - this.vpHeight * 3;
-            if( y >= lastScreenOffset ){
-                this.generateData();
+            let lastScreenOffset = height - this.vpHeight * 1;
+            if( y >= lastScreenOffset  && this.awaitTime){
+                this.generateData(this.pageSize);
+                /* setTimeout(() => this.awaitTime = true, 1000);
+                this.awaitTime = false; */
             }
     }
 

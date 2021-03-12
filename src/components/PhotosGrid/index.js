@@ -26,7 +26,7 @@ const PhotosGrid = ({navigation}) => {
 }
 
 // Card's data provider
-function dataItemProvider(pageSize=10){
+function dataItemProvider(pageSize=2){
     
     return [...Array(pageSize).keys()].map((i) => {
         return {
