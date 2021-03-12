@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./src/routes";
+
+import * as firebase from 'firebase';
+
 import {
   useFonts,
   Raleway_100Thin,
@@ -29,7 +32,10 @@ import {
   Raleway_800ExtraBold_Italic,
   Raleway_900Black,
   Raleway_900Black_Italic,
-} from "@expo-google-fonts/raleway";
+
+} from '@expo-google-fonts/raleway';
+import apiKeys from './config/keys';
+
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -53,8 +59,15 @@ export default function App() {
     Raleway_900Black_Italic,
   });
 
-  if (!fontsLoaded) {
-    return <ActivityIndicator />;
+
+  if (!firebase.apps.length) {
+    console.log('Connected with Firebase')
+    firebase.initializeApp(apiKeys.firebaseConfig);
+  }
+
+  if(!fontsLoaded){
+    return <ActivityIndicator />
+
   } else {
     return (
       <SafeAreaView style={{ flex: 1 }}>
