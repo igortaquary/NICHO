@@ -1,7 +1,6 @@
 import React from 'react'
 import { Feather } from '@expo/vector-icons';
-import { KeyboardAvoidingView, ScrollView } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import { KeyboardAvoidingView, ScrollView, Text } from 'react-native';
 import {
   Container,
   WelcomeText,
@@ -17,7 +16,8 @@ import {
   Newsletter,
   NewsletterText,
   Button,
-  ButtonText
+  ButtonText,
+  Check
 } from './styles';
 import { useState } from 'react';
 
@@ -114,13 +114,10 @@ const SignUpPage = () => {
           </PickerContainer>
           
           <Newsletter>
-            <CheckBox
-              disabled={false}
-              value={newsletter}
-              onValueChange={(newValue) => setNewsletter(newValue)}
-              boxType='circle'
-              lineWidth={1}
-            />
+            <Check style={{borderColor: newsletter ? '#019B92' : '#C4C4C4'}} onPress={() => setNewsletter(!newsletter)}>
+              {newsletter ? <Feather name="check-square" size={18} color="#019B92" /> : <Feather name="square" size={18} color="#C4C4C4" />}
+            </Check>
+            
             <NewsletterText>quero receber novidades do Nicho no meu email</NewsletterText>
           </Newsletter>
 

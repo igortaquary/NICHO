@@ -104,3 +104,9 @@ export const ButtonText = styled.Text`
   font-size: 14px;
   font-family: 'Raleway_700Bold';
 `;
+
+export const Check = styled.TouchableOpacity`
+  margin-right: 5px;
+  align-items: center;
+  justify-content: center;
+`;
