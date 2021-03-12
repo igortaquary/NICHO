@@ -1,9 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import Routes from './src/routes';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  SafeAreaView,
+} from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import Routes from "./src/routes";
+
 import * as firebase from 'firebase';
+
 import {
   useFonts,
   Raleway_100Thin,
@@ -24,8 +32,10 @@ import {
   Raleway_800ExtraBold_Italic,
   Raleway_900Black,
   Raleway_900Black_Italic,
+
 } from '@expo-google-fonts/raleway';
 import apiKeys from './config/keys';
+
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -49,6 +59,7 @@ export default function App() {
     Raleway_900Black_Italic,
   });
 
+
   if (!firebase.apps.length) {
     console.log('Connected with Firebase')
     firebase.initializeApp(apiKeys.firebaseConfig);
@@ -56,24 +67,24 @@ export default function App() {
 
   if(!fontsLoaded){
     return <ActivityIndicator />
-  } else {
 
+  } else {
     return (
+      <SafeAreaView style={{ flex: 1 }}>
         <Routes />
+      </SafeAreaView>
     );
-    
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }, 
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   text: {
-    fontFamily: 'Raleway_400Regular'
-  }
+    fontFamily: "Raleway_400Regular",
+  },
 });
