@@ -30,26 +30,26 @@ const data = [
   {
     id: 1,
     color: 'yellow',
-    url: 'https://source.unsplash.com/featured/?artesanato'
+    url: 'https://source.unsplash.com/featured/?handmade'
   },
   {
     id: 2,
     color: 'blue',
-    url: 'https://source.unsplash.com/featured/?artesanato'
+    url: 'https://source.unsplash.com/featured/?handmade'
   },
   {
     id: 3,
     color: 'orange',
-    url: 'https://source.unsplash.com/featured/?artesanato'
+    url: 'https://source.unsplash.com/featured/?handmade'
   },
 ]
 
-const ProductPage = () => {
+const ProductPage = ({navigation}) => {
   return (
     <Container>
       <ProductCarousel data={data} />
       <MainInfo>
-        <Artist>
+        <Artist onPress={() => navigation.navigate('Página do Artista')}>
           <ArtistText>Por Juliana Daglio</ArtistText>
         </Artist>
         <ProductName>Produto Maravilhoso</ProductName>
