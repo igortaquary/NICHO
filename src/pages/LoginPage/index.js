@@ -43,6 +43,7 @@ const LoginPage = ({ navigation }) => {
         setPassword('');
     };
 
+const LoginPage = ({navigation}) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} enabled style={{ flex: 1 }}>
             <StatusBar translucent />
@@ -78,7 +79,7 @@ const LoginPage = ({ navigation }) => {
                                     Fazer login
                                     </LoginButtonText>
                             </LoginButton>
-                            <RegisterLink>
+                            <RegisterLink onPress={() => navigation.navigate('SignUp')}>
                                 <RegisterLinkText>Ainda não possui cadastro?</RegisterLinkText>
                             </RegisterLink>
                             <ChangePasswordLink>
