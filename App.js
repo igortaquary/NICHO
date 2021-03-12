@@ -1,6 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import Routes from './src/routes';
+import * as firebase from 'firebase';
+import apiKeys from './config/keys';
 import {
   useFonts,
   Raleway_100Thin,
@@ -45,18 +49,22 @@ export default function App() {
     Raleway_900Black_Italic,
   });
 
+  if (!firebase.apps.length) {
+    console.log('Connected with Firebase')
+    firebase.initializeApp(apiKeys.firebaseConfig);
+  }
+
   if(!fontsLoaded){
     return <ActivityIndicator />
   } else {
+
     return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Open up App.js to start working on your app!</Text>
-        <StatusBar style="auto" />
-      </View>
+        <Routes />
     );
     
   }
 }
+
 
 const styles = StyleSheet.create({
   container: {
