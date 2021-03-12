@@ -3,6 +3,8 @@ import React from 'react';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Routes from './src/routes';
+import * as firebase from 'firebase';
+import apiKeys from './config/keys';
 import {
   useFonts,
   Raleway_100Thin,
@@ -46,6 +48,11 @@ export default function App() {
     Raleway_900Black,
     Raleway_900Black_Italic,
   });
+
+  if (!firebase.apps.length) {
+    console.log('Connected with Firebase')
+    firebase.initializeApp(apiKeys.firebaseConfig);
+  }
 
   if(!fontsLoaded){
     return <ActivityIndicator />
