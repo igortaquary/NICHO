@@ -57,8 +57,8 @@ const ProductPage = ({navigation}) => {
           <Label text='Para vestir' />
           <Label text='GO' />
           <Label text='Tecido' />
-          <Label icon='hourglass' text='Encomenda' />
-          <Label icon='leaf' text='Vegano' />
+          <Label icon='ampulheta' text='Encomenda' />
+          <Label icon='vegano' text='Vegano' />
         </Labels>
 
       </MainInfo>
@@ -80,7 +80,7 @@ const ProductPage = ({navigation}) => {
 
       <Accordion title='Opções de Compra' key={2}>
         <Option>
-          <Label icon='hourglass' />
+          <Label icon='ampulheta' />
           <OptionDetails>
             <OptionTitle>SOB ENCOMENDA</OptionTitle>
             <OptionDescription>Este produto é produzido sob encomenda. Para mais

@@ -10,7 +10,7 @@ export const Container = styled.View`
   margin-top: 3px;
 `;
 
-export const Icon = styled.View`
+export const IconContainer = styled.View`
   border-radius: 50px;
   align-items: center;
   justify-content: center;

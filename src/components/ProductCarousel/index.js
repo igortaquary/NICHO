@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { ScrollView, Image, View, Dimensions, Text } from 'react-native';
-import { Feather, Ionicons   } from '@expo/vector-icons';
+import Icon from '../../components/Icon';
 import { 
   Container, 
   Carousel, 
@@ -9,7 +9,7 @@ import {
   CurrentIndicator,
   LeftFixedIcons,
   RightFixedIcons,
-  Icon
+  IconContainer
 } from './styles';
 
 const ProductCarousel = ({ data }) => {
@@ -40,17 +40,17 @@ const ProductCarousel = ({ data }) => {
         </ScrollView>
         <LeftFixedIcons>
           <Text style={{padding: 10, color: 'white', backgroundColor: 'rgba(0,0,0,0.67)', borderRadius: 50, marginBottom: 10}}>R$ 40 a 50</Text>
-          <Icon>
-            <Feather name="shopping-bag" size={16} color="black" style={{}} />
-          </Icon>
+          <IconContainer>
+            <Icon name="comprar" size={16} color="black" style={{}} />
+          </IconContainer>
         </LeftFixedIcons>
         <RightFixedIcons>
-          <Icon style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
-           <Ionicons name="ios-git-network-outline" size={16} color="white" />
-          </Icon>
-          <Icon style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
-            <Ionicons name="md-bookmark-outline" size={16} color="white" />
-          </Icon>
+          <IconContainer style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
+           <Icon name="compartilhar" size={16} color="white" />
+          </IconContainer>
+          <IconContainer style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
+            <Icon name="salvar" size={16} color="white" />
+          </IconContainer>
         </RightFixedIcons>
       </Carousel>
       <Indicator>

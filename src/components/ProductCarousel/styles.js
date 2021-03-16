@@ -20,7 +20,7 @@ export const RightFixedIcons = styled.View`
   bottom: 0;
 `;
 
-export const Icon = styled.TouchableOpacity`
+export const IconContainer = styled.TouchableOpacity`
   /* padding: 5px; */
   align-items: center;
   justify-content: center;

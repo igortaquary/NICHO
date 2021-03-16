@@ -32,13 +32,14 @@ import {
   Raleway_800ExtraBold_Italic,
   Raleway_900Black,
   Raleway_900Black_Italic,
-
 } from '@expo-google-fonts/raleway';
 import apiKeys from './config/keys';
 
 
+
 export default function App() {
-  let [fontsLoaded] = useFonts({
+  let [fontsLoaded] = useFonts({  
+    fontello: require('./assets/custom-font/font/fontello.ttf'),
     Raleway_100Thin,
     Raleway_100Thin_Italic,
     Raleway_200ExtraLight,

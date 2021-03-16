@@ -6,6 +6,7 @@ import Home from "./home";
 import Locations from "./locations";
 import NotFoundPage from "../pages/NotFoundPage";
 import ArtistPage from "../pages/ArtistPage";
+import Icon from "../components/Icon";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -30,34 +31,34 @@ const HomePages = () => {
     >
       <Tab.Screen 
         options={{
-          tabBarIcon: ({focused, color}) => <Feather name="home" size={21} color={color} />
+          tabBarIcon: ({focused, color}) => <Icon name="home" size={21} color={color} />
         }}         
         name="Home" 
         component={Home} />
       <Tab.Screen 
         options={{
-          tabBarIcon: ({focused, color}) => <MaterialCommunityIcons name="map-marker-radius-outline" size={21} color={color} />
+          tabBarIcon: ({focused, color}) => <Icon name="locais" size={21} color={color} />
         }}   
         name="Locais" 
         component={Locations} 
       />
       <Tab.Screen
         options={{
-          tabBarIcon: ({focused, color}) => <Feather name="bookmark" size={21} color={color} />
+          tabBarIcon: ({focused, color}) => <Icon name="salvos" size={21} color={color} />
         }}   
         name="Salvos" 
         component={NotFoundPage} 
       />
       <Tab.Screen 
         options={{
-          tabBarIcon: ({focused, color}) => <Feather name="users" size={21} color={color} />
+          tabBarIcon: ({focused, color}) => <Icon name="seguindo" size={21} color={color} />
         }}   
         name="Seguindo" 
         component={NotFoundPage} 
       />
       <Tab.Screen 
         options={{
-          tabBarIcon: ({focused, color}) => <Feather name="message-circle" size={21} color={color} />
+          tabBarIcon: ({focused, color}) => <Icon name="chat" size={21} color={color} />
         }}   
         name="Mensagens" 
         component={NotFoundPage} 
