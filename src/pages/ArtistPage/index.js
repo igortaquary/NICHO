@@ -15,6 +15,7 @@ import {
   ConvertHeight as ch,
 } from "./../../components/Converter";
 import Accordion from "../../components/Accordion";
+import Icon from '../../components/Icon';
 
 export default function ArtistPage({ navigation }) {
   let imageSource = "https://source.unsplash.com/featured/412x115/?craft";
@@ -56,8 +57,8 @@ export default function ArtistPage({ navigation }) {
           </RoundedButton>
 
           <RoundedButton style={Style.iconButton}>
-            <Ionicons
-              name="ios-git-network-outline"
+            <Icon
+              name="compartilhar"
               size={cw(15)}
               color="#707070"
               style={Style.networkIcon}
@@ -94,23 +95,23 @@ export default function ArtistPage({ navigation }) {
         <Text style={Style.titleText}>Minhas outras redes</Text>
         <View style={Style.socialNetworkButtonRow}>
           <TouchableOpacity>
-            <SimpleLineIcons
-              name="social-instagram"
+            <Icon
+              name="instagram"
               size={cw(20)}
               color="#019B92"
             />
           </TouchableOpacity>
 
           <TouchableOpacity>
-            <SimpleLineIcons
-              name="social-linkedin"
+            <Icon
+              name="linkedin"
               size={cw(21.94)}
               color="#019B92"
             />
           </TouchableOpacity>
 
           <TouchableOpacity>
-            <Fontisto name="world-o" size={cw(20.11)} color="#019B92" />
+            <Icon name="website" size={cw(20.11)} color="#019B92" />
           </TouchableOpacity>
         </View>
       </View>

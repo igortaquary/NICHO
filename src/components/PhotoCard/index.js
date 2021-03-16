@@ -14,8 +14,8 @@ const PhotoCard = (dataItem, key, navigation) => {
             />
             <LabelsContainer>
                 <Label icon='check' backgroundColor='white'/>
-                <Label icon='hourglass' backgroundColor='white'/>
-                <Label icon='leaf' />
+                <Label icon='ampulheta' backgroundColor='white'/>
+                <Label icon='vegano' />
             </LabelsContainer>
         </Container>
     );

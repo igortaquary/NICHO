@@ -1,19 +1,19 @@
 import React from 'react'
-import { FontAwesome5 } from '@expo/vector-icons';
 import {
   Container,
-  Icon,
+  IconContainer,
   Text
 } from './styles';
+import Icon from '../../components/Icon';
 
 // Três opções de ícone 'leaf' 'hourglass' 'check'
 
 const Label = ({icon, text}) => {
   return (
     <Container>
-      {icon && (<Icon>
-        <FontAwesome5 name={icon} size={12} color="#707070" />
-      </Icon>)}
+      {icon && (<IconContainer>
+        <Icon name={icon} size={12} color="#707070" />
+      </IconContainer>)}
       {text && <Text>{text}</Text>}
     </Container>
   )
