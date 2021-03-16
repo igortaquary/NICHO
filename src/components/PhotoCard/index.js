@@ -4,13 +4,13 @@ import { Container, LabelsContainer } from './styles';
 import Label from '../Label'
 
 
-const PhotoCard = (dataItem, key, navigation) => {
+const PhotoCard = (source, style, navigation) => {
     return (
-        <Container key={key} style={{height: dataItem.height}} 
-            onPress={ () => navigation.navigate('ProductPage') }>
+        <Container style={{height: style.height, width: style.width, margin: style.margin}} 
+            onPress={ () => {}}>
             <Image 
                 style={{flex: 1}}
-                source={{uri: dataItem.image_url}}
+                source={{uri: source }}
             />
             <LabelsContainer>
                 <Label icon='check' backgroundColor='white'/>
