@@ -76,7 +76,8 @@ const MainPages = () => {
   return (
     <Drawer.Navigator screenOptions={{ 
       headerShown: true, 
-      header: ({scene}) => <DrawerHeader scene={scene} />
+      header: ({scene}) => <DrawerHeader scene={scene} />,
+      headerStatusBarHeight: 0,
       }}>
       <Drawer.Screen name="Inicio" component={HomePages} />
       <Drawer.Screen name="Alone Page" component={NotFoundPage} />
