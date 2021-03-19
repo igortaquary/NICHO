@@ -20,12 +20,34 @@ import {
   Check
 } from './styles';
 import { useState } from 'react';
+import {signUp} from '../../api/signup';
+import {Alert} from "react-native";
 
-const SignUpPage = () => {
+const SignUpPage = ({navigation}) => {
 
-  const [gender, setGender] = useState(null);
-  const [region, setRegion] = useState(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [user, setUser] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmation, setConfirmation] = useState('');
+  const [gender, setGender] = useState('');
+  const [region, setRegion] = useState('');
   const [newsletter, setNewsletter] = useState(false);
+
+  const handlePress = () => {
+    if (!email) {
+      Alert.alert('Email field is required.');
+    } else if (!password) {
+      Alert.alert('Password field is required.');
+    } else if (password != confirmation) {
+      Alert.alert('Password and confirmation are not the same.');
+    } else{
+      signUp(name, email, user, password, gender, region, newsletter, navigation);
+    }
+
+    setPassword('');
+    setConfirmation('');
+};
 
 
   return (
@@ -40,7 +62,9 @@ const SignUpPage = () => {
           <Input>
             <InputLabel>Nome completo</InputLabel>
             <InputContainer>
-              <TextInput />
+              <TextInput 
+                value={name}
+                onChangeText={(name) => setName(name)}/>
             </InputContainer>
           </Input>
 
@@ -48,7 +72,9 @@ const SignUpPage = () => {
             <InputLabel>Endereço de e-mail</InputLabel>
             <InputContainer>
               <Feather name="mail" style={{marginRight: 5}} size={16} color="#707070" />
-              <TextInput />
+              <TextInput
+                value={email}
+                onChangeText={(email) => setEmail(email)} />
             </InputContainer>
           </Input>
 
@@ -56,7 +82,9 @@ const SignUpPage = () => {
             <InputLabel>Nome de usuário</InputLabel>
             <InputContainer>
               <Feather name="at-sign" style={{marginRight: 5}} size={16} color="#707070" />
-              <TextInput />
+              <TextInput 
+                value={user}
+                onChangeText={(user) => setUser(user)}/>
             </InputContainer>
           </Input>
 
@@ -66,7 +94,10 @@ const SignUpPage = () => {
             <InputLabel>Senha</InputLabel>
             <InputContainer>
               <Feather name="lock" style={{marginRight: 5}} size={16} color="#707070" />
-              <TextInput />
+              <TextInput
+                value={password}
+                onChangeText={(password) => setPassword(password)}
+                secureTextEntry={true} />
               <Feather name="eye" style={{marginRight: 5}} size={16} color="#707070" />
 
             </InputContainer>
@@ -76,7 +107,10 @@ const SignUpPage = () => {
             <InputLabel>Confirmação de senha</InputLabel>
             <InputContainer>
               <Feather name="lock" style={{marginRight: 5}} size={16} color="#707070" />
-              <TextInput />
+              <TextInput 
+                value={confirmation}
+                onChangeText={(confirmation) => setConfirmation(confirmation)}
+                secureTextEntry={true}/>
               <Feather name="eye-off" style={{marginRight: 5}} size={16} color="#707070" />
             </InputContainer>
           </Input>
@@ -100,7 +134,7 @@ const SignUpPage = () => {
             <Option>
               <OptionLabel>Gênero</OptionLabel>
               <Pickerr
-                selectedValue={region}
+                selectedValue={gender}
                 onValueChange={(itemValue, itemIndex) =>
                   setGender(itemValue)
                 }>
@@ -121,7 +155,7 @@ const SignUpPage = () => {
             <NewsletterText>quero receber novidades do Nicho no meu email</NewsletterText>
           </Newsletter>
 
-          <Button>
+          <Button onPress={handlePress}>
             <ButtonText>Criar conta</ButtonText>
           </Button>
         </Container>
