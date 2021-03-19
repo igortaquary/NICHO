@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import {StatusBar} from 'react-native';
 
 export const MainContainer = styled.View`
     background-color: #F1F1F1;
@@ -6,6 +7,7 @@ export const MainContainer = styled.View`
     flex-direction: row;
     align-items: baseline;
     justify-content: space-between;
+    padding-top: ${StatusBar.currentHeight}px;
 `;
 
 export const Container = styled.View`

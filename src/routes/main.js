@@ -61,13 +61,6 @@ const HomePages = () => {
         name="Seguindo" 
         component={NotFoundPage} 
       />
-      <Tab.Screen 
-        options={{
-          tabBarIcon: ({focused, color}) => <Icon name="chat" size={21} color={color} />
-        }}   
-        name="Mensagens" 
-        component={NotFoundPage} 
-      />
     </Tab.Navigator>
   );
 };
@@ -77,7 +70,6 @@ const MainPages = () => {
     <Drawer.Navigator screenOptions={{ 
       headerShown: true, 
       header: ({scene}) => <DrawerHeader scene={scene} />,
-      headerStatusBarHeight: 0,
       }}>
       <Drawer.Screen name="Inicio" component={HomePages} />
       <Drawer.Screen name="Alone Page" component={NotFoundPage} />
