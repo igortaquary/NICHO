@@ -62,8 +62,8 @@ const PhotosGrid = ({navigation}) => {
                     (data) => 
                     <LabelsContainer>
                         { data.available && <Label icon='check' />}
-                        { data.sheduling && <Label icon='hourglass'/> }
-                        { data.green && <Label icon='leaf' /> }
+                        { data.sheduling && <Label icon='ampulheta'/> }
+                        { data.green && <Label icon='vegano' /> }
                     </LabelsContainer>
                 }
                 spacing={2}
