@@ -92,7 +92,7 @@ export default StyleSheet.create({
   buttonRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: cw(180),
+    width: cw(139),
 
     marginTop: cw(15),
     marginBottom: cw(16),
