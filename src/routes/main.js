@@ -7,7 +7,7 @@ import ArtistPage from "../pages/ArtistPage";
 import Icon from "../components/Icon";
 import HomePage from "../pages/HomePage";
 import DrawerHeader from "../components/DrawerHeader";
-import { StatusBar } from 'react-native';
+import { StatusBar } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -17,49 +17,58 @@ const HomePages = () => {
     <Tab.Navigator
       tabBarOptions={{
         labelStyle: {
-          textTransform: 'lowercase'
+          textTransform: "lowercase",
         },
         iconStyle: {
           margin: 0,
-          padding: 0
+          padding: 0,
         },
         style: {
           paddingBottom: 5,
-          paddingTop:5,
+          paddingTop: 5,
           margin: 0,
           padding: 0,
-          backgroundColor: '#F1F1F1'
+          backgroundColor: "#F1F1F1",
         },
-        activeTintColor: '#019B92',
-        inactiveTintColor: '#707070'
+        activeTintColor: "#019B92",
+        inactiveTintColor: "#707070",
       }}
     >
-      <Tab.Screen 
+      <Tab.Screen
         options={{
-          tabBarIcon: ({focused, color}) => <Icon name="home" size={21} color={color} />
-        }}         
-        name="Home" 
-        component={HomePage} />
-      <Tab.Screen 
-        options={{
-          tabBarIcon: ({focused, color}) => <Icon name="locais" size={21} color={color} />
-        }}   
-        name="Locais" 
-        component={Locations} 
+          tabBarIcon: ({ focused, color }) => (
+            <Icon name="home" size={21} color={color} />
+          ),
+        }}
+        name="Home"
+        component={HomePage}
       />
       <Tab.Screen
         options={{
-          tabBarIcon: ({focused, color}) => <Icon name="salvos" size={21} color={color} />
-        }}   
-        name="Salvos" 
-        component={NotFoundPage} 
+          tabBarIcon: ({ focused, color }) => (
+            <Icon name="locais" size={21} color={color} />
+          ),
+        }}
+        name="Locais"
+        component={Locations}
       />
-      <Tab.Screen 
+      <Tab.Screen
         options={{
-          tabBarIcon: ({focused, color}) => <Icon name="seguindo" size={21} color={color} />
-        }}   
-        name="Seguindo" 
-        component={NotFoundPage} 
+          tabBarIcon: ({ focused, color }) => (
+            <Icon name="salvos" size={21} color={color} />
+          ),
+        }}
+        name="Salvos"
+        component={NotFoundPage}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Icon name="seguindo" size={21} color={color} />
+          ),
+        }}
+        name="Seguindo"
+        component={NotFoundPage}
       />
     </Tab.Navigator>
   );
@@ -67,14 +76,15 @@ const HomePages = () => {
 
 const MainPages = () => {
   return (
-    <Drawer.Navigator screenOptions={{ 
-      headerShown: true, 
-      header: ({scene}) => <DrawerHeader scene={scene} />,
-      }}>
+    <Drawer.Navigator
+      screenOptions={{
+        headerShown: true,
+        header: ({ scene }) => <DrawerHeader scene={scene} />,
+      }}
+    >
       <Drawer.Screen name="Inicio" component={HomePages} />
       <Drawer.Screen name="Alone Page" component={NotFoundPage} />
       <Drawer.Screen name="Página do Artista" component={ArtistPage} />
-
     </Drawer.Navigator>
   );
 };
