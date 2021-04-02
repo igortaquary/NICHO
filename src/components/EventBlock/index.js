@@ -14,6 +14,7 @@ export default function EventBlock({
   location,
   address,
   schedule,
+  onPress,
 }) {
   const month = [
     "JAN",
@@ -34,13 +35,18 @@ export default function EventBlock({
     <>
       <Text style={Style.eventName}>{name}</Text>
       <View>
-        <TouchableOpacity style={{ ...Style.iconContainer, top: cw(189) }}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={{ ...Style.iconContainer, top: cw(189) }}
+        >
           <Icon name="compartilhar" size={cw(18.18)} color="#FFFFFF" />
         </TouchableOpacity>
-        <TouchableOpacity style={Style.iconContainer}>
+        <TouchableOpacity activeOpacity={0.7} style={Style.iconContainer}>
           <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
         </TouchableOpacity>
-        <Image style={Style.additionalEventImage} source={image} />
+        <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+          <Image style={Style.additionalEventImage} source={image} />
+        </TouchableOpacity>
       </View>
       <View style={Style.additionalEventInfo}>
         <View style={Style.additionalEventLeftContainer}>

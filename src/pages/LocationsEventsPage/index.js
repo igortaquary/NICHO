@@ -106,7 +106,11 @@ export default function LocationsEventsPage({ navigation }) {
       <View
         style={[
           Style.sectionContainer,
-          { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 },
+          {
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+            marginBottom: 0,
+          },
         ]}
       >
         <Text style={Style.titleText}>Mais eventos para você</Text>
