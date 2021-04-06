@@ -2,19 +2,25 @@
 import { ScrollView, Text, View, Image, TouchableOpacity } from "react-native";
 import Style from "./styles";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
+import Accordion from "../../components/Accordion";
+import Icon from "./../../components/Icon/index";
+import ShowLocation from "./../../components/ShowLocation";
+import SkeletonContent from "react-native-skeleton-content";
+
+import { AskLocationPermission } from "../../components/ShowLocation";
+
+import * as Permissions from "expo-permissions";
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
 } from "./../../components/Converter";
-import Accordion from "../../components/Accordion";
-import Label from "../../components/Label";
-import Icon from "./../../components/Icon/index";
-import MapView, { Callout, Marker } from "react-native-maps";
-import * as Permissions from "expo-permissions";
 
 export default function EventPage({ navigation }) {
   const [seguindoBrio, setSeguindoBrio] = useState(true);
   const [seguindoBicuda, setSeguindoBicuda] = useState(true);
+  const [location, setLocation] = useState();
+  const [remover, setRemover] = useState(null);
+  const [perm, setPerm] = useState(null);
 
   const mockedDate = new Date();
 
@@ -42,31 +48,13 @@ export default function EventPage({ navigation }) {
     );
   };
 
-  const [permission, askForPermission] = Permissions.usePermissions(
-    Permissions.LOCATION,
-    {
-      ask: true,
-    }
-  );
-
-  const latitudeSource = "-15.833891";
-  const longitudeSource = "-48.051603";
+  // const latitudeSource = "-15.833891";
+  // const longitudeSource = "-48.051603";
   const latitudeDestination = "-15.835981";
   const longitudeDestination = "-48.050079";
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    fetch(
-      `http://router.project-osrm.org/table/v1/bike/${longitudeSource},${latitudeSource};${longitudeDestination},${latitudeDestination}?annotations=distance,duration`
-    )
-      .then((response) => response.json())
-      .then((json) => console.log(json))
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-  console.log(
-    `http://router.project-osrm.org/table/v1/bike/${longitudeSource},${latitudeSource};${longitudeDestination},${latitudeDestination}`
-  );
+
+  useEffect(() => {}, []);
+
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <Image style={Style.coverImage} source={coverImage} />
@@ -129,31 +117,13 @@ export default function EventPage({ navigation }) {
           </Text>
         </View>
 
-        <MapView
+        <ShowLocation
+          destinationLatitude={latitudeDestination}
+          destinationLongitude={longitudeDestination}
+          destinationName="Brio - Café e Espaço Colaborativo "
           style={Style.map}
-          camera={{
-            center: {
-              latitude: -15.833820348354257,
-              longitude: -48.051536338917934,
-            },
-            pitch: 0,
-            heading: 0,
-            altitude: 18,
-            zoom: 16.19,
-          }}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          onPoiClick={(e) => console.log(e.nativeEvent)}
-        >
-          <Marker
-            coordinate={{
-              latitude: -15.833820348354257,
-              longitude: -48.051536338917934,
-            }}
-          >
-            <Callout tooltip={true} />
-          </Marker>
-        </MapView>
+        />
+
         {/* MAPA ----------------------------------- */}
       </View>
 
