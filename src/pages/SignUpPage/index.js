@@ -1,6 +1,6 @@
 import React from 'react'
 import { Feather } from '@expo/vector-icons';
-import { KeyboardAvoidingView, ScrollView, Text } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import {
   Container,
   WelcomeText,
@@ -17,11 +17,14 @@ import {
   NewsletterText,
   Button,
   ButtonText,
-  Check
+  Check,
+  ImageContainer,
+  ImageTextContainer,
+  ImageText,
 } from './styles';
 import { useState } from 'react';
 import {signUp} from '../../api/signup';
-import {Alert} from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 
 const SignUpPage = ({navigation}) => {
 
@@ -33,6 +36,7 @@ const SignUpPage = ({navigation}) => {
   const [gender, setGender] = useState('');
   const [region, setRegion] = useState('');
   const [newsletter, setNewsletter] = useState(false);
+  const [image, setImage] = useState('');
 
   const handlePress = () => {
     if (!email) {
@@ -47,7 +51,23 @@ const SignUpPage = ({navigation}) => {
 
     setPassword('');
     setConfirmation('');
-};
+  };
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Erro','Desculpe, precisa permitir o acesso às suas fotos para isso!');
+        } else {
+          let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: false,
+            quality: 0.5,
+          });
+          if (!result.cancelled) {
+            setImage(result.uri);
+          }
+        }
+  }
 
 
   return (
@@ -58,6 +78,20 @@ const SignUpPage = ({navigation}) => {
           <WelcomeText>
           Bem vinde ao Nicho! Vamos recolher suas informações básicas e logo logo você poderá personalizar melhor aquilo que quer ver no app :)
           </WelcomeText>
+
+          {
+          image !== '' &&
+          <ImageContainer onPress={pickImage} >
+            <Image source={{ uri: image }} style={{ width: 150, height: 150 }}/>
+          </ImageContainer>
+          }
+
+          <ImageTextContainer onPress={pickImage} >
+            <Feather name="edit-2" size={14} color="#019B92" />
+            <ImageText>
+              {image === '' ? 'Adicionar' : 'Alterar'} foto de perfil
+            </ImageText>
+          </ImageTextContainer>
 
           <Input>
             <InputLabel>Nome completo</InputLabel>
@@ -147,7 +181,7 @@ const SignUpPage = ({navigation}) => {
             </Option>
           </PickerContainer>
           
-          <Newsletter>
+          <Newsletter onPress={() => setNewsletter(!newsletter)}>
             <Check style={{borderColor: newsletter ? '#019B92' : '#C4C4C4'}} onPress={() => setNewsletter(!newsletter)}>
               {newsletter ? <Feather name="check-square" size={18} color="#019B92" /> : <Feather name="square" size={18} color="#C4C4C4" />}
             </Check>
