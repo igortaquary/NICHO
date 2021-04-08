@@ -16,13 +16,13 @@ const DrawerHeader = ({scene}) => {
                 </CustomText>
             </Container>
             <Container>
-                <IconContainer onPress={ () => scene.descriptor.navigation.navigate('Mensagens')}>
+                <IconContainer onPress={ () => scene.descriptor.navigation.navigate('Messages')}>
                     <Icon name="busca" size={18} color={'#AEAEAE'}/>
                 </IconContainer>
                 <IconContainer onPress={ () => scene.descriptor.navigation.navigate('Mensagens')}>
                     <Icon name="chat" size={18} color={'#AEAEAE'}/>
                 </IconContainer>
-                <IconContainer onPress={ () => scene.descriptor.navigation.navigate('Mensagens')}>
+                <IconContainer onPress={ () => scene.descriptor.navigation.navigate('NewProduct')}>
                     <Icon name="plus" size={18} color={'#AEAEAE'}/>
                 </IconContainer>
             </Container>

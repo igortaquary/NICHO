@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./src/routes";
+import UserData from "./src/contexts/userData";
+import fetchUser from "./src/api/fetchUser";
 
 import * as firebase from 'firebase';
 
@@ -36,7 +38,7 @@ import {
 import apiKeys from './config/keys';
 
 export default function App() {
-  let [fontsLoaded] = useFonts({  
+  let [fontsLoaded] = useFonts({
     fontello: require('./assets/custom-font/font/fontello.ttf'),
     Rousseau_Deco: require('./assets/RousseauDeco.ttf'),
     Raleway_100Thin,
@@ -59,20 +61,40 @@ export default function App() {
     Raleway_900Black_Italic,
   });
 
+  const [state, setState] = useState({});
+
 
   if (!firebase.apps.length) {
     console.log('Connected with Firebase')
     firebase.initializeApp(apiKeys.firebaseConfig);
   }
 
-  if(!fontsLoaded){
+  async function onAuthStateChanged(user) {
+    if (user) {
+      fetchUser(user.uid).then((res) => {
+        setState({ ...res, username: user.email });
+      });
+    } else {
+      setState({});
+    }
+  }
+
+  useEffect(() => {
+    console.log("rodou")
+    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (!fontsLoaded) {
     return <ActivityIndicator />
 
   } else {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <Routes />
-      </SafeAreaView>
+      <UserData.Provider value={[state, setState]}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <Routes />
+        </SafeAreaView>
+      </UserData.Provider>
     );
   }
 }

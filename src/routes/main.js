@@ -5,9 +5,9 @@ import Locations from "./locations";
 import NotFoundPage from "../pages/NotFoundPage";
 import ArtistPage from "../pages/ArtistPage";
 import Icon from "../components/Icon";
+import CustomDrawer from "../components/CustomDrawer";
 import HomePage from "../pages/HomePage";
-import DrawerHeader from "../components/DrawerHeader";
-import { StatusBar } from "react-native";
+import EventPage from "../pages/EventPage";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -70,6 +70,15 @@ const HomePages = () => {
         name="Seguindo"
         component={NotFoundPage}
       />
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Icon name="chat" size={21} color={color} />
+          ),
+        }}
+        name="Mensagens"
+        component={NotFoundPage}
+      />
     </Tab.Navigator>
   );
 };
@@ -77,14 +86,13 @@ const HomePages = () => {
 const MainPages = () => {
   return (
     <Drawer.Navigator
-      screenOptions={{
-        headerShown: true,
-        header: ({ scene }) => <DrawerHeader scene={scene} />,
-      }}
+      drawerContent={(props) => <CustomDrawer {...props} />}
+      screenOptions={{ headerShown: true }}
     >
-      <Drawer.Screen name="Inicio" component={HomePages} />
+      <Drawer.Screen name="Home" component={HomePages} />
       <Drawer.Screen name="Alone Page" component={NotFoundPage} />
       <Drawer.Screen name="Página do Artista" component={ArtistPage} />
+      <Drawer.Screen name="Página de Evento" component={EventPage} />
     </Drawer.Navigator>
   );
 };
