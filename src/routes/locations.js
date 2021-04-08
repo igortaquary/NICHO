@@ -10,9 +10,9 @@ const TopTab = createMaterialTopTabNavigator();
 const Locations = () => {
   return (
     <TopTab.Navigator>
-
       <TopTab.Screen name="Eventos" component={LocationsEventsPage} />
       <TopTab.Screen name="Espaços" component={LocationsSpacesPage} />
+    </TopTab.Navigator>
 
   );
 };
