@@ -1,12 +1,16 @@
-﻿import React from "react";
+﻿﻿import React from "react";
 import { View, Text, TouchableOpacity, TouchableHighlight } from "react-native";
 import { ConvertWidth as cw, ConvertHeight as ch } from "../Converter";
 import Style from "./styles";
 
-export default function RoundedButton({ children, ...props }) {
+export default function RoundedButton({
+  activeOpacity = 0.2,
+  children,
+  ...props
+}) {
   return (
     <TouchableOpacity
-      //activeOpacity={0.85}
+      activeOpacity={activeOpacity}
       style={
         props.active
           ? [Style.normalButton, Style.selectedButton, props.style]
