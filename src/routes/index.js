@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -8,10 +9,11 @@ import { StatusBar, Platform } from 'react-native';
 import NotFoundPage from '../pages/NotFoundPage';
 import ProductPage from '../pages/ProductPage';
 
+
 const Stack = createStackNavigator();
 
 const Routes = () => {
-
+ 
     return(
         <NavigationContainer>
             <StatusBar barStyle='dark-content' backgroundColor='transparent' hidden={Platform.OS === 'ios'}/>
@@ -24,7 +26,7 @@ const Routes = () => {
             </Stack.Navigator>
         </NavigationContainer>
     ) 
-
 }
+
 
 export default Routes;
