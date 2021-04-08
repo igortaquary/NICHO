@@ -6,6 +6,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import ArtistPage from "../pages/ArtistPage";
 import Icon from "../components/Icon";
 import CustomDrawer from "../components/CustomDrawer";
+import HomePage from "../pages/HomePage";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
