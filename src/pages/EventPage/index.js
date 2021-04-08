@@ -6,10 +6,10 @@ import Accordion from "../../components/Accordion";
 import Icon from "./../../components/Icon/index";
 import ShowLocation from "./../../components/ShowLocation";
 import SkeletonContent from "react-native-skeleton-content";
-
-import { AskLocationPermission } from "../../components/ShowLocation";
-
+import moment from "moment";
+import * as Calendar from "expo-calendar";
 import * as Permissions from "expo-permissions";
+import * as Localization from "expo-localization";
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
@@ -22,7 +22,10 @@ export default function EventPage({ navigation }) {
   const [remover, setRemover] = useState(null);
   const [perm, setPerm] = useState(null);
 
-  const mockedDate = new Date();
+  const eventName = "Feira Liga Pontos";
+  const localName = "Brio - Café e Espaço Colaborativo ";
+  const mockedDate = moment().local().format();
+  const finishDate = moment(mockedDate).add(1, "hour").format();
 
   const coverImage = {
     uri: "https://source.unsplash.com/collection/227043",
@@ -53,7 +56,30 @@ export default function EventPage({ navigation }) {
   const latitudeDestination = "-15.835981";
   const longitudeDestination = "-48.050079";
 
-  useEffect(() => {}, []);
+  const addToCalendar = async () => {
+    const { timezone } = await Localization.getLocalizationAsync();
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    if (status === "granted") {
+      let calendars = await Calendar.getCalendarsAsync();
+      let defaultCalendar = calendars.find(
+        (element) => element.isPrimary == true
+      );
+      defaultCalendar ? {} : (defaultCalendar = calendars[0]);
+      // console.log(calendars);
+      console.log(defaultCalendar.id);
+      console.log(typeof mockedDate);
+      console.log(finishDate);
+      let event = await Calendar.createEventAsync(defaultCalendar.id, {
+        title: eventName,
+        startDate: new Date(mockedDate),
+        endDate: new Date(finishDate ? finishDate : finishDate.add(1, "hour")),
+        location: localName,
+        alarms: [{ relativeOffset: -30, method: Calendar.AlarmMethod.DEFAULT }],
+        timeZone: timezone,
+      });
+      Calendar.openEventInCalendar(event);
+    }
+  };
 
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
@@ -72,7 +98,7 @@ export default function EventPage({ navigation }) {
               <Text style={Style.dateText}>SEX, 08 DE DEZ ÀS 14:00</Text>
               {isToday && <Text style={Style.today}>Hoje!</Text>}
             </View>
-            <Text style={Style.localName}>Feira Liga Pontos</Text>
+            <Text style={Style.localName}>{eventName}</Text>
             <Text style={Style.localNeighborhood}>DF - Asa Sul</Text>
             <Text style={Style.localAddress}>
               SQN 311/312 no gramado entrequadras
@@ -80,7 +106,16 @@ export default function EventPage({ navigation }) {
           </View>
 
           <View style={Style.addToCalendarContainer}>
-            <View style={Style.calendarContainer}></View>
+            <TouchableOpacity
+              style={Style.calendarContainer}
+              activeOpacity={0.7}
+              onPress={() => addToCalendar()}
+            >
+              <Image
+                style={{ width: 21.94 }}
+                source={require("../../assets/calendar.png")}
+              />
+            </TouchableOpacity>
             <Text style={Style.addToCalendarText}>
               adicionar ao meu calendário
             </Text>
@@ -90,7 +125,10 @@ export default function EventPage({ navigation }) {
         <View style={Style.stripe} />
 
         <View style={Style.iconAndInfoContainer}>
-          <Icon name="locais" size={17} color="#019B92" />
+          <Image
+            style={{ width: 14.37 }}
+            source={require("../../assets/flag.png")}
+          />
           <Text style={Style.infoText}>
             evento de{" "}
             <Text style={Style.organizerName}>Brio Espaço Colaborativo</Text> e{" "}
@@ -99,14 +137,20 @@ export default function EventPage({ navigation }) {
         </View>
 
         <View style={Style.iconAndInfoContainer}>
-          <Icon name="locais" size={17} color="#019B92" />
+          <Image
+            style={{ aspectRatio: 1 }}
+            source={require("../../assets/minuto.png")}
+          />
           <Text style={Style.infoText}>
             acontecerá na Quarta à partir de 17:00h
           </Text>
         </View>
 
         <View style={Style.iconAndInfoContainer}>
-          <Icon name="locais" size={17} color="#019B92" />
+          <Image
+            // style={{ width: 18 }}
+            source={require("../../assets/ticket.png")}
+          />
           <Text style={Style.infoText}>evento gratuito</Text>
         </View>
 
@@ -118,11 +162,17 @@ export default function EventPage({ navigation }) {
         </View>
 
         <ShowLocation
-          destinationLatitude={latitudeDestination}
-          destinationLongitude={longitudeDestination}
-          destinationName="Brio - Café e Espaço Colaborativo "
+          destinationLatitude={parseFloat(latitudeDestination)}
+          destinationLongitude={parseFloat(longitudeDestination)}
+          destinationName={localName}
           style={Style.map}
         />
+        <View style={Style.attentionTextContainer}>
+          <View style={Style.attention} />
+          <Text style={Style.noteText}>
+            O tempo estimado de viagem não considera as condições de trânsito
+          </Text>
+        </View>
 
         {/* MAPA ----------------------------------- */}
       </View>

@@ -3,11 +3,13 @@ import { Alert, View, Text } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import Constants from "expo-constants";
 import SkeletonContent from "react-native-skeleton-content";
+import { createOpenLink } from "react-native-open-maps";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import * as IntentLauncher from "expo-intent-launcher";
 import Style from "./styles";
 import { ConvertWidth as cw, ConvertHeight as ch } from "../Converter";
+import { get } from "react-native/Libraries/Utilities/PixelRatio";
 
 export default function ShowLocation({
   destinationLatitude,
@@ -38,6 +40,35 @@ export default function ShowLocation({
     ask: true,
   });
 
+  const getEta = (
+    longitudeSource,
+    latitudeSource,
+    destinationLongitude,
+    destinationLatitude
+  ) => {
+    let maxTries = 3;
+    let count = 0;
+    fetch(
+      `http://router.project-osrm.org/table/v1/bike/${longitudeSource},${latitudeSource};${destinationLongitude},${destinationLatitude}?annotations=duration`
+    )
+      .then((response) => response.json())
+      .then((json) => Math.round(json.durations[0][1] / 60))
+      .then((duration) => setEta(duration))
+      .catch((error) => {
+        count++;
+        console.log(count);
+        console.error(error);
+        if (count < maxTries) {
+          getEta(
+            longitudeSource,
+            latitudeSource,
+            destinationLongitude,
+            destinationLatitude
+          );
+        }
+      });
+  };
+
   useEffect(() => {
     (async () => {
       let unsubscribe = await Location.watchPositionAsync(
@@ -49,15 +80,12 @@ export default function ShowLocation({
           let longitudeSource = position.coords.longitude;
           let latitudeSource = position.coords.latitude;
           // console.log(longitudeSource, latitudeSource);
-          fetch(
-            `http://router.project-osrm.org/table/v1/bike/${longitudeSource},${latitudeSource};${destinationLongitude},${destinationLatitude}?annotations=duration`
-          )
-            .then((response) => response.json())
-            .then((json) => Math.round(json.durations[0][1] / 60))
-            .then((duration) => setEta(duration))
-            .catch((error) => {
-              console.error(error);
-            });
+          getEta(
+            longitudeSource,
+            latitudeSource,
+            destinationLongitude,
+            destinationLatitude
+          );
         }
       );
       setRemover(unsubscribe);
@@ -95,11 +123,22 @@ export default function ShowLocation({
     if (refMarker && refMarker.current && refMarker.current.showCallout) {
       refMarker.current.showCallout();
     }
-    // refMarker.current.showCallout();
   };
 
+  const openMapApp = createOpenLink({
+    end: destinationName,
+    navigate_mode: "preview",
+  });
+
   return (
-    <SkeletonContent isLoading={eta != 0}>
+    <SkeletonContent
+      isLoading={!eta}
+      animationType="shiver"
+      // animationDirection="horizontalRight"
+      duration={2000}
+      highlightColor="#fafbfa"
+      boneColor="#F1F1F1"
+    >
       <MapView
         style={style}
         camera={{
@@ -110,14 +149,16 @@ export default function ShowLocation({
           pitch: 0,
           heading: 0,
           altitude: 18,
-          zoom: 17,
+          zoom: 15,
         }}
         showsUserLocation={true}
         showsMyLocationButton={true}
         // showsTraffic={true}
         loadingEnabled={true}
-        showsPointsOfInterest={true}
+        showsPointsOfInterest={false}
         onRegionChangeComplete={showInfo}
+        onPress={openMapApp}
+        onMarkerPress={openMapApp}
         // onPoiClick={(e) => console.log(e.nativeEvent)}
       >
         <Marker

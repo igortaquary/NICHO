@@ -80,6 +80,8 @@ export default StyleSheet.create({
     width: cw(39),
     height: cw(39),
     borderRadius: cw(19.5),
+    justifyContent: "center",
+    alignItems: "center",
 
     backgroundColor: "#F1F1F1",
   },
@@ -119,7 +121,31 @@ export default StyleSheet.create({
     height: cw(97),
 
     marginTop: cw(5),
+    marginBottom: cw(5),
+  },
+
+  attentionTextContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+
+    paddingLeft: cw(5),
     marginBottom: cw(29),
+  },
+
+  attention: {
+    width: cw(4),
+    height: cw(4),
+    borderRadius: cw(2),
+    marginRight: cw(3),
+
+    backgroundColor: "#019B92",
+  },
+
+  noteText: {
+    fontSize: cw(9),
+    fontFamily: "Raleway_300Light",
+    color: "#707070",
+    // backgroundColor: "#1111ff",
   },
 
   infoText: {
