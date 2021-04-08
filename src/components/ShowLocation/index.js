@@ -91,7 +91,7 @@ export default function ShowLocation({
       setRemover(unsubscribe);
     })();
 
-    // return () => remover.remove();
+    return () => remover.remove();
   }, []);
 
   if (permission && permission.status !== "granted") {
