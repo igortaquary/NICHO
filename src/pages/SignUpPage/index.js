@@ -46,7 +46,7 @@ const SignUpPage = ({navigation}) => {
     } else if (password != confirmation) {
       Alert.alert('Password and confirmation are not the same.');
     } else{
-      signUp(name, email, user, password, gender, region, newsletter, navigation);
+      signUp(name, email, user, password, gender, region, newsletter, navigation, image);
     }
 
     setPassword('');
