@@ -5,9 +5,7 @@ import Locations from "./locations";
 import NotFoundPage from "../pages/NotFoundPage";
 import ArtistPage from "../pages/ArtistPage";
 import Icon from "../components/Icon";
-import HomePage from "../pages/HomePage";
-import DrawerHeader from "../components/DrawerHeader";
-import { StatusBar } from 'react-native';
+import CustomDrawer from "../components/CustomDrawer";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -67,11 +65,8 @@ const HomePages = () => {
 
 const MainPages = () => {
   return (
-    <Drawer.Navigator screenOptions={{ 
-      headerShown: true, 
-      header: ({scene}) => <DrawerHeader scene={scene} />,
-      }}>
-      <Drawer.Screen name="Inicio" component={HomePages} />
+    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />} screenOptions={{ headerShown: true }}>
+      <Drawer.Screen name="Home" component={HomePages} />
       <Drawer.Screen name="Alone Page" component={NotFoundPage} />
       <Drawer.Screen name="Página do Artista" component={ArtistPage} />
 
