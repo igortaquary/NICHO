@@ -8,6 +8,9 @@ import NotFoundPage from "../pages/NotFoundPage";
 import ArtistPage from "../pages/ArtistPage";
 import Icon from "../components/Icon";
 import EventPage from "../pages/EventPage";
+import HomePage from "../pages/HomePage";
+import DrawerHeader from "../components/DrawerHeader";
+import { StatusBar } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -21,10 +24,14 @@ const HomePages = () => {
         },
         iconStyle: {
           margin: 0,
+          padding: 0,
         },
         style: {
           paddingBottom: 5,
           paddingTop: 5,
+          margin: 0,
+          padding: 0,
+          backgroundColor: "#F1F1F1",
         },
         activeTintColor: "#019B92",
         inactiveTintColor: "#707070",
@@ -37,7 +44,7 @@ const HomePages = () => {
           ),
         }}
         name="Home"
-        component={Home}
+        component={HomePage}
       />
       <Tab.Screen
         options={{
@@ -81,8 +88,13 @@ const HomePages = () => {
 
 const MainPages = () => {
   return (
-    <Drawer.Navigator screenOptions={{ headerShown: true }}>
-      <Drawer.Screen name="Home" component={HomePages} />
+    <Drawer.Navigator
+      screenOptions={{
+        headerShown: true,
+        header: ({ scene }) => <DrawerHeader scene={scene} />,
+      }}
+    >
+      <Drawer.Screen name="Inicio" component={HomePages} />
       <Drawer.Screen name="Alone Page" component={NotFoundPage} />
       <Drawer.Screen name="Página do Artista" component={ArtistPage} />
       <Drawer.Screen name="Página de Evento" component={EventPage} />
