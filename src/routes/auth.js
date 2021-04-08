@@ -8,35 +8,28 @@ const Stack = createStackNavigator();
 
 const AuthPages = () => {
     return(
-
-            <Stack.Navigator>
-                <Stack.Screen 
-                    name='Login' 
-                    component={LoginPage}
-                    options={
-                        {
-                            headerShown: false,
-                        }
-                    }
+        <Stack.Navigator>
+            <Stack.Screen 
+                name='Login' 
+                component={LoginPage}
+                options={{headerShown: false,}}
                 />
-                <Stack.Screen 
-                    name='SignUp'
-                    component={SignUpPage}
-                    options={({ navigation, route }) => ({
-                        headerTitle: 'CRIAR CONTA',
-                        headerLeft: () => (
-                            <Feather onPress={() => navigation.goBack()} style={{marginLeft: 25}} name="chevron-left" size={24} color="#019B92" />
-                        ),
-                        headerTitleAlign: 'center',
-                        headerTitleStyle: {
-                            fontFamily: 'Raleway_600SemiBold',
-                            color: '#707070'
-                        }                    
+            <Stack.Screen 
+                name='SignUp'
+                component={SignUpPage}
+                options={({ navigation, route }) => ({
+                    headerTitle: 'CRIAR CONTA',
+                    headerLeft: () => (
+                        <Feather onPress={() => navigation.goBack()} style={{marginLeft: 25}} name="chevron-left" size={24} color="#019B92" />
+                    ),
+                    headerTitleAlign: 'center',
+                    headerTitleStyle: {
+                        fontFamily: 'Raleway_600SemiBold',
+                        color: '#707070'
+                    }                    
                     })}
-                    
-                />
-            </Stack.Navigator>
-
+            />
+        </Stack.Navigator>
     )
 };
 

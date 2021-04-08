@@ -76,7 +76,7 @@ export const OptionLabel = styled.Text`
   margin-bottom: 6px;
 `;
 
-export const Newsletter = styled.View`
+export const Newsletter = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   max-width: 100%;
@@ -107,6 +107,32 @@ export const ButtonText = styled.Text`
 
 export const Check = styled.TouchableOpacity`
   margin-right: 5px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ImageTextContainer = styled.TouchableOpacity`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  margin: 10px;
+`;
+
+export const ImageText = styled.Text`
+  margin-left: 5px;
+  color: #019B92;
+  font-size: 12px;
+  font-family: 'Raleway_700Bold';
+`;
+
+export const ImageContainer = styled.TouchableOpacity`
+  width: 150px;
+  height: 150px;
+  background-color: #F1F1F1;
+  border-radius: 100px;
+  overflow: hidden;
   align-items: center;
   justify-content: center;
 `;

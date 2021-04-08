@@ -1,8 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
-import Home from "./home";
 import Locations from "./locations";
 import NotFoundPage from "../pages/NotFoundPage";
 import ArtistPage from "../pages/ArtistPage";
@@ -20,11 +18,15 @@ const HomePages = () => {
           textTransform: 'lowercase'
         },
         iconStyle: {
-          margin: 0
+          margin: 0,
+          padding: 0
         },
         style: {
           paddingBottom: 5,
-          paddingTop:5
+          paddingTop:5,
+          margin: 0,
+          padding: 0,
+          backgroundColor: '#F1F1F1'
         },
         activeTintColor: '#019B92',
         inactiveTintColor: '#707070'
@@ -35,7 +37,7 @@ const HomePages = () => {
           tabBarIcon: ({focused, color}) => <Icon name="home" size={21} color={color} />
         }}         
         name="Home" 
-        component={Home} />
+        component={HomePage} />
       <Tab.Screen 
         options={{
           tabBarIcon: ({focused, color}) => <Icon name="locais" size={21} color={color} />
@@ -55,13 +57,6 @@ const HomePages = () => {
           tabBarIcon: ({focused, color}) => <Icon name="seguindo" size={21} color={color} />
         }}   
         name="Seguindo" 
-        component={NotFoundPage} 
-      />
-      <Tab.Screen 
-        options={{
-          tabBarIcon: ({focused, color}) => <Icon name="chat" size={21} color={color} />
-        }}   
-        name="Mensagens" 
         component={NotFoundPage} 
       />
     </Tab.Navigator>

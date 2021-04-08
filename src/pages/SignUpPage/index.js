@@ -1,6 +1,6 @@
 import React from 'react'
 import { Feather } from '@expo/vector-icons';
-import { KeyboardAvoidingView, ScrollView, Text } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import {
   Container,
   WelcomeText,
@@ -17,15 +17,57 @@ import {
   NewsletterText,
   Button,
   ButtonText,
-  Check
+  Check,
+  ImageContainer,
+  ImageTextContainer,
+  ImageText,
 } from './styles';
 import { useState } from 'react';
+import {signUp} from '../../api/signup';
+import * as ImagePicker from 'expo-image-picker';
 
-const SignUpPage = () => {
+const SignUpPage = ({navigation}) => {
 
-  const [gender, setGender] = useState(null);
-  const [region, setRegion] = useState(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [user, setUser] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmation, setConfirmation] = useState('');
+  const [gender, setGender] = useState('');
+  const [region, setRegion] = useState('');
   const [newsletter, setNewsletter] = useState(false);
+  const [image, setImage] = useState('');
+
+  const handlePress = () => {
+    if (!email) {
+      Alert.alert('Email field is required.');
+    } else if (!password) {
+      Alert.alert('Password field is required.');
+    } else if (password != confirmation) {
+      Alert.alert('Password and confirmation are not the same.');
+    } else{
+      signUp(name, email, user, password, gender, region, newsletter, navigation);
+    }
+
+    setPassword('');
+    setConfirmation('');
+  };
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Erro','Desculpe, precisa permitir o acesso às suas fotos para isso!');
+        } else {
+          let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: false,
+            quality: 0.5,
+          });
+          if (!result.cancelled) {
+            setImage(result.uri);
+          }
+        }
+  }
 
 
   return (
@@ -37,10 +79,26 @@ const SignUpPage = () => {
           Bem vinde ao Nicho! Vamos recolher suas informações básicas e logo logo você poderá personalizar melhor aquilo que quer ver no app :)
           </WelcomeText>
 
+          {
+          image !== '' &&
+          <ImageContainer onPress={pickImage} >
+            <Image source={{ uri: image }} style={{ width: 150, height: 150 }}/>
+          </ImageContainer>
+          }
+
+          <ImageTextContainer onPress={pickImage} >
+            <Feather name="edit-2" size={14} color="#019B92" />
+            <ImageText>
+              {image === '' ? 'Adicionar' : 'Alterar'} foto de perfil
+            </ImageText>
+          </ImageTextContainer>
+
           <Input>
             <InputLabel>Nome completo</InputLabel>
             <InputContainer>
-              <TextInput />
+              <TextInput 
+                value={name}
+                onChangeText={(name) => setName(name)}/>
             </InputContainer>
           </Input>
 
@@ -48,7 +106,9 @@ const SignUpPage = () => {
             <InputLabel>Endereço de e-mail</InputLabel>
             <InputContainer>
               <Feather name="mail" style={{marginRight: 5}} size={16} color="#707070" />
-              <TextInput />
+              <TextInput
+                value={email}
+                onChangeText={(email) => setEmail(email)} />
             </InputContainer>
           </Input>
 
@@ -56,7 +116,9 @@ const SignUpPage = () => {
             <InputLabel>Nome de usuário</InputLabel>
             <InputContainer>
               <Feather name="at-sign" style={{marginRight: 5}} size={16} color="#707070" />
-              <TextInput />
+              <TextInput 
+                value={user}
+                onChangeText={(user) => setUser(user)}/>
             </InputContainer>
           </Input>
 
@@ -66,7 +128,10 @@ const SignUpPage = () => {
             <InputLabel>Senha</InputLabel>
             <InputContainer>
               <Feather name="lock" style={{marginRight: 5}} size={16} color="#707070" />
-              <TextInput />
+              <TextInput
+                value={password}
+                onChangeText={(password) => setPassword(password)}
+                secureTextEntry={true} />
               <Feather name="eye" style={{marginRight: 5}} size={16} color="#707070" />
 
             </InputContainer>
@@ -76,7 +141,10 @@ const SignUpPage = () => {
             <InputLabel>Confirmação de senha</InputLabel>
             <InputContainer>
               <Feather name="lock" style={{marginRight: 5}} size={16} color="#707070" />
-              <TextInput />
+              <TextInput 
+                value={confirmation}
+                onChangeText={(confirmation) => setConfirmation(confirmation)}
+                secureTextEntry={true}/>
               <Feather name="eye-off" style={{marginRight: 5}} size={16} color="#707070" />
             </InputContainer>
           </Input>
@@ -100,7 +168,7 @@ const SignUpPage = () => {
             <Option>
               <OptionLabel>Gênero</OptionLabel>
               <Pickerr
-                selectedValue={region}
+                selectedValue={gender}
                 onValueChange={(itemValue, itemIndex) =>
                   setGender(itemValue)
                 }>
@@ -113,7 +181,7 @@ const SignUpPage = () => {
             </Option>
           </PickerContainer>
           
-          <Newsletter>
+          <Newsletter onPress={() => setNewsletter(!newsletter)}>
             <Check style={{borderColor: newsletter ? '#019B92' : '#C4C4C4'}} onPress={() => setNewsletter(!newsletter)}>
               {newsletter ? <Feather name="check-square" size={18} color="#019B92" /> : <Feather name="square" size={18} color="#C4C4C4" />}
             </Check>
@@ -121,7 +189,7 @@ const SignUpPage = () => {
             <NewsletterText>quero receber novidades do Nicho no meu email</NewsletterText>
           </Newsletter>
 
-          <Button>
+          <Button onPress={handlePress}>
             <ButtonText>Criar conta</ButtonText>
           </Button>
         </Container>
