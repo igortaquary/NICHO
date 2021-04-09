@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 const NewProduct = () => {
     return(
         <Stack.Navigator initialRouteName="CreateProduct">
-            <Stack.Screen name="CreateProduct" component={CreateProductPage} />
+            <Stack.Screen options={{headerShown: true, title: 'Nova publicação'}} name="CreateProduct" component={CreateProductPage} />
         </Stack.Navigator>
     )
 };

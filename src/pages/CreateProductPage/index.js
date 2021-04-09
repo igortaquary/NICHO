@@ -8,6 +8,7 @@ import {
  } from './styles';
 import CreateProductCarousel from '../../components/CreateProductCarousel';
 import OptionButton from '../../components/OptionButton';
+import {addProduct} from '../../api/addProduct';
 
 const images = [
     {
@@ -36,7 +37,13 @@ const selectedCategorys = ["Cosméticos", "Adesivos"]
 const regions = [  "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO" ]
 const selectedRegions = [ "DF"]
 
-const CreateProductPage = () => {
+const primas = [
+  "Biscuit", "Papel", "Upcycling", "Metais", "Lápis", "Tinta",
+  "Tecido", "Barro e argila", "Madeira", "Vidro", "Cristais e pedras",
+  "Plástico", "Cimento", "Linhas e cordas", "Resina"]
+const selectedPrimas = ["Biscuit", "Resina"]
+
+const CreateProductPage = ({navigation}) => {
 
     const [productTitle, setProductTitle] = useState('');
     const [productDescription, setProductDescription] = useState('');
@@ -44,6 +51,10 @@ const CreateProductPage = () => {
     const [priceType, setPriceType] = useState('unique');
     const [productPrice, setProductPrice] = useState('');
     const [productPrice2, setProductPrice2] = useState('');
+
+    const handlePress = () => {
+      addProduct(productTitle, productDescription, selectedCategorys, selectedRegions, selectedPrimas, productPrice, images, navigation);
+    };
 
     return(
         <Container>
@@ -74,7 +85,7 @@ const CreateProductPage = () => {
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
                   {
                     categorys.map( (item) => 
-                      <OptionButton title={item} selected={selectedCategorys.includes(item)}/>
+                      <OptionButton key={item} title={item} selected={selectedCategorys.includes(item)}/>
                     )
                   }
                 </View>
@@ -88,14 +99,20 @@ const CreateProductPage = () => {
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
                   {
                     regions.map( (item) => 
-                      <OptionButton title={item} selected={selectedRegions.includes(item)}/>
+                      <OptionButton key={item} title={item} selected={selectedRegions.includes(item)}/>
                     )
                   }
                 </View>
             </Input>
             <Input>
                 <InputLabel>Materia Prima</InputLabel>
-                
+                <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
+                  {
+                    primas.map( (item) => 
+                      <OptionButton key={item} title={item} selected={selectedPrimas.includes(item)}/>
+                    )
+                  }
+                </View>
             </Input>
             <Input>
                 <InputLabel>Preço</InputLabel>
@@ -139,7 +156,7 @@ const CreateProductPage = () => {
                   </>
                 }
             </Input>
-            <PublishButton>
+            <PublishButton onPress={handlePress}>
                 <PublishButtonText>
                   Publicar Produto
                 </PublishButtonText>

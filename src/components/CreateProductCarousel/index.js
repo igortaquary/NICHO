@@ -11,10 +11,33 @@ import {
   RightFixedIcons,
   IconContainer
 } from './styles';
+import * as ImagePicker from 'expo-image-picker';
 
 const CreateProductCarousel = ({ data }) => {
 
   const [currentImage, setCurrentImage] = useState(0);
+
+  const handleImageChange = (image) => {
+    data[currentImage].url = image;
+    setCurrentImage(currentImage);
+  }
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Erro','Desculpe, precisa permitir o acesso às suas fotos para isso!');
+        } else {
+          let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: false,
+            quality: 0.5,
+          });
+          if (!result.cancelled) {
+            setCurrentImage(4);
+            handleImageChange(result.uri);
+          }
+        }
+  }
 
   const handleScroll = ({ nativeEvent }) => {
     const current = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width)
@@ -39,7 +62,7 @@ const CreateProductCarousel = ({ data }) => {
           ))}
         </ScrollView>
         <EditButton >
-          <IconContainer>
+          <IconContainer onPress={pickImage}>
             <Icon name="lapis" size={20} color="white" style={{}} />
           </IconContainer>
         </EditButton>
