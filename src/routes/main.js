@@ -7,7 +7,10 @@ import ArtistPage from "../pages/ArtistPage";
 import Icon from "../components/Icon";
 import CustomDrawer from "../components/CustomDrawer";
 import HomePage from "../pages/HomePage";
+import SavedPage from "../pages/SavedPage";
+import DrawerHeader from '../components/DrawerHeader';
 import EventPage from "../pages/EventPage";
+
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -59,7 +62,7 @@ const HomePages = () => {
           ),
         }}
         name="Salvos"
-        component={NotFoundPage}
+        component={SavedPage}
       />
       <Tab.Screen
         options={{
@@ -85,9 +88,12 @@ const HomePages = () => {
 
 const MainPages = () => {
   return (
-    <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawer {...props} />}
-      screenOptions={{ headerShown: true }}
+    <Drawer.Navigator 
+      drawerContent={props => <CustomDrawer {...props} />} 
+      screenOptions={{ 
+        headerShown: true,
+        header: ({scene}) => <DrawerHeader scene={scene} />,
+      }}
     >
       <Drawer.Screen name="Home" component={HomePages} />
       <Drawer.Screen name="Alone Page" component={NotFoundPage} />
