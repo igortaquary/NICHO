@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 // import {Transitioning} from 'react-native-reanimated';
 export const Container = styled.View`
   background-color: white;
@@ -24,5 +24,4 @@ export const ToggleButtonText = styled.Text`
 export const Content = styled.View`
   padding: 0 40px 20px 40px;
   /* height: 100px; */
-
 `;
