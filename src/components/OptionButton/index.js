@@ -1,12 +1,24 @@
 import React from 'react';
-import { Container, Title } from './styles';
+import { Container, Title, IconContainer } from './styles';
+import Icon from '../Icon';
 
-const OptionButton = (props) => {
+const OptionButton = ({selected, title, onPress, icon}) => {
     return(
-        <Container selected={props.selected}>
-            <Title selected={props.selected}>
-                {props.title}
+        <Container selected={selected} onPress={onPress}>
+            {icon ? 
+            <>
+            <IconContainer>
+                <Icon name={icon} size={12} color={selected ? "#019B92" : "#707070"} />
+             </IconContainer>
+            <Title selected={selected} icon={icon}>
+                {title}
             </Title>
+            </>
+            :
+            <Title selected={selected}>
+                {title}
+            </Title>
+            }
         </Container>
     )
 };

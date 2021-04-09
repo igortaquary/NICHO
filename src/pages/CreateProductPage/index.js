@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Alert } from 'react-native';
 import { 
   Container, Description, Input, 
   InputContainer, InputLabel, TextInput,
@@ -8,6 +8,7 @@ import {
  } from './styles';
 import CreateProductCarousel from '../../components/CreateProductCarousel';
 import OptionButton from '../../components/OptionButton';
+import Label from '../../components/Label';
 import {addProduct} from '../../api/addProduct';
 
 const images = [
@@ -32,16 +33,16 @@ const categorys = [
   "Adesivos", "Para vestir", "Para sua casa", 
   "Papelaria", "Cosméticos","Impressões", "Esculturas", 
   "Desenhos", "Acessórios", "Pinturas" ]
-const selectedCategorys = ["Cosméticos", "Adesivos"]
+//const selectedCategorys = ["Cosméticos", "Adesivos"]
 
 const regions = [  "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO" ]
-const selectedRegions = [ "DF"]
+//const selectedRegions = [ "DF"]
 
 const primas = [
   "Biscuit", "Papel", "Upcycling", "Metais", "Lápis", "Tinta",
   "Tecido", "Barro e argila", "Madeira", "Vidro", "Cristais e pedras",
   "Plástico", "Cimento", "Linhas e cordas", "Resina"]
-const selectedPrimas = ["Biscuit", "Resina"]
+//const selectedPrimas = ["Biscuit", "Resina"]
 
 const CreateProductPage = ({navigation}) => {
 
@@ -51,10 +52,51 @@ const CreateProductPage = ({navigation}) => {
     const [priceType, setPriceType] = useState('unique');
     const [productPrice, setProductPrice] = useState('');
     const [productPrice2, setProductPrice2] = useState('');
+    //Options vars
+    const [selectedCategorys, setSelectedCategorys] = useState([]);
+    const [selectedRegions, setSelectedRegions] = useState([]);
+    const [selectedPrimas, setSelectedPrimas] = useState([]);
+    const [selectedDelivery, setSelectedDelivery] = useState([]);
 
     const handlePress = () => {
-      addProduct(productTitle, productDescription, selectedCategorys, selectedRegions, selectedPrimas, productPrice, images, navigation);
+      if(checkInputs()){
+        addProduct(productTitle, productDescription, selectedCategorys, selectedRegions, selectedPrimas, productPrice, images, navigation);
+      }
     };
+
+    const checkInputs = () => {
+      if(productTitle.length < 4){
+        Alert.alert('O titulo do seu produto deve ter pelo menos 4 caracteres');
+        return false;
+      }
+      if(productDescription.length < 10){
+        Alert.alert('A descrição do seu produto deve ter pelo menos 10 caracteres');
+        return false;
+      }
+      if(selectedCategorys.length < 1){
+        Alert.alert('Escolha pelo menos uma categoria para seu produto');
+        return false;
+      }
+      if(selectedRegions.length < 1){
+        Alert.alert('Escolha pelo menos uma região para seu produto');
+        return false;
+      }
+      if(selectedPrimas.length < 1){
+        Alert.alert('Escolha pelo menos uma matéria prima para seu produto');
+        return false;
+      }
+      if(productPrice){
+
+      }
+      if(priceType !== 'unique'){
+        if(productPrice2 === ''){
+          Alert.alert('Digite o valor final do seu produto', 
+          'Um produto com faixa de preço deve ter um preço mínimo e um máximo');
+          return false
+        }
+      }
+      return true;
+    }
 
     return(
         <Container>
@@ -83,23 +125,42 @@ const CreateProductPage = ({navigation}) => {
             <Input>
                 <InputLabel>Escolha as categorias do seu produto</InputLabel>
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
-                  {
-                    categorys.map( (item) => 
-                      <OptionButton key={item} title={item} selected={selectedCategorys.includes(item)}/>
-                    )
-                  }
+                  { categorys.map( (item) => 
+                    <OptionButton key={item} title={item} selected={selectedCategorys.includes(item)}
+                      onPress={ 
+                        () => setSelectedCategorys( prev => prev.includes(item) ? 
+                        prev.filter(e => e !== item) : [...prev, item] ) 
+                      } /> 
+                  )}
                 </View>
             </Input>
             <Input>
                 <InputLabel>Opções de entrega</InputLabel>
-                
+                <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
+                  <OptionButton title="Encomendas" icon="ampulheta" 
+                  selected={selectedDelivery.includes("Encomendas")}
+                  onPress={ 
+                    () => setSelectedDelivery( prev => prev.includes("Encomendas") ? 
+                    prev.filter(e => e !== "Encomendas") : [...prev, "Encomendas"] ) 
+                  }/>
+                  <OptionButton title="Pronta Entrega" icon="check"
+                  selected={selectedDelivery.includes("Pronta Entrega")}
+                  onPress={ 
+                    () => setSelectedDelivery( prev => prev.includes("Pronta Entrega") ? 
+                    prev.filter(e => e !== "Pronta Entrega") : [...prev, "Pronta Entrega"] ) 
+                  }/>
+                </View>
             </Input>
             <Input>
                 <InputLabel>Região</InputLabel>
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
                   {
                     regions.map( (item) => 
-                      <OptionButton key={item} title={item} selected={selectedRegions.includes(item)}/>
+                      <OptionButton key={item} title={item} selected={selectedRegions.includes(item)}
+                      onPress={ 
+                        () => setSelectedRegions( prev => prev.includes(item) ? 
+                        prev.filter(e => e !== item) : [...prev, item] ) 
+                      }/>
                     )
                   }
                 </View>
@@ -109,7 +170,11 @@ const CreateProductPage = ({navigation}) => {
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
                   {
                     primas.map( (item) => 
-                      <OptionButton key={item} title={item} selected={selectedPrimas.includes(item)}/>
+                      <OptionButton key={item} title={item} selected={selectedPrimas.includes(item)}
+                      onPress={ 
+                        () => setSelectedPrimas( prev => prev.includes(item) ? 
+                        prev.filter(e => e !== item) : [...prev, item] ) 
+                      }/>
                     )
                   }
                 </View>
@@ -161,7 +226,7 @@ const CreateProductPage = ({navigation}) => {
                   Publicar Produto
                 </PublishButtonText>
             </PublishButton>
-            <CancelButton>
+            <CancelButton onPress={() => navigation.goBack()}>
                 <CancelButtonText>
                   Cancelar
                 </CancelButtonText>
