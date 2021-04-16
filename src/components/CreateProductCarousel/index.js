@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import { ScrollView, Image, View, Dimensions, Text } from 'react-native';
+import { ScrollView, Image, View, Dimensions, Text, TouchableOpacity } from 'react-native';
 import Icon from '../../components/Icon';
 import { 
   Container, 
@@ -13,13 +13,22 @@ import {
 } from './styles';
 import * as ImagePicker from 'expo-image-picker';
 
-const CreateProductCarousel = ({ data }) => {
+const CreateProductCarousel = ({ images, setImages }) => {
 
   const [currentImage, setCurrentImage] = useState(0);
 
   const handleImageChange = (image) => {
-    data[currentImage].url = image;
-    setCurrentImage(currentImage);
+    if(currentImage === images.length){
+      setImages( prev => [...prev, image])
+    } else {
+      setImages( Object.assign([...images], {
+        [currentImage]: image,
+      }) )
+    }
+  }
+
+  const handleImageRemove = () => {
+    setImages(prev => prev.filter( (img, i) => i !== currentImage ))
   }
 
   const pickImage = async () => {
@@ -33,7 +42,7 @@ const CreateProductCarousel = ({ data }) => {
             quality: 0.5,
           });
           if (!result.cancelled) {
-            setCurrentImage(4);
+            //setCurrentImage(4);
             handleImageChange(result.uri);
           }
         }
@@ -57,20 +66,35 @@ const CreateProductCarousel = ({ data }) => {
           onScroll={handleScroll}
           style={{ height: 300, width: 300, flexDirection: 'row', flex: 1 }}
         >
-          {data.map((item) => (
-            <Image source={{ uri: item.url }} key={item.id} style={{ flex: 1, width: 300, backgroundColor: item.color }} />
+          {images.map((item, index) => (
+            <Image source={{ uri: item }} key={index} style={{ flex: 1, width: 300, backgroundColor: 'grey'}} />
           ))}
+          { images.length < 3 && 
+            <TouchableOpacity onPress={pickImage} style={{ height: 300, width: 300, backgroundColor: 'lightgray', 
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+              <Text style={{color: 'grey'}}>Adicionar Imagem</Text>
+            </TouchableOpacity>
+          }
         </ScrollView>
-        <EditButton >
-          <IconContainer onPress={pickImage}>
-            <Icon name="lapis" size={20} color="white" style={{}} />
-          </IconContainer>
-        </EditButton>
+        {
+          currentImage < images.length &&
+          <EditButton >
+            <IconContainer onPress={handleImageRemove}>
+              <Icon name="apagar" size={20} color="white"  />
+            </IconContainer>
+            <IconContainer onPress={pickImage}>
+              <Icon name="lapis" size={20} color="white" />
+            </IconContainer>
+          </EditButton>
+        }
       </Carousel>
       <Indicator>
-        {data.map((i, index) => (
+        {images.map((i, index) => (
           <CurrentIndicator key={index} style={{ backgroundColor: index == currentImage ? '#707070' : 'transparent' }}></CurrentIndicator>
         ))}
+        { images.length < 3 &&
+          <CurrentIndicator key='new' style={{ backgroundColor: images.length == currentImage ? '#707070' : 'transparent' }}></CurrentIndicator>
+        }
       </Indicator>
     </Container>
   )

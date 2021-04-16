@@ -5,9 +5,9 @@ import {Alert} from "react-native";
 export async function addProduct(productTitle, productDescription, selectedCategorys, selectedRegions, selectedPrimas, productPrice, images, navigation) {
   try {
     const currentUser = firebase.auth().currentUser;
-    if(images[0].url != "https://source.unsplash.com/featured/?handmade"){
+    if(images[0]){
         const reference = firebase.storage().ref('user_products/' + currentUser.uid + '/' + productTitle);
-        const response = await fetch(images[0].url)
+        const response = await fetch(images[0])
         const blob = await response.blob();
         await reference.put(blob);
     }

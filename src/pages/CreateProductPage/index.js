@@ -11,24 +11,6 @@ import OptionButton from '../../components/OptionButton';
 import Label from '../../components/Label';
 import {addProduct} from '../../api/addProduct';
 
-const images = [
-    {
-      id: 1,
-      color: 'yellow',
-      url: 'https://source.unsplash.com/featured/?handmade'
-    },
-    {
-      id: 2,
-      color: 'blue',
-      url: 'https://source.unsplash.com/featured/?handmade'
-    },
-    {
-      id: 3,
-      color: 'orange',
-      url: 'https://source.unsplash.com/featured/?handmade'
-    },
-  ]
-
 const categorys = [
   "Adesivos", "Para vestir", "Para sua casa", 
   "Papelaria", "Cosméticos","Impressões", "Esculturas", 
@@ -45,6 +27,8 @@ const primas = [
 //const selectedPrimas = ["Biscuit", "Resina"]
 
 const CreateProductPage = ({navigation}) => {
+
+    const [images, setImages] = useState([]);
 
     const [productTitle, setProductTitle] = useState('');
     const [productDescription, setProductDescription] = useState('');
@@ -100,7 +84,7 @@ const CreateProductPage = ({navigation}) => {
 
     return(
         <Container>
-            <CreateProductCarousel data={images}/>
+            <CreateProductCarousel images={images} setImages={setImages}/>
             <Input>
                 <InputLabel>Título</InputLabel>
                 <InputContainer>
