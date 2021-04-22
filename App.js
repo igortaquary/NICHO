@@ -80,7 +80,6 @@ export default function App() {
   }
 
   useEffect(() => {
-    console.log("rodou")
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);

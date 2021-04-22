@@ -29,11 +29,11 @@ const images = [
     },
   ]
 
-const categorys = [
+const Categories = [
   "Adesivos", "Para vestir", "Para sua casa", 
   "Papelaria", "Cosméticos","Impressões", "Esculturas", 
   "Desenhos", "Acessórios", "Pinturas" ]
-//const selectedCategorys = ["Cosméticos", "Adesivos"]
+//const selectedCategories = ["Cosméticos", "Adesivos"]
 
 const regions = [  "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO" ]
 //const selectedRegions = [ "DF"]
@@ -53,14 +53,14 @@ const CreateProductPage = ({navigation}) => {
     const [productPrice, setProductPrice] = useState('');
     const [productPrice2, setProductPrice2] = useState('');
     //Options vars
-    const [selectedCategorys, setSelectedCategorys] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedRegions, setSelectedRegions] = useState([]);
     const [selectedPrimas, setSelectedPrimas] = useState([]);
     const [selectedDelivery, setSelectedDelivery] = useState([]);
 
     const handlePress = () => {
       if(checkInputs()){
-        addProduct(productTitle, productDescription, selectedCategorys, selectedRegions, selectedPrimas, productPrice, images, navigation);
+        addProduct(productTitle, productDescription, selectedCategories, selectedDelivery, selectedRegions, selectedPrimas, productPrice, images, navigation);
       }
     };
 
@@ -73,7 +73,7 @@ const CreateProductPage = ({navigation}) => {
         Alert.alert('A descrição do seu produto deve ter pelo menos 10 caracteres');
         return false;
       }
-      if(selectedCategorys.length < 1){
+      if(selectedCategories.length < 1){
         Alert.alert('Escolha pelo menos uma categoria para seu produto');
         return false;
       }
@@ -125,10 +125,10 @@ const CreateProductPage = ({navigation}) => {
             <Input>
                 <InputLabel>Escolha as categorias do seu produto</InputLabel>
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
-                  { categorys.map( (item) => 
-                    <OptionButton key={item} title={item} selected={selectedCategorys.includes(item)}
+                  { Categories.map( (item) => 
+                    <OptionButton key={item} title={item} selected={selectedCategories.includes(item)}
                       onPress={ 
-                        () => setSelectedCategorys( prev => prev.includes(item) ? 
+                        () => setSelectedCategories( prev => prev.includes(item) ? 
                         prev.filter(e => e !== item) : [...prev, item] ) 
                       } /> 
                   )}
