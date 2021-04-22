@@ -21,7 +21,7 @@ const CustomDrawer = ({navigation}) => {
 
     return (
         <Container>
-            <Avatar source={{uri: userData.foto} || {uri: "https://source.unsplash.com/featured/412x115/?craft"}} />
+            <Avatar source={{uri: "https://source.unsplash.com/featured/412x115/?craft"}} />
             <Welcome>Olá, {userData.nome} :)</Welcome>
             <WelcomeSubTitle>Seja bem vinda!</WelcomeSubTitle>
             <DrawerOption 

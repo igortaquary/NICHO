@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, KeyboardAvoidingView, ImageBackground, Platform, StatusBar } from 'react-native';
+import { Text, KeyboardAvoidingView, ImageBackground, Platform, StatusBar, Dimensions } from 'react-native';
 import {
     Container,
     ScrollContainer,
@@ -24,11 +24,13 @@ import LoginBg from '../../assets/login-bg.jpg';
 import LogoImg from '../../assets/nicho-logo.png';
 import {signIn} from '../../api/auth';
 import {Alert} from "react-native";
+import { AntDesign } from '@expo/vector-icons';
 
 const LoginPage = ({navigation}) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [scrollIndicator, setScrollIndicator] = useState(false);
 
     const handlePress = () => {
         if (!email) {
@@ -43,13 +45,38 @@ const LoginPage = ({navigation}) => {
         setPassword('');
     };
 
+    const handleLayout = (e) => {
+        const {height} = e.nativeEvent.layout;
+        const ScreenHeight = Dimensions.get('window').height;
+        if(height - ScreenHeight > 50) {
+            setScrollIndicator(true);
+        }
+    }
+
+    const handleScroll = (nativeEvent) => {
+        const isClose = isCloseToBottom(nativeEvent);
+        if(isClose){
+            setScrollIndicator(false);
+        } else {
+            setScrollIndicator(true);
+        }
+    }
+
+    const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+        const paddingToBottom = 50;
+        return layoutMeasurement.height + contentOffset.y >=
+          contentSize.height - paddingToBottom;
+    };
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} enabled style={{ flex: 1 }}>
             <StatusBar translucent />
             <ImageBackground source={LoginBg} style={{ flex: 1 }} >
-                <ScrollContainer>
-                    <Container>
-
+                <ScrollContainer
+                    onScroll={({nativeEvent}) => handleScroll(nativeEvent)}
+                    scrollEventThrottle={400}
+                >
+                    <Container onLayout={handleLayout}>
                         <Line />
                         <Logo source={LogoImg} />
                         <TitleText>
@@ -85,8 +112,11 @@ const LoginPage = ({navigation}) => {
                                 <ChangePasswordLinkText>Esqueceu sua senha?</ChangePasswordLinkText>
                             </ChangePasswordLink>
                         </MainContainer>
+                        {scrollIndicator && 
+                            <AntDesign style={{position: 'absolute', bottom: 100}} name="downcircleo" size={24} color="white" />
+                        }
                         <Text
-                            style={{ marginTop: 24, marginBottom: 24, fontSize: 16, color: 'white', fontFamily: 'Raleway_400Regular' }}>
+                            style={{ opacity: scrollIndicator ? 0 : 1,marginTop: 24, marginBottom: 24, fontSize: 16, color: 'white', fontFamily: 'Raleway_400Regular' }}>
                             OU
                             </Text>
                         <ExploreButton onPress={() => navigation.navigate('Main')}>
