@@ -109,7 +109,7 @@ const CreateProductPage = ({navigation}) => {
             <Input>
                 <InputLabel>Escolha as categorias do seu produto</InputLabel>
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
-                  { Categories.map( (item) => 
+                  { categories.map( (item) => 
                     <OptionButton key={item} title={item} selected={selectedCategories.includes(item)}
                       onPress={ 
                         () => setSelectedCategories( prev => prev.includes(item) ? 

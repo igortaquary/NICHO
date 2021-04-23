@@ -24,11 +24,14 @@ import LoginBg from '../../assets/login-bg.jpg';
 import LogoImg from '../../assets/nicho-logo.png';
 import {signIn} from '../../api/auth';
 import {Alert} from "react-native";
+import { useUserContext } from '../../contexts/userContext';
 
 const LoginPage = ({navigation}) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const {SignIn} = useUserContext();
 
     const handlePress = () => {
         if (!email) {
@@ -36,7 +39,7 @@ const LoginPage = ({navigation}) => {
         } else if (!password) {
             Alert.alert('Password field is required.');
         } else {
-            signIn(email, password, navigation);
+            SignIn(email, password, navigation);
         }
 
         setEmail('');
