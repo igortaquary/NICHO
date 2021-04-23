@@ -26,33 +26,18 @@ import {
   More
 } from './styles';
 
-const data = [
-  {
-    id: 1,
-    color: 'yellow',
-    url: 'https://source.unsplash.com/featured/?handmade'
-  },
-  {
-    id: 2,
-    color: 'blue',
-    url: 'https://source.unsplash.com/featured/?handmade'
-  },
-  {
-    id: 3,
-    color: 'orange',
-    url: 'https://source.unsplash.com/featured/?handmade'
-  },
-]
-
-const ProductPage = ({navigation}) => {
+const ProductPage = ({navigation, route}) => {
+  const images = route.params.images;
+  const product = route.params.product;
+  
   return (
     <Container>
-      <ProductCarousel data={data} />
+      <ProductCarousel data={images} />
       <MainInfo>
         <Artist onPress={() => navigation.navigate('Página do Artista')}>
-          <ArtistText>Por Juliana Daglio</ArtistText>
+          <ArtistText>Por {product.nome}</ArtistText>
         </Artist>
-        <ProductName>Produto Maravilhoso</ProductName>
+        <ProductName>{product.titulo}</ProductName>
         <Labels>
           <Label text='Para vestir' />
           <Label text='GO' />
@@ -64,15 +49,7 @@ const ProductPage = ({navigation}) => {
       </MainInfo>
       <Accordion title='Descrição' key={1}>
         <Description>
-          Atirei o pau no gatis, per gatis num morreus. Si u mundo tá muito paradis? Toma um mé que o mundo vai girarzis!
-          Praesent malesuada urna nisi, quis volutpat erat hendrerit non. Nam vulputate dapibus. Praesent vel viverra nisi.
-          Mauris aliquet nunc non turpis scelerisque, eget.Mauris nec dolor in eros commodo tempor. Aenean aliquam molestie
-          leo, vitae iaculis nisl. Quem num gosta di mé, boa gentis num é. Suco de cevadiss, é um leite divinis, qui tem
-          lupuliz, matis, aguis e fermentis. Quem manda na minha terra sou euzis!Mais vale um bebadis conhecidiss, que um
-          alcoolatra anonimis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis.
-          Vehicula non. Ut sed ex eros. Vivamus sit amet nibh non tellus tristique interdum. Interessantiss quisso pudia
-          ce receita de bolis, mais bolis eu num gostis. Diuretics paradis num copo é motivis de denguis. Interagi no mé,
-          cursus quis, vehicula ac nisi. Mé faiz elementum girarzis, nisi eros vermeio.
+          {product.descricao}
         </Description>
       </Accordion>
 

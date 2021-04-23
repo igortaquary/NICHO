@@ -25,6 +25,7 @@ import {
 import { useState } from 'react';
 import {signUp} from '../../api/signup';
 import * as ImagePicker from 'expo-image-picker';
+import { useUserContext } from '../../contexts/userContext';
 
 const SignUpPage = ({navigation}) => {
 
@@ -38,7 +39,9 @@ const SignUpPage = ({navigation}) => {
   const [newsletter, setNewsletter] = useState(false);
   const [image, setImage] = useState('');
 
-  const handlePress = () => {
+  const {SignUp} = useUserContext()
+
+  const handlePress = async () => {
     if (!email) {
       Alert.alert('Email field is required.');
     } else if (!password) {
@@ -46,7 +49,7 @@ const SignUpPage = ({navigation}) => {
     } else if (password != confirmation) {
       Alert.alert('Password and confirmation are not the same.');
     } else{
-      signUp(name, email, user, password, gender, region, newsletter, navigation, image);
+      await SignUp(name, email, user, password, gender, region, newsletter, navigation, image);
     }
 
     setPassword('');

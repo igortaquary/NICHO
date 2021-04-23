@@ -14,7 +14,7 @@ export const Container = styled(View)`
 
 export const Line = styled(View)`
   width: 8px;
-  height: 137px;
+  height: 100px;
   background-color: white;
   margin-bottom: 42px;
 `;
@@ -104,6 +104,7 @@ export const ExploreButton = styled(TouchableOpacity)`
   height: 39px;
   background-color: white;
   border-radius: 20px;
+  margin-bottom: 30px;
   /* margin-bottom: 100%; */
 `; 
 
