@@ -29,6 +29,10 @@ import {
 const ProductPage = ({navigation, route}) => {
   const images = route.params.images;
   const product = route.params.product;
+
+  React.useEffect( () => {
+    navigation.setOptions({ title: product.titulo })
+  }, [])
   
   return (
     <Container>
