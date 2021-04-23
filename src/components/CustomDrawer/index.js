@@ -19,11 +19,21 @@ const CustomDrawer = ({navigation}) => {
     const [selected, setSelected] = useState();
     const {user} = useUserContext();
 
+    const getUserPronoun = () => {
+        if(user?.genero === 'M'){
+            return 'Seja bem vindo!'
+        } else if(user?.genero === 'F') {
+            return 'Seja bem vinda!'
+        } else {
+            return 'Seja bem vinde!'
+        }
+    }
+
     return (
         <Container>
             <Avatar source={{uri: user?.foto} || {uri: "https://source.unsplash.com/featured/412x115/?craft"}} />
             <Welcome>Olá, {user?.nome} :)</Welcome>
-            <WelcomeSubTitle>Seja bem vinda!</WelcomeSubTitle>
+            <WelcomeSubTitle>{getUserPronoun()}</WelcomeSubTitle>
             <DrawerOption 
                 text='Configurações' 
                 icon='config' 
