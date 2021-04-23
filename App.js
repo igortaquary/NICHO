@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./src/routes";
-import UserData from "./src/contexts/userData";
+import {UserProvider} from "./src/contexts/userContext";
 import fetchUser from "./src/api/fetchUser";
 
 import * as firebase from 'firebase';
@@ -89,11 +89,11 @@ export default function App() {
 
   } else {
     return (
-      <UserData.Provider value={[state, setState]}>
+      <UserProvider>
         <SafeAreaView style={{ flex: 1 }}>
           <Routes />
         </SafeAreaView>
-      </UserData.Provider>
+      </UserProvider>
     );
   }
 }

@@ -24,7 +24,9 @@ import LoginBg from '../../assets/login-bg.jpg';
 import LogoImg from '../../assets/nicho-logo.png';
 import {signIn} from '../../api/auth';
 import {Alert} from "react-native";
+import { useUserContext } from '../../contexts/userContext';
 import { AntDesign } from '@expo/vector-icons';
+
 
 const LoginPage = ({navigation}) => {
 
@@ -32,13 +34,15 @@ const LoginPage = ({navigation}) => {
     const [password, setPassword] = useState('');
     const [scrollIndicator, setScrollIndicator] = useState(false);
 
+    const {SignIn} = useUserContext();
+
     const handlePress = () => {
         if (!email) {
             Alert.alert('Email field is required.');
         } else if (!password) {
             Alert.alert('Password field is required.');
         } else {
-            signIn(email, password, navigation);
+            SignIn(email, password, navigation);
         }
 
         setEmail('');
