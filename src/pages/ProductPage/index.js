@@ -29,14 +29,20 @@ import {
 const ProductPage = ({navigation, route}) => {
   const images = route.params.images;
   const product = route.params.product;
+  console.log(route.params);
+  console.log(product);
 
   React.useEffect( () => {
     navigation.setOptions({ title: product.titulo })
   }, [])
+
+  const getImages = () => {
+    
+  }
   
   return (
     <Container>
-      <ProductCarousel data={images} />
+      <ProductCarousel data={[product.uri]} />
       <MainInfo>
         <Artist onPress={() => navigation.navigate('Página do Artista')}>
           <ArtistText>Por {product.nome}</ArtistText>

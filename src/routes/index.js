@@ -23,7 +23,7 @@ const headerStyle = {
 const Routes = () => {
     return(
         <NavigationContainer>
-            <StatusBar barStyle='dark-content' backgroundColor='transparent' hidden={Platform.OS === 'ios'}/>
+            <StatusBar barStyle='dark-content' backgroundColor='transparent'/>
             <Stack.Navigator headerMode='screen' >
                 <Stack.Screen options={{headerShown: false, }} name='Auth' component={AuthPages} />
                 <Stack.Screen options={{headerShown: false}} name='Main' component={MainPages} /> 
