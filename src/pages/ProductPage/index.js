@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Modal, Text, TouchableOpacity } from 'react-native';
+
 import Accordion from '../../components/Accordion';
 import Label from '../../components/Label';
 import ProductCarousel from '../../components/ProductCarousel';
@@ -30,12 +31,30 @@ import {
 } from './styles';
 import SaveProductModal from '../../components/SaveProductModal';
 
-const ProductPage = ({ navigation, route }) => {
-  const images = route.params.images;
+const ProductPage = ({ navigation, route }) => {  
+  //const images = route.params.images;
   const product = route.params.product;
-
+  
+  const [images, setImages] = useState([]);
   const { user } = useUserContext();
   const modalizeRef = useRef(null);
+
+  React.useEffect( () => {
+    navigation.setOptions({ title: product.titulo });
+    getImages();
+  }, [])
+
+  const getImages = async () => {
+    const auxImages = [];
+    try{
+      auxImages.push(product.uri);
+      auxImages.push(await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/1').getDownloadURL());
+      auxImages.push(await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/2').getDownloadURL());
+    } catch (err) {
+      console.log(err);
+    }
+    setImages(auxImages);
+  }
 
   const handleSavePress = async () => {
     console.log('clicou')

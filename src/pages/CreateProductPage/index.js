@@ -98,10 +98,11 @@ const CreateProductPage = ({navigation}) => {
                 <InputLabel>Descrição</InputLabel>
                 <InputContainer>
                 <TextInput 
+                    style={{textAlignVertical: 'top'}}
                     textAlign="left"
                     placeholder={"Diga um pouco mais sobre o seu produto..."}
                     multiline={true}
-                    numberOfLines={5}
+                    numberOfLines={4}
                     value={productDescription}
                     onChangeText={(desc) => setProductDescription(desc)} />
                 </InputContainer>

@@ -34,8 +34,8 @@ const ProductCarousel = ({ data, onSavePress }) => {
           onScroll={handleScroll}
           style={{ height: 450, width: Dimensions.get('window').width, flexDirection: 'row' }}
         >
-          {data.map((item) => (
-            <Image source={{ uri: item.url }} key={item.id} style={{ flex: 1, width: Dimensions.get('window').width, backgroundColor: item.color }} />
+          {data.map((item, index) => (
+            <Image source={{ uri: item.url || item.uri || item}} key={index} style={{ flex: 1, width: Dimensions.get('window').width }} />
           ))}
         </ScrollView>
         <LeftFixedIcons>
