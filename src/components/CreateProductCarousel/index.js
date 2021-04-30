@@ -1,7 +1,7 @@
-import React from 'react'
-import { useState } from 'react';
+import React, {useState, useRef} from 'react'
 import { ScrollView, Image, View, Dimensions, Text, TouchableOpacity } from 'react-native';
 import Icon from '../../components/Icon';
+import { Feather } from '@expo/vector-icons';
 import { 
   Container, 
   Carousel, 
@@ -17,9 +17,14 @@ const CreateProductCarousel = ({ images, setImages }) => {
 
   const [currentImage, setCurrentImage] = useState(0);
 
+  const scrollRef = useRef();
+
   const handleImageChange = (image) => {
     if(currentImage === images.length){
       setImages( prev => [...prev, image])
+      setTimeout(() => {
+        scrollRef.current.scrollToEnd();
+      }, 1000);
     } else {
       setImages( Object.assign([...images], {
         [currentImage]: image,
@@ -59,6 +64,7 @@ const CreateProductCarousel = ({ images, setImages }) => {
     <Container>
       <Carousel>
         <ScrollView
+          ref={scrollRef}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
@@ -72,7 +78,8 @@ const CreateProductCarousel = ({ images, setImages }) => {
           { images.length < 3 && 
             <TouchableOpacity onPress={pickImage} style={{ height: 300, width: 300, backgroundColor: 'lightgray', 
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-              <Text style={{color: 'grey'}}>Adicionar Imagem</Text>
+              <Feather name="camera" size={45} color={"#707070"}/>
+              <Text style={{color: '#707070'}}>Adicionar Imagem</Text>
             </TouchableOpacity>
           }
         </ScrollView>
@@ -80,7 +87,7 @@ const CreateProductCarousel = ({ images, setImages }) => {
           currentImage < images.length &&
           <EditButton >
             <IconContainer onPress={handleImageRemove}>
-              <Icon name="apagar" size={20} color="white"  />
+              <Feather name="x" size={20} color="white"  />
             </IconContainer>
             <IconContainer onPress={pickImage}>
               <Icon name="lapis" size={20} color="white" />
