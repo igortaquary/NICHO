@@ -6,31 +6,27 @@ import Style from "./styles";
 export default function RoundedButton({
   activeOpacity = 0.2,
   children,
-  active,
-  style,
-  textStyle,
-  onPress,
-  text,
+  ...props
 }) {
   return (
     <TouchableOpacity
       activeOpacity={activeOpacity}
       style={
-        active
-          ? [Style.normalButton, Style.selectedButton, style]
-          : [Style.normalButton, style]
+        props.active
+          ? [Style.normalButton, Style.selectedButton, props.style]
+          : [Style.normalButton, props.style]
       }
-      onPress={onPress}
+      onPress={props.onPress}
     >
       <Text
         numberOfLines={1}
         style={
-          active
-            ? [Style.normalText, Style.selectedText, textStyle]
-            : [Style.normalText, textStyle]
+          props.active
+            ? [Style.normalText, Style.selectedText, props.textStyle]
+            : [Style.normalText, props.textStyle]
         }
       >
-        {text}
+        {props.text}
       </Text>
       {children}
     </TouchableOpacity>
