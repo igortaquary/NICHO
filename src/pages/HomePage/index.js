@@ -23,7 +23,8 @@ const HomePage = ({navigation}) => {
         const querySnapshot = await firebase.firestore().collection('produto').get()
         querySnapshot.forEach( documentSnapshot => {
             const data = documentSnapshot.data();
-            auxProducts.push(data);
+            const id = documentSnapshot.id;
+            auxProducts.push({...data, id});
         });
         for(const product of auxProducts){
             const uri = await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/0').getDownloadURL();

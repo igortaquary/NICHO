@@ -23,21 +23,32 @@ const UserProvider = ({ children }) => {
     const loadCollections = async () => {
         console.log('loadCollections');
         console.log(user);
-        await firebase
+        const auxCollections = []
+        const res = await firebase
             .firestore()
             .collection('usuario')
             .doc(user.id)
             .collection('colecoes')
-            .get()
-            .then(res => {
-              const docs = res.docs.map(doc => doc);
-              setCollections(docs);
-            })
+            .get();
+        for(const doc of res.docs) {
+            let auxProdutos = []
+            for(const product of doc.data().produtos){
+                const produto = await firebase.firestore().collection('produto').doc(product.id).get();
+                const firstImage = await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/0').getDownloadURL();
+                auxProdutos.push({...produto.data(), uri: firstImage});
+            }
+            auxCollections.push({titulo: doc.data().titulo, produtos: auxProdutos, ref: doc.ref})
+        }
+        setCollections(auxCollections);
     }
 
     const addProductToCollection = async (doc, product) => {
         await doc.ref.update({
-            produtos: firebase.firestore.FieldValue.arrayUnion(product)
+            produtos: firebase.firestore.FieldValue.arrayUnion({
+                id: product.id,
+                anunciante: product.anunciante,
+                titulo: product.titulo
+            })
         })
         Alert.alert('Produto adicionado!')
         loadCollections();
@@ -51,7 +62,11 @@ const UserProvider = ({ children }) => {
             .collection('colecoes')
             .add({
                 titulo: newCollectionTitle,
-                produtos: [product]
+                produtos: [{
+                    id: product.id,
+                    anunciante: product.anunciante,
+                    titulo: product.titulo
+                }]
             });
         loadCollections();
         Alert.alert('Produto adicionado!')

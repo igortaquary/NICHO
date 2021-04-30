@@ -6,9 +6,9 @@ const SavedCard = ({label, labelStyle, images}) => {
     return (
         <Container >
             <Images>
-                <LeftImage source={{uri: images[0].imagens[0].url}}/>
-                <TopRightImage source={{uri: images[1]?.imagens[0].url}}/>
-                <BottomRightImage source={{uri: images[2]?.imagens[0].url}}/>            
+                <LeftImage source={{uri: images[0]?.uri}}/>
+                <TopRightImage source={{uri: images[1]?.uri}}/>
+                <BottomRightImage source={{uri: images[2]?.uri}}/>            
             </Images>
             <Text style={{marginTop: 5,...labelStyle}}>{label}</Text>
         </Container>

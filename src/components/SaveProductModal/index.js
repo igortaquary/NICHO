@@ -68,9 +68,9 @@ const SaveProductModal = ({ modalizeRef, product }) => {
             }
             <SectionTitle>Suas coleções</SectionTitle>
             {collections && collections.map(collection => (
-                <CollectionCard key={collection.id} onPress={() => addProductToCollection(collection, product)}>
-                    <CollectionImage source={{ uri: collection.data()?.produtos[0].imagens[0].url }} />
-                    <CollectionTitle>{collection.data().titulo}</CollectionTitle>
+                <CollectionCard key={collection.ref.id} onPress={() => addProductToCollection(collection, product)}>
+                    <CollectionImage source={{ uri: collection?.produtos[0].uri }} />
+                    <CollectionTitle>{collection.titulo}</CollectionTitle>
                 </CollectionCard>
             ))}
         </Modalize>
