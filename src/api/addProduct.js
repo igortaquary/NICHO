@@ -7,7 +7,7 @@ export async function addProduct(productTitle, productDescription, selectedCateg
     const currentUser = firebase.auth().currentUser;
     var i;
     for(i = 0; i < 3; i++){
-      if(images[i].url){
+      if(images[i]?.url){
         const reference = firebase.storage().ref('user_products/' + currentUser.uid + '/' + productTitle + '/' + i);
         const response = await fetch(images[i].url)
         const blob = await response.blob();
