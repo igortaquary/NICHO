@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text } from 'react-native';
 import Accordion from '../../components/Accordion';
 import Label from '../../components/Label';
@@ -25,24 +25,34 @@ import {
   CommentResponse,
   More
 } from './styles';
+import * as firebase from "firebase";
 
 const ProductPage = ({navigation, route}) => {
-  const images = route.params.images;
+  //const images = route.params.images;
   const product = route.params.product;
-  console.log(route.params);
-  console.log(product);
+  
+  const [images, setImages] = useState([]);
 
   React.useEffect( () => {
-    navigation.setOptions({ title: product.titulo })
+    navigation.setOptions({ title: product.titulo });
+    getImages();
   }, [])
 
-  const getImages = () => {
-    
+  const getImages = async () => {
+    const auxImages = [];
+    try{
+      auxImages.push(product.uri);
+      auxImages.push(await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/1').getDownloadURL());
+      auxImages.push(await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/2').getDownloadURL());
+    } catch (err) {
+      console.log(err);
+    }
+    setImages(auxImages);
   }
   
   return (
     <Container>
-      <ProductCarousel data={[product.uri]} />
+      <ProductCarousel data={images} />
       <MainInfo>
         <Artist onPress={() => navigation.navigate('Página do Artista')}>
           <ArtistText>Por {product.nome}</ArtistText>
