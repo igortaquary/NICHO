@@ -4,12 +4,16 @@ import { ConvertWidth as cw, ConvertHeight as ch } from "../Converter";
 export default StyleSheet.create({
   callout: {
     // position: "absolute",
-    // backgroundColor: "red",
+
     // flexShrink: 1,
     left: cw(3),
     top: ch(2.3),
+    // width: "120%",
+    // height: "120%",
     width: cw(150),
-    height: cw(50),
+    minHeight: cw(50),
+    zIndex: 2,
+    elevation: 2,
   },
 
   calloutText: {

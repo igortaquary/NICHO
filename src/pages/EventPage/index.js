@@ -142,7 +142,7 @@ export default function EventPage({ navigation }) {
             source={require("../../assets/minuto.png")}
           />
           <Text style={Style.infoText}>
-            acontecerá na Quarta à partir de 17:00h
+            acontecerá na Sexta das 14 às 17:00h
           </Text>
         </View>
 

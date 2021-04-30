@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from "react";
+﻿import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { Alert, View, Text } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import Constants from "expo-constants";
@@ -9,17 +9,22 @@ import * as Permissions from "expo-permissions";
 import * as IntentLauncher from "expo-intent-launcher";
 import Style from "./styles";
 import { ConvertWidth as cw, ConvertHeight as ch } from "../Converter";
-import { get } from "react-native/Libraries/Utilities/PixelRatio";
+import moment from "moment";
+import "moment/locale/pt-br";
 
 export default function ShowLocation({
   destinationLatitude,
   destinationLongitude,
   destinationName,
   style,
+  latitudeDelta,
+  longitudeDelta,
 }) {
-  const [remover, setRemover] = useState(null);
   const refMarker = useRef(null);
-  const [eta, setEta] = useState(0);
+  const [eta, setEta] = useState("");
+  const [latitudeSource, setLatitudeSource] = useState("");
+  const [longitudeSource, setLongitudeSource] = useState("");
+  moment.locale("pt-br");
 
   const pkg = Constants.manifest.releaseChannel
     ? Constants.manifest.android.package
@@ -40,7 +45,7 @@ export default function ShowLocation({
     ask: true,
   });
 
-  const getEta = (
+  const getEta = async (
     longitudeSource,
     latitudeSource,
     destinationLongitude,
@@ -48,18 +53,28 @@ export default function ShowLocation({
   ) => {
     let maxTries = 3;
     let count = 0;
-    fetch(
-      `http://router.project-osrm.org/table/v1/bike/${longitudeSource},${latitudeSource};${destinationLongitude},${destinationLatitude}?annotations=duration`
+    console.log(
+      `http://router.project-osrm.org/table/v1/car/${longitudeSource},${latitudeSource};${destinationLongitude},${destinationLatitude}?annotations=duration`
+    );
+    await fetch(
+      `http://router.project-osrm.org/table/v1/car/${longitudeSource},${latitudeSource};${destinationLongitude},${destinationLatitude}?annotations=duration`
     )
       .then((response) => response.json())
-      .then((json) => Math.round(json.durations[0][1] / 60))
-      .then((duration) => setEta(duration))
-      .catch((error) => {
+      .then((json) => {
+        console.log(json);
+        return Math.round(json.durations[0][1] / 60);
+      })
+      .then((duration) => {
+        setEta(moment.duration(duration, "minutes").humanize());
+        console.log("oi");
+        console.log(moment.duration(duration, "minutes").humanize());
+      })
+      .catch(async (error) => {
         count++;
         console.log(count);
         console.error(error);
         if (count < maxTries) {
-          getEta(
+          await getEta(
             longitudeSource,
             latitudeSource,
             destinationLongitude,
@@ -70,29 +85,50 @@ export default function ShowLocation({
   };
 
   useEffect(() => {
+    let rem;
     (async () => {
       let unsubscribe = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.BestForNavigation,
           distanceInterval: 200,
         },
-        (position) => {
-          let longitudeSource = position.coords.longitude;
-          let latitudeSource = position.coords.latitude;
-          // console.log(longitudeSource, latitudeSource);
-          getEta(
-            longitudeSource,
-            latitudeSource,
+        async (position) => {
+          console.log("listener de localizacao");
+          await getEta(
+            position.coords.longitude,
+            position.coords.latitude,
             destinationLongitude,
             destinationLatitude
           );
+          setLatitudeSource(position.coords.latitude);
+          setLongitudeSource(position.coords.longitude);
         }
       );
-      setRemover(unsubscribe);
+      rem = unsubscribe;
     })();
 
-    return () => remover.remove();
+    return () => rem.remove();
   }, []);
+
+  useLayoutEffect(() => {
+    setEta("");
+  }, [destinationLatitude, destinationLongitude]);
+
+  useEffect(() => {
+    console.log("rodou");
+    async function fetchEta() {
+      if (!!latitudeSource && !!longitudeSource) {
+        await getEta(
+          longitudeSource,
+          latitudeSource,
+          destinationLongitude,
+          destinationLatitude
+        );
+      }
+    }
+
+    fetchEta();
+  }, [destinationLongitude, destinationLatitude]);
 
   if (permission && permission.status !== "granted") {
     Alert.alert(
@@ -141,16 +177,22 @@ export default function ShowLocation({
     >
       <MapView
         style={style}
-        camera={{
-          center: {
-            latitude: -15.833620348354257,
-            longitude: -48.051536338917934,
-          },
-          pitch: 0,
-          heading: 0,
-          altitude: 18,
-          zoom: 15,
+        region={{
+          latitude: destinationLatitude,
+          longitude: destinationLongitude,
+          latitudeDelta: latitudeDelta,
+          longitudeDelta: longitudeDelta,
         }}
+        // camera={{
+        //   center: {
+        //     latitude: -15.833620348354257,
+        //     longitude: -48.051536338917934,
+        //   },
+        //   pitch: 0,
+        //   heading: 0,
+        //   altitude: 18,
+        //   zoom: 15,
+        // }}
         showsUserLocation={true}
         showsMyLocationButton={true}
         // showsTraffic={true}
@@ -159,22 +201,21 @@ export default function ShowLocation({
         onRegionChangeComplete={showInfo}
         onPress={openMapApp}
         onMarkerPress={openMapApp}
-        // onPoiClick={(e) => console.log(e.nativeEvent)}
       >
         <Marker
           coordinate={{
-            latitude: -15.833820348354257,
-            longitude: -48.051536338917934,
+            latitude: destinationLatitude,
+            longitude: destinationLongitude,
           }}
           calloutAnchor={{ x: cw(4), y: cw(1) }}
           ref={refMarker}
         >
           <Callout tooltip={true}>
             <View style={Style.callout}>
-              <Text style={Style.calloutText} numberOfLines={3}>
+              <Text style={Style.calloutText} numberOfLines={2}>
                 {destinationName}
               </Text>
-              <Text style={Style.etaText}>{eta} min carro - local atual</Text>
+              <Text style={Style.etaText}>{eta} carro - local atual</Text>
               {console.log(eta)}
             </View>
           </Callout>

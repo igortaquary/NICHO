@@ -1,14 +1,14 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import CategoryPage from "./../pages/CategoryPage";
+import NotFoundPage from "./../pages/NotFoundPage";
 
 const TopTab = createMaterialTopTabNavigator();
 
 const Locations = () => {
   return (
     <TopTab.Navigator>
-      <TopTab.Screen name="Eventos" component={CategoryPage} />
-      <TopTab.Screen name="Espaços" component={CategoryPage} />
+      <TopTab.Screen name="Eventos" component={NotFoundPage} />
+      <TopTab.Screen name="Espaços" component={NotFoundPage} />
     </TopTab.Navigator>
   );
 };
