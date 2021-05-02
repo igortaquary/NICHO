@@ -95,7 +95,7 @@ const MainPages = () => {
         header: ({scene}) => <DrawerHeader scene={scene} />,
       }}
     >
-      <Drawer.Screen name="Home" component={HomePages} />
+      <Drawer.Screen name="HomePages" component={HomePages} />
       <Drawer.Screen name="Alone Page" component={NotFoundPage} />
       <Drawer.Screen name="Página do Artista" component={ArtistPage} />
       <Drawer.Screen name="Página de Evento" component={EventPage} />

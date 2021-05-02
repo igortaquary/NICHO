@@ -9,6 +9,7 @@ import CreateProductPage from '../pages/CreateProductPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import ProductPage from '../pages/ProductPage';
 import { Feather } from '@expo/vector-icons';
+import CollectionPage from '../pages/CollectionPage';
 
 
 const Stack = createStackNavigator();
@@ -29,6 +30,7 @@ const Routes = () => {
                 <Stack.Screen options={{headerShown: false}} name='Main' component={MainPages} /> 
                 <Stack.Screen options={{title: 'Produto', ...headerStyle}} name='ProductPage' component={ProductPage} />
                 <Stack.Screen options={{title: 'Nova publicação', ...headerStyle}} name="NewProduct" component={CreateProductPage} /> 
+                <Stack.Screen options={{title: 'Coleção', ...headerStyle, headerStyle:{elevation: 0}}} name="Collection" component={CollectionPage} /> 
                 <Stack.Screen options={headerStyle} name='NotFound' component={NotFoundPage} />
             </Stack.Navigator>
         </NavigationContainer>
