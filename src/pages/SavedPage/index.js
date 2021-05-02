@@ -5,7 +5,7 @@ import SearchBar from '../../components/SearchBar';
 import { useUserContext } from '../../contexts/userContext';
 import { Container, Line, PlacesAndEvents } from './styles';
 
-const SavedPage = () => {
+const SavedPage = ({navigation}) => {
 
     const {collections} = useUserContext();
     const [searchText, setSeachText] = useState('');
@@ -13,6 +13,7 @@ const SavedPage = () => {
     const renderItem = (item, index) => {
     return (
         <SavedCard
+            onPress={() => navigation.navigate('Collection', {titulo: item.item.titulo, produtos: item.item.produtos})}
             images={item.item.produtos}
             label={item.item.titulo}
             labelStyle={{
