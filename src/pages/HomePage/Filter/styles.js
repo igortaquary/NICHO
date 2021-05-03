@@ -20,7 +20,6 @@ export default StyleSheet.create({
 
     flexDirection: "row",
     alignSelf: "flex-start",
-    justifyContent: "space-between",
   },
 
   firstLineCategoriasContainer: {
@@ -103,6 +102,7 @@ export default StyleSheet.create({
 
   label: {
     marginTop: cw(36),
+    marginBottom: cw(15),
     left: cw(9),
 
     alignSelf: "flex-start",

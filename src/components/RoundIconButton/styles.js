@@ -9,6 +9,7 @@ export default StyleSheet.create({
   button: {
     flexDirection: "row",
     alignItems: "center",
+    marginRight: cw(20),
   },
 
   iconContainer: {

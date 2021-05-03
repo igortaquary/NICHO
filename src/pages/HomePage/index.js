@@ -1,40 +1,21 @@
 import React, { useState, useEffect} from 'react';
-import PhotosGrid from '../../components/PhotosGrid';
 import * as firebase from "firebase";
+import PhotosGrid from '../../components/PhotosGrid';
+import SearchBar from '../../components/SearchBar';
+import { TouchableOpacity, Text, View } from 'react-native';
+import { useFilterContext } from '../../contexts/filterContext';
 
-const HomePage = ({navigation}) => {
+const HomePage = ({navigation, route}) => {
 
-    const [refreshing, setRefreshing] = useState(false);
-    //const [images, setImages] = useState([]);
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-        console.log(refreshing);
-        if(refreshing === false){
-            fetchProducts();
-        }
-    }, [])
-
-    const fetchProducts = async () => {
-        setRefreshing(true);
-        //console.log('fetch products');
-        const auxProducts = [];
-        const auxImages = [];
-        const querySnapshot = await firebase.firestore().collection('produto').get()
-        querySnapshot.forEach( documentSnapshot => {
-            const data = documentSnapshot.data();
-            auxProducts.push(data);
-        });
-        for(const product of auxProducts){
-            const uri = await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/0').getDownloadURL();
-            auxImages.push({...product, uri});
-        }
-        setProducts(auxImages);
-        setRefreshing(false);
-    }
+    const { products, loading } = useFilterContext();
 
     return(
-        <PhotosGrid products={products} refreshing={refreshing} navigation={navigation} />
+        <View style={{flex: 1}}>
+            <View style={{marginTop: 10, marginTop: 10, marginLeft: 20, marginRight: 20,  }}>
+                <SearchBar onPressFilter={() => navigation.navigate("Filters")}/>
+            </View>
+            <PhotosGrid products={products} refreshing={loading} navigation={navigation} />
+        </View>
     )
 };
 

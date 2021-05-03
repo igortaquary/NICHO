@@ -128,11 +128,11 @@ const CreateProductPage = ({navigation}) => {
                     () => setSelectedDelivery( prev => prev.includes("Encomendas") ? 
                     prev.filter(e => e !== "Encomendas") : [...prev, "Encomendas"] ) 
                   }/>
-                  <OptionButton title="Pronta Entrega" icon="check"
-                  selected={selectedDelivery.includes("Pronta Entrega")}
+                  <OptionButton title="Pronta-entrega" icon="check"
+                  selected={selectedDelivery.includes("Pronta-entrega")}
                   onPress={ 
-                    () => setSelectedDelivery( prev => prev.includes("Pronta Entrega") ? 
-                    prev.filter(e => e !== "Pronta Entrega") : [...prev, "Pronta Entrega"] ) 
+                    () => setSelectedDelivery( prev => prev.includes("Pronta-entrega") ? 
+                    prev.filter(e => e !== "Pronta-entrega") : [...prev, "Pronta-entrega"] ) 
                   }/>
                 </View>
             </Input>

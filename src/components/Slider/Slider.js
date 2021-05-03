@@ -13,84 +13,84 @@ export default function Slider() {
     <>
       <View style={Style.sliderContainer}>
         <View style={Style.labelContainer}>
-          <Text style={[Style.label]}>1kg</Text>
-          {sliderValue > 1 && <DottedLine style={Style.dottedLine} />}
+          <Text style={[Style.label]}>-R$10</Text>
+          {sliderValue > 10 && <DottedLine style={Style.dottedLine} />}
 
           <View style={{ left: cw(71) }}>
-            {sliderValue > 10 ? (
+            {sliderValue > 50 ? (
               <>
-                <Text style={[Style.label, Style.secondLabel]}>10kg</Text>
+                <Text style={[Style.label, Style.secondLabel]}>R$50</Text>
                 <DottedLine style={Style.dottedLine} />
               </>
-            ) : sliderValue == 10 ? (
-              <Text style={[Style.label, Style.secondLabel]}>10kg</Text>
+            ) : sliderValue == 50 ? (
+              <Text style={[Style.label, Style.secondLabel]}>R$50</Text>
             ) : (
               <Text
                 style={[Style.label, Style.lessThanLabel, Style.secondLabel]}
               >
-                10kg
+                R$50
               </Text>
             )}
           </View>
           <View style={{ left: cw(138.2) }}>
-            {sliderValue > 20 ? (
+            {sliderValue > 100 ? (
               <>
-                <Text style={[Style.label, Style.thirdLabel]}>20kg</Text>
+                <Text style={[Style.label, Style.thirdLabel]}>R$100</Text>
                 <DottedLine style={Style.dottedLine} />
               </>
-            ) : sliderValue == 20 ? (
-              <Text style={[Style.label, Style.thirdLabel]}>20kg</Text>
+            ) : sliderValue == 100 ? (
+              <Text style={[Style.label, Style.thirdLabel]}>R$100</Text>
             ) : (
               <Text
                 style={[Style.label, Style.lessThanLabel, Style.thirdLabel]}
               >
-                20kg
+                R$100
               </Text>
             )}
           </View>
           <View style={{ left: cw(205.7) }}>
-            {sliderValue > 30 ? (
+            {sliderValue > 150 ? (
               <>
-                <Text style={[Style.label, Style.fourthLabel]}>30kg</Text>
+                <Text style={[Style.label, Style.fourthLabel]}>R$150</Text>
                 <DottedLine style={Style.dottedLine} />
               </>
-            ) : sliderValue == 30 ? (
-              <Text style={[Style.label, Style.fourthLabel]}>30kg</Text>
+            ) : sliderValue == 150 ? (
+              <Text style={[Style.label, Style.fourthLabel]}>R$150</Text>
             ) : (
               <Text
                 style={[Style.label, Style.lessThanLabel, Style.fourthLabel]}
               >
-                30kg
+                R$150
               </Text>
             )}
           </View>
           <View style={{ left: cw(272.8) }}>
-            {sliderValue > 40 ? (
+            {sliderValue > 200 ? (
               <>
-                <Text style={[Style.label, Style.fifthLabel]}>40kg</Text>
+                <Text style={[Style.label, Style.fifthLabel]}>R$200</Text>
                 <DottedLine style={Style.dottedLine} />
               </>
-            ) : sliderValue == 40 ? (
-              <Text style={[Style.label, Style.fifthLabel]}>40kg</Text>
+            ) : sliderValue == 200 ? (
+              <Text style={[Style.label, Style.fifthLabel]}>R$200</Text>
             ) : (
               <Text
                 style={[Style.label, Style.lessThanLabel, Style.fifthLabel]}
               >
-                40kg
+                R$200
               </Text>
             )}
           </View>
           <View style={{ left: cw(350) }}>
-            {sliderValue >= 50 ? (
-              <Text style={[Style.label, Style.sixthLabel]}>50kg+</Text>
-            ) : sliderValue == 50 ? (
-              <Text style={[Style.label, Style.sixthLabel]}>50kg</Text>
+            {sliderValue >= 250 ? (
+              <Text style={[Style.label, Style.sixthLabel]}>R$250+</Text>
+            ) : sliderValue == 250 ? (
+              <Text style={[Style.label, Style.sixthLabel]}>R$250</Text>
             ) : (
               <>
                 <Text
                   style={[Style.label, Style.lessThanLabel, Style.sixthLabel]}
                 >
-                  50kg+
+                  R$250+
                 </Text>
                 <View style={Style.circle} />
               </>
@@ -101,9 +101,9 @@ export default function Slider() {
           animationType={"spring"}
           value={sliderValue}
           onValueChange={(value) => setSliderValue(value)}
-          step={1}
-          minimumValue={1}
-          maximumValue={50}
+          step={10}
+          minimumValue={10}
+          maximumValue={250}
           minimumTrackTintColor="#707070"
           maximumTrackTintColor="rgba(194, 194, 194, 0.85)"
           allowTouchTrack={false}
@@ -112,7 +112,7 @@ export default function Slider() {
           style={Style.sliderStyle}
         ></SliderRNE>
       </View>
-      <Text>{sliderValue}Kg</Text>
+      <Text>R${sliderValue}</Text>
     </>
   );
 }

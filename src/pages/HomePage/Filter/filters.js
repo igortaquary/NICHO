@@ -1,24 +1,63 @@
-import React, { useState } from "react";
-import { View, Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, ScrollView } from "react-native";
 import Style from "./styles";
 import RoundedButton from "../../../components/RoundedButton/RoundedButton";
 import RoundIconButton from "../../../components/RoundIconButton/RoundIconButton";
-import DottedLine from "../../../components/DottedLine/DottedLine";
 import Slider from "../../../components/Slider/Slider";
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
 } from "../../../components/Converter";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import CategoriaFilters from "../../../components/CategoriaFilters/CategoriaFilters";
-import { ScrollView } from "react-native-gesture-handler";
-import { PixelRatio } from "react-native";
+import { useFilterContext } from "../../../contexts/filterContext";
 
-export default function Filters() {
-  const [todosCategorias, setTodosCategorias] = useState(false);
+const categories = [
+  "Adesivos", "Para vestir", "Para sua casa", 
+  "Papelaria", "Cosméticos", "Impressões", "Esculturas", 
+  "Desenhos", "Acessórios", "Pinturas" ]
+
+const regions = [  "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO" ]
+
+const primas = [
+  "Biscuit", "Papel", "Upcycling", "Metais", "Lápis", "Tinta",
+  "Tecido", "Barro e argila", "Madeira", "Vidro", "Cristais e pedras",
+  "Plástico", "Cimento", "Linhas e cordas", "Resina" ]
+
+export default function Filters({navigation}) {
+
+  const { filters, setFilters } = useFilterContext();
+  //Filter vars
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedRegions, setSelectedRegions] = useState([]);
+  const [selectedPrimas, setSelectedPrimas] = useState([]);
+  const [selectedDelivery, setSelectedDelivery] = useState([]);
+
+  useEffect(() => {
+    if(filters.categories){ setSelectedCategories(filters.categories); }
+    if(filters.delivery){ setSelectedDelivery(filters.delivery); }
+    if(filters.regions){ setSelectedRegions(filters.regions); }
+    if(filters.primas){ setSelectedPrimas(filters.primas); }
+  }, [filters]);
+
+  const handleFilters = () => {
+    // Por limitação do firebase não é possível pesquisar por mais de 10 campos na mesma clausula
+    const auxFilters = {};
+    if( selectedCategories.length < 10 && selectedCategories.length > 0 ){
+      auxFilters.categories = selectedCategories;
+    }
+    if( selectedRegions.length < 10 && selectedRegions.length > 0){
+      auxFilters.regions = selectedRegions;
+    }
+    if( selectedPrimas.length < 10 && selectedPrimas.length > 0){
+      auxFilters.primas = selectedPrimas;
+    }
+    if( selectedDelivery.length < 10 && selectedDelivery.length > 0){
+      auxFilters.delivery = selectedDelivery;
+    }
+    setFilters(auxFilters);
+    navigation.navigate("Home");
+  }
+
+  /* const [todosCategorias, setTodosCategorias] = useState(false);
   const [vestir, setVestir] = useState(false);
   const [casa, setCasa] = useState(false);
   const [papelaria, setPapelaria] = useState(false);
@@ -27,13 +66,13 @@ export default function Filters() {
   const [esculturas, setEsculturas] = useState(false);
   const [desenhos, setDesenhos] = useState(false);
   const [acessorios, setAcessorios] = useState(false);
-  const [pinturas, setPinturas] = useState(false);
+  const [pinturas, setPinturas] = useState(false); 
 
   const [encomendas, setEncomendas] = useState(false);
   const [prontaEntrega, setProntaEntrega] = useState(false);
   const [vegano, setVegano] = useState(false);
 
-  const [todosRegioes, setTodosRegioes] = useState(false);
+   const [todosRegioes, setTodosRegioes] = useState(false);
   const [AC, setAC] = useState(false);
   const [AL, setAL] = useState(false);
   const [AP, setAP] = useState(false);
@@ -75,14 +114,14 @@ export default function Filters() {
   const [plastico, setPlastico] = useState(false);
   const [cimento, setCimento] = useState(false);
   const [linhasCordas, setLinhasCordas] = useState(false);
-  const [biscuit, setBiscuit] = useState(false);
+  const [biscuit, setBiscuit] = useState(false); */
 
   const ampulheta = require("./../../../../assets/ampulheta.png");
   const ampulhetaSelecionada = require("./../../../../assets/ampulhetaSelecionada.png");
   const check = require("./../../../../assets/check.png");
   const checkSelecionado = require("./../../../../assets/checkSelecionado.png");
-  const folha = require("./../../../../assets/folha.png");
-  const folhaSelecionada = require("./../../../../assets/folhaSelecionada.png");
+/*   const folha = require("./../../../../assets/folha.png");
+  const folhaSelecionada = require("./../../../../assets/folhaSelecionada.png"); */
 
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
@@ -91,87 +130,48 @@ export default function Filters() {
         <RoundIconButton
           width={cw(20)}
           text={"Encomendas"}
-          active={encomendas}
-          icon={encomendas ? ampulhetaSelecionada : ampulheta}
-          onPress={() => setEncomendas(!encomendas)}
+          icon={selectedDelivery.includes("Encomendas") ? ampulhetaSelecionada : ampulheta}
+          active={selectedDelivery.includes("Encomendas")}
+          onPress={ 
+            () => setSelectedDelivery( prev => prev.includes("Encomendas") ? 
+            prev.filter(e => e !== "Encomendas") : [...prev, "Encomendas"] ) 
+          }
         />
         <RoundIconButton
           width={cw(20)}
           text={"Pronta-entrega"}
-          active={prontaEntrega}
-          icon={prontaEntrega ? checkSelecionado : check}
-          onPress={() => setProntaEntrega(!prontaEntrega)}
-        />
-        <RoundIconButton
+          icon={selectedDelivery.includes("Pronta-entrega") ? checkSelecionado : check}
+          active={selectedDelivery.includes("Pronta-entrega")}
+          onPress={ 
+            () => setSelectedDelivery( prev => prev.includes("Pronta-entrega") ? 
+            prev.filter(e => e !== "Pronta-entrega") : [...prev, "Pronta-entrega"] ) 
+          }/>
+        {/* <RoundIconButton
           width={cw(20)}
           text={"Vegano"}
           active={vegano}
           icon={vegano ? folhaSelecionada : folha}
           onPress={() => setVegano(!vegano)}
-        />
+        /> */}
       </View>
 
       <Text style={Style.label}>Categorias</Text>
-      <CategoriaFilters />
-      {/* <View>
-        <View style={Style.firstLineCategoriasContainer}>
-          <RoundedButton
-            text="Todos"
-            active={todosCategorias}
-            onPress={() => setTodosCategorias(!todosCategorias)}
-          />
-          <RoundedButton
-            text="Para vestir"
-            active={vestir}
-            onPress={() => setVestir(!vestir)}
-          />
-          <RoundedButton
-            text="Para sua casa"
-            active={casa}
-            onPress={() => setCasa(!casa)}
-          />
-          <RoundedButton
-            text="Papelaria"
-            active={papelaria}
-            onPress={() => setPapelaria(!papelaria)}
-          />
-          <RoundedButton
-            text="Cosméticos"
-            active={cosmeticos}
-            onPress={() => setCosmeticos(!cosmeticos)}
-          />
-        </View>
-        <View style={Style.secondLineCategoriasContainer}>
-          <RoundedButton
-            text="Impressões"
-            active={impressoes}
-            onPress={() => setImpressoes(!impressoes)}
-          />
-          <RoundedButton
-            text="Esculturas"
-            active={esculturas}
-            onPress={() => setEsculturas(!esculturas)}
-          />
-          <RoundedButton
-            text="Desenhos"
-            active={desenhos}
-            onPress={() => setDesenhos(!desenhos)}
-          />
-          <RoundedButton
-            text="Acessórios"
-            active={acessorios}
-            onPress={() => setAcessorios(!acessorios)}
-          />
-          <RoundedButton
-            text="Pinturas"
-            active={pinturas}
-            onPress={() => setPinturas(!pinturas)}
-          />
-        </View>
-      </View> */}
+      {/* <CategoriaFilters /> */}
+      <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap",
+       alignItems: "center", justifyContent: "center"}}>
+         { categories.map( (item) => 
+            <RoundedButton key={item} text={item} active={selectedCategories.includes(item)}
+              onPress={ 
+                () => setSelectedCategories( prev => prev.includes(item) ? 
+                prev.filter(e => e !== item) : [...prev, item] ) 
+              } /> 
+          )}
+       </View>
+     
       <Text style={Style.label}>Regiões</Text>
-      <View style={{ alignItems: "center" }}>
-        <View style={Style.firstLineRegioesContainer}>
+      <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap",
+       alignItems: "center", justifyContent: "center"}}>
+        {/* <View style={Style.firstLineRegioesContainer}>
           <RoundedButton
             text="Todos"
             active={todosRegioes}
@@ -212,12 +212,31 @@ export default function Filters() {
           <RoundedButton text="SP" active={SP} onPress={() => setSP(!SP)} />
           <RoundedButton text="SE" active={SE} onPress={() => setSE(!SE)} />
           <RoundedButton text="TO" active={TO} onPress={() => setTO(!TO)} />
-        </View>
+        </View> */}
+        {
+          regions.map( (item) => 
+            <RoundedButton key={item} text={item} active={selectedRegions.includes(item)}
+            onPress={ 
+              () => setSelectedRegions( prev => prev.includes(item) ? 
+              prev.filter(e => e !== item) : [...prev, item] ) 
+            }/>
+          )
+        }
       </View>
 
       <Text style={Style.label}>Matéria prima</Text>
-      <View style={{ alignItems: "center" }}>
-        <View style={Style.firstLineMateriaPrimaContainer}>
+      <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap",
+       alignItems: "center", justifyContent: "center"}}>
+        {
+          primas.map( (item) => 
+            <RoundedButton key={item} text={item} active={selectedPrimas.includes(item)}
+            onPress={ 
+              () => setSelectedPrimas( prev => prev.includes(item) ? 
+              prev.filter(e => e !== item) : [...prev, item] ) 
+            }/>
+          )
+        }
+        {/* <View style={Style.firstLineMateriaPrimaContainer}>
           <RoundedButton
             text="Todos"
             active={todosMateriaPrima}
@@ -299,7 +318,7 @@ export default function Filters() {
             active={biscuit}
             onPress={() => setBiscuit(!biscuit)}
           />
-        </View>
+        </View> */}
       </View>
 
       <Text style={Style.label}>Peso</Text>
@@ -308,6 +327,7 @@ export default function Filters() {
       <View style={Style.stripe} />
       <View style={Style.greenButtonContainer}>
         <RoundedButton
+          onPress={handleFilters}
           activeOpacity={0.2}
           text="Ver resultados"
           style={Style.checkResultsButton}
