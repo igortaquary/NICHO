@@ -1,4 +1,7 @@
-﻿import React, { useState, useEffect, useRef } from "react";
+
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+
+
 import { Alert, View, Text } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import Constants from "expo-constants";
@@ -9,38 +12,29 @@ import * as Permissions from "expo-permissions";
 import * as IntentLauncher from "expo-intent-launcher";
 import Style from "./styles";
 import { ConvertWidth as cw, ConvertHeight as ch } from "../Converter";
-import { get } from "react-native/Libraries/Utilities/PixelRatio";
+import moment from "moment";
+import "moment/locale/pt-br";
+
 
 export default function ShowLocation({
   destinationLatitude,
   destinationLongitude,
   destinationName,
   style,
+  latitudeDelta,
+  longitudeDelta,
 }) {
-  const [remover, setRemover] = useState(null);
   const refMarker = useRef(null);
-  const [eta, setEta] = useState(0);
+  const [eta, setEta] = useState("");
+  const [latitudeSource, setLatitudeSource] = useState("");
+  const [longitudeSource, setLongitudeSource] = useState("");
 
-  const pkg = Constants.manifest.releaseChannel
-    ? Constants.manifest.android.package
-    : "host.exp.exponent";
-  const openAppSettings = () => {
-    IntentLauncher.startActivityAsync(
-      IntentLauncher.ACTION_APPLICATION_DETAILS_SETTINGS,
-      { data: "package:" + pkg }
-    );
-  };
+  // let latitudeSource;
+  // let longitudeSource;
+  let isMounted = true;
+  moment.locale("pt-br");
 
-  const [
-    permission,
-    askForPermission,
-    getPermission,
-  ] = Permissions.usePermissions(Permissions.LOCATION, {
-    get: true,
-    ask: true,
-  });
-
-  const getEta = (
+  const getEta = async (
     longitudeSource,
     latitudeSource,
     destinationLongitude,
@@ -48,18 +42,31 @@ export default function ShowLocation({
   ) => {
     let maxTries = 3;
     let count = 0;
-    fetch(
-      `http://router.project-osrm.org/table/v1/bike/${longitudeSource},${latitudeSource};${destinationLongitude},${destinationLatitude}?annotations=duration`
+
+    await fetch(
+      `http://router.project-osrm.org/table/v1/car/${longitudeSource},${latitudeSource};${destinationLongitude},${destinationLatitude}?annotations=duration`
     )
       .then((response) => response.json())
-      .then((json) => Math.round(json.durations[0][1] / 60))
-      .then((duration) => setEta(duration))
-      .catch((error) => {
+      .then((json) => {
+        console.log(json);
+        return Math.round(json.durations[0][1] / 60);
+      })
+      .then((duration) => {
+        if (isMounted) {
+          setEta(moment.duration(duration, "minutes").humanize());
+          setLongitudeSource(longitudeSource);
+          setLatitudeSource(latitudeSource);
+        }
+        console.log("oiee");
+        console.log(moment.duration(duration, "minutes").humanize());
+      })
+      .catch(async (error) => {
         count++;
         console.log(count);
         console.error(error);
+        setEta("indisponivel");
         if (count < maxTries) {
-          getEta(
+          await getEta(
             longitudeSource,
             latitudeSource,
             destinationLongitude,
@@ -70,54 +77,59 @@ export default function ShowLocation({
   };
 
   useEffect(() => {
+
+    let rem;
     (async () => {
       let unsubscribe = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.BestForNavigation,
           distanceInterval: 200,
         },
-        (position) => {
-          let longitudeSource = position.coords.longitude;
-          let latitudeSource = position.coords.latitude;
-          // console.log(longitudeSource, latitudeSource);
-          getEta(
-            longitudeSource,
-            latitudeSource,
+
+        async (position) => {
+          console.log("listener de localizacao");
+
+          await getEta(
+            position.coords.longitude,
+            position.coords.latitude,
+
             destinationLongitude,
             destinationLatitude
           );
         }
       );
-      setRemover(unsubscribe);
+
+      rem = unsubscribe;
     })();
 
-    return () => remover.remove();
+    return () => {
+      isMounted = false;
+      if (rem && rem.remove) {
+        rem.remove();
+      }
+    };
   }, []);
 
-  if (permission && permission.status !== "granted") {
-    Alert.alert(
-      "Localização",
-      "A localização é necessária para alguns recursos do aplicativo",
-      [
-        {
-          text: "Me lembre depois",
-          onPress: () => console.log("Me lembre depois"),
-        },
-        {
-          text: "Cancelar",
-          onPress: () => console.log("Cancelado"),
-        },
-        {
-          text: "Ativar",
-          onPress: () =>
-            permission.canAskAgain ? askForPermission() : openAppSettings(),
-        },
-      ],
-      {
-        cancelable: false,
+  useLayoutEffect(() => {
+    setEta("");
+  }, [destinationLatitude, destinationLongitude]);
+
+  useEffect(() => {
+    async function fetchEta() {
+      if (!!latitudeSource && !!longitudeSource) {
+        await getEta(
+          longitudeSource,
+          latitudeSource,
+          destinationLongitude,
+          destinationLatitude
+        );
       }
-    );
-  }
+    }
+
+    fetchEta();
+  }, [destinationLongitude, destinationLatitude]);
+
+
 
   const showInfo = () => {
     if (refMarker && refMarker.current && refMarker.current.showCallout) {
@@ -141,10 +153,17 @@ export default function ShowLocation({
     >
       <MapView
         style={style}
+
+        region={{
+          latitude: destinationLatitude,
+          longitude: destinationLongitude,
+          latitudeDelta: latitudeDelta,
+          longitudeDelta: longitudeDelta,
+        }}
         camera={{
           center: {
-            latitude: -15.833620348354257,
-            longitude: -48.051536338917934,
+            latitude: destinationLatitude + 0.001,
+            longitude: destinationLongitude,
           },
           pitch: 0,
           heading: 0,
@@ -159,22 +178,27 @@ export default function ShowLocation({
         onRegionChangeComplete={showInfo}
         onPress={openMapApp}
         onMarkerPress={openMapApp}
-        // onPoiClick={(e) => console.log(e.nativeEvent)}
       >
         <Marker
           coordinate={{
-            latitude: -15.833820348354257,
-            longitude: -48.051536338917934,
+            latitude: destinationLatitude,
+            longitude: destinationLongitude,
           }}
           calloutAnchor={{ x: cw(4), y: cw(1) }}
           ref={refMarker}
         >
           <Callout tooltip={true}>
             <View style={Style.callout}>
-              <Text style={Style.calloutText} numberOfLines={3}>
+
+              <Text style={Style.calloutText} numberOfLines={2}>
                 {destinationName}
               </Text>
-              <Text style={Style.etaText}>{eta} min carro - local atual</Text>
+              <Text style={Style.etaText}>
+                {eta != "indisponivel"
+                  ? eta + "carro - local atual"
+                  : "tempo de viagem indisponivel"}
+              </Text>
+
               {console.log(eta)}
             </View>
           </Callout>
