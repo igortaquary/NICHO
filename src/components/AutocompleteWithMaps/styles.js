@@ -19,7 +19,7 @@ export default StyleSheet.create({
   },
 
   errorMessage: {
-    top: cw(-14),
+    top: cw(10),
     marginLeft: cw(5),
     fontFamily: "Raleway_600SemiBold",
     fontSize: cw(13),
@@ -54,6 +54,7 @@ export default StyleSheet.create({
   locationNameAddress: {
     marginLeft: cw(15.54),
     marginBottom: cw(12.39),
+    paddingRight: cw(40),
   },
 
   placeName: {
@@ -86,10 +87,16 @@ export default StyleSheet.create({
     color: "#707070",
   },
 
+  captionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
   iconAddressContainer: {
     width: cw(344),
-    minHeight: cw(165),
+    // minHeight: cw(50),
     paddingHorizontal: cw(16),
+    // paddingRight: cw(32),
     paddingTop: cw(14),
     paddingBottom: cw(15),
     marginBottom: cw(18),
@@ -100,13 +107,16 @@ export default StyleSheet.create({
     borderColor: "#C2C2C2",
   },
 
-  addLocation: {
-    fontFamily: "Raleway_500Medium",
-    fontSize: cw(13),
-    color: "#707070",
-
-    alignSelf: "center",
-    marginBottom: cw(27),
+  buttonArea: {
+    position: "absolute",
+    alignSelf: "flex-end",
+    justifyContent: "center",
+    alignItems: "center",
+    width: cw(18),
+    height: cw(18),
+    borderRadius: cw(9),
+    top: cw(15),
+    right: cw(16),
   },
 
   stripe: {

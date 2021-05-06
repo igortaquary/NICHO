@@ -68,6 +68,7 @@ export function ImageModal({
   isVisible,
   images,
   setImages,
+  backgroundStyle,
 }) {
   function handlePickImage() {
     setIsVisible(false);
@@ -81,7 +82,7 @@ export function ImageModal({
 
   return (
     <>
-      {isVisible && <View style={Style.darkScreen} />}
+      {isVisible && <View style={[Style.darkScreen, backgroundStyle]} />}
 
       <Modal
         animationType="slide"

@@ -24,26 +24,11 @@ export default function ShowLocation({
   const [eta, setEta] = useState("");
   const [latitudeSource, setLatitudeSource] = useState("");
   const [longitudeSource, setLongitudeSource] = useState("");
+
+  // let latitudeSource;
+  // let longitudeSource;
+  let isMounted = true;
   moment.locale("pt-br");
-
-  const pkg = Constants.manifest.releaseChannel
-    ? Constants.manifest.android.package
-    : "host.exp.exponent";
-  const openAppSettings = () => {
-    IntentLauncher.startActivityAsync(
-      IntentLauncher.ACTION_APPLICATION_DETAILS_SETTINGS,
-      { data: "package:" + pkg }
-    );
-  };
-
-  const [
-    permission,
-    askForPermission,
-    getPermission,
-  ] = Permissions.usePermissions(Permissions.LOCATION, {
-    get: true,
-    ask: true,
-  });
 
   const getEta = async (
     longitudeSource,
@@ -65,14 +50,19 @@ export default function ShowLocation({
         return Math.round(json.durations[0][1] / 60);
       })
       .then((duration) => {
-        setEta(moment.duration(duration, "minutes").humanize());
-        console.log("oi");
+        if (isMounted) {
+          setEta(moment.duration(duration, "minutes").humanize());
+          setLongitudeSource(longitudeSource);
+          setLatitudeSource(latitudeSource);
+        }
+        console.log("oiee");
         console.log(moment.duration(duration, "minutes").humanize());
       })
       .catch(async (error) => {
         count++;
         console.log(count);
         console.error(error);
+        setEta("indisponivel");
         if (count < maxTries) {
           await getEta(
             longitudeSource,
@@ -86,6 +76,7 @@ export default function ShowLocation({
 
   useEffect(() => {
     let rem;
+
     (async () => {
       let unsubscribe = await Location.watchPositionAsync(
         {
@@ -94,20 +85,24 @@ export default function ShowLocation({
         },
         async (position) => {
           console.log("listener de localizacao");
+
           await getEta(
             position.coords.longitude,
             position.coords.latitude,
             destinationLongitude,
             destinationLatitude
           );
-          setLatitudeSource(position.coords.latitude);
-          setLongitudeSource(position.coords.longitude);
         }
       );
       rem = unsubscribe;
     })();
 
-    return () => rem.remove();
+    return () => {
+      isMounted = false;
+      if (rem && rem.remove) {
+        rem.remove();
+      }
+    };
   }, []);
 
   useLayoutEffect(() => {
@@ -115,7 +110,6 @@ export default function ShowLocation({
   }, [destinationLatitude, destinationLongitude]);
 
   useEffect(() => {
-    console.log("rodou");
     async function fetchEta() {
       if (!!latitudeSource && !!longitudeSource) {
         await getEta(
@@ -129,31 +123,6 @@ export default function ShowLocation({
 
     fetchEta();
   }, [destinationLongitude, destinationLatitude]);
-
-  if (permission && permission.status !== "granted") {
-    Alert.alert(
-      "Localização",
-      "A localização é necessária para alguns recursos do aplicativo",
-      [
-        {
-          text: "Me lembre depois",
-          onPress: () => console.log("Me lembre depois"),
-        },
-        {
-          text: "Cancelar",
-          onPress: () => console.log("Cancelado"),
-        },
-        {
-          text: "Ativar",
-          onPress: () =>
-            permission.canAskAgain ? askForPermission() : openAppSettings(),
-        },
-      ],
-      {
-        cancelable: false,
-      }
-    );
-  }
 
   const showInfo = () => {
     if (refMarker && refMarker.current && refMarker.current.showCallout) {
@@ -183,16 +152,16 @@ export default function ShowLocation({
           latitudeDelta: latitudeDelta,
           longitudeDelta: longitudeDelta,
         }}
-        // camera={{
-        //   center: {
-        //     latitude: -15.833620348354257,
-        //     longitude: -48.051536338917934,
-        //   },
-        //   pitch: 0,
-        //   heading: 0,
-        //   altitude: 18,
-        //   zoom: 15,
-        // }}
+        camera={{
+          center: {
+            latitude: destinationLatitude + 0.001,
+            longitude: destinationLongitude,
+          },
+          pitch: 0,
+          heading: 0,
+          altitude: 18,
+          zoom: 15,
+        }}
         showsUserLocation={true}
         showsMyLocationButton={true}
         // showsTraffic={true}
@@ -215,7 +184,11 @@ export default function ShowLocation({
               <Text style={Style.calloutText} numberOfLines={2}>
                 {destinationName}
               </Text>
-              <Text style={Style.etaText}>{eta} carro - local atual</Text>
+              <Text style={Style.etaText}>
+                {eta != "indisponivel"
+                  ? eta + "carro - local atual"
+                  : "tempo de viagem indisponivel"}
+              </Text>
               {console.log(eta)}
             </View>
           </Callout>

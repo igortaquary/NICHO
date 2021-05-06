@@ -9,6 +9,7 @@ import ArtistPage from "../pages/ArtistPage";
 import Icon from "../components/Icon";
 import EventPage from "../pages/EventPage";
 import CreateEvent from "../pages/CreateEvent";
+import CreateSpace from "../pages/CreateSpace";
 import HomePage from "../pages/HomePage";
 import DrawerHeader from "../components/DrawerHeader";
 import { StatusBar } from "react-native";
@@ -100,6 +101,7 @@ const MainPages = () => {
       <Drawer.Screen name="Página do Artista" component={ArtistPage} />
       <Drawer.Screen name="Página de Evento" component={EventPage} />
       <Drawer.Screen name="Criar Evento" component={CreateEvent} />
+      <Drawer.Screen name="Criar Espaço" component={CreateSpace} />
     </Drawer.Navigator>
   );
 };

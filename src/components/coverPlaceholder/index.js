@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { ImageModal, pickImage } from "../ImagePickerWithModal";
 import { ConvertWidth as cw } from "./../../components/Converter";
@@ -17,6 +18,7 @@ export default function coverPlaceholder({
   image,
   setImage,
   errorMessage,
+  errorMessageStyle,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,48 +45,64 @@ export default function coverPlaceholder({
 
   return (
     <View>
-      {image && image[0] ? (
-        <>
-          <SkeletonContent
-            containerStyle={{
-              flexGrow: 1,
-              width: "100%",
-              // position: "absolute",
+      <View style={[Style.cover]}>
+        {(!image && !image[0]) ||
+          (isLoading && (
+            <SkeletonContent
+              containerStyle={{
+                flexGrow: 1,
+                width: "100%",
+                // position: "absolute",
 
-              zIndex: 3,
-              // top: 100,
-            }}
-            layout={[{ width: "100%", height: cw(199), borderRadius: 0 }]}
-            isLoading={isLoading}
-            duration={2000}
-            highlightColor="#8d8a8b"
-            boneColor="#707070"
-          />
-          <TouchableOpacity
-            style={Style.imageButton}
-            onPress={handleAddCoverImage}
-          >
-            <Image
-              resizeMode={"cover"}
-              source={{ uri: image[0] }}
-              style={Style.image}
-              onLoadStart={handleLoadStart}
-              onLoadEnd={handleLoadEnd}
+                // top: 100,
+              }}
+              layout={[
+                {
+                  zIndex: 9,
+                  width: "100%",
+                  height: cw(199),
+                  borderRadius: 0,
+
+                  // position: "absolute",
+                  // borderWidth: 1,
+                },
+              ]}
+              isLoading={isLoading}
+              animationType="pulse"
+              duration={2000}
+              highlightColor="#8d8a8b"
+              boneColor="#707070"
             />
-          </TouchableOpacity>
-          {/* </SkeletonContent> */}
-        </>
-      ) : (
-        <View style={Style.cover}>
-          <TouchableOpacity style={buttonStyle} onPress={handleAddCoverImage}>
-            <Icon name="lapis" color="#FFFFFF" size={cw(12.08)} />
-            <Text style={Style.text}>Adicionar foto de capa</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+          ))}
+        <Image
+          resizeMode={"cover"}
+          source={{ uri: image[0] }}
+          style={[
+            Style.image,
+            !!errorMessage && { borderColor: "red", borderWidth: 1 },
+          ]}
+          onLoadStart={handleLoadStart}
+          onLoadEnd={handleLoadEnd}
+        />
+
+        <TouchableOpacity
+          style={[buttonStyle, isLoading && { zIndex: 0 }]}
+          onPress={handleAddCoverImage}
+        >
+          <Icon
+            name="lapis"
+            color="#FFFFFF"
+            size={cw(12)}
+            // style={{ top: cw(0) }}
+          />
+          <Text style={Style.text}>
+            {image && image[0] ? "Alterar" : "Adicionar"} foto de capa
+          </Text>
+        </TouchableOpacity>
+      </View>
       {errorMessage != "" && (
-        <View style={{ alignItems: "center" }}>
-          <Text style={Style.errorMessage}>{errorMessage}</Text>
+        <View style={{ alignItems: "center", ...errorMessageStyle }}>
+          <Text style={[Style.errorMessage]}>{errorMessage}</Text>
         </View>
       )}
       <ImageModal

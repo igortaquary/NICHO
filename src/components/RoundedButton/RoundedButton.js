@@ -10,6 +10,8 @@ export default function RoundedButton({
   style,
   textStyle,
   onPress,
+  onPressIn,
+  onPressOut,
   text,
 }) {
   return (
@@ -21,6 +23,8 @@ export default function RoundedButton({
           : [Style.normalButton, style]
       }
       onPress={onPress}
+      onPressOut={onPressOut}
+      onPressIn={onPressIn}
     >
       <Text
         numberOfLines={1}

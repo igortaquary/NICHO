@@ -14,16 +14,67 @@ export default StyleSheet.create({
   coverText: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "baseline",
-    alignSelf: "center",
+    alignItems: "center",
+    alignSelf: "flex-end",
     position: "absolute",
     width: cw(155),
-    top: cw(163),
-    flexDirection: "row",
+    height: cw(18),
+    top: cw(15),
+    right: cw(15),
     borderRadius: cw(7),
-    paddingRight: cw(1.5),
+    paddingRight: cw(2),
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    zIndex: 10,
+    zIndex: 9,
+  },
+
+  coverErrorMessageStyle: {
+    position: "absolute",
+    alignSelf: "center",
+    top: cw(264),
+    zIndex: 6,
+  },
+
+  profilePictureContainer: {
+    alignItems: "center",
+    position: "absolute",
+    alignSelf: "center",
+    top: cw(82),
+    zIndex: 9,
+    // backgroundColor: "blue"
+  },
+
+  profilePicturePlaceholder: {
+    width: cw(158),
+    height: cw(158),
+    borderRadius: cw(79),
+    borderWidth: cw(3),
+    borderColor: "#FFFFFF",
+    backgroundColor: "#C4C4C4",
+  },
+
+  profilePicture: {
+    width: "100%",
+    height: "100%",
+    borderRadius: cw(79),
+  },
+
+  addProfilePictureButton: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    justifyContent: "center",
+    marginTop: cw(12),
+  },
+
+  backgroundStyle: {
+    top: 0,
+  },
+
+  addProfilePictureText: {
+    fontFamily: "Raleway_600SemiBold",
+    fontSize: cw(12),
+    color: "#019B92",
+
+    marginLeft: cw(3),
   },
 
   sectionContainer: {
@@ -41,7 +92,7 @@ export default StyleSheet.create({
     color: "#707070",
   },
 
-  eventNameInput: {
+  establishmentNameInput: {
     width: cw(344),
     height: cw(28),
     marginTop: cw(8),
@@ -161,7 +212,7 @@ export default StyleSheet.create({
     color: "#707070",
 
     alignSelf: "center",
-    marginBottom: cw(27),
+    marginRight: cw(9),
   },
 
   stripe: {
@@ -186,7 +237,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: cw(24),
-    marginBottom: cw(20),
+    marginBottom: cw(15),
   },
 
   caption: {
@@ -195,12 +246,37 @@ export default StyleSheet.create({
     color: "#707070",
   },
 
-  scheduleDateHourContainer: {
+  daysButtonsContainer: {
+    minWidth: cw(349),
+    height: cw(64),
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "baseline",
+    alignContent: "space-between",
+    marginBottom: cw(23),
+
+    // backgroundColor: "blue",
+  },
+
+  dayButton: {
+    width: cw(82),
+    height: cw(26),
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: cw(4.01999999),
+  },
+
+  dayButtonText: {
+    fontSize: cw(10),
+    marginHorizontal: 0,
+  },
+
+  timeInputRow: {
     flexDirection: "row",
 
     alignItems: "center",
     marginTop: cw(3),
-    marginBottom: cw(25),
     marginLeft: cw(1),
   },
 
@@ -209,28 +285,22 @@ export default StyleSheet.create({
     fontSize: cw(12),
     color: "#707070",
 
-    marginRight: cw(8),
+    marginRight: cw(4),
   },
 
-  scheduleInputContainer: {
+  timeField: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     height: cw(28),
-    width: cw(115),
+    width: cw(133),
     borderRadius: cw(8),
     backgroundColor: "#F1F1F1",
   },
 
-  datetime: {
+  timeText: {
     fontFamily: "Raleway_700Bold",
     fontSize: cw(16),
-    color: "#707070",
-  },
-
-  bars: {
-    fontFamily: "Raleway_700Bold",
-    fontSize: cw(19),
     color: "#707070",
   },
 
@@ -240,14 +310,49 @@ export default StyleSheet.create({
     color: "#707070",
   },
 
+  addDateButton: {
+    alignSelf: "center",
+    marginTop: cw(25),
+    marginBottom: cw(31),
+    marginLeft: cw(-16),
+  },
+
   addDateText: {
     fontFamily: "Raleway_500Medium",
     fontSize: cw(13),
     color: "#707070",
+    alignSelf: "center",
 
-    marginRight: cw(119.38),
-    marginBottom: cw(29),
-    marginLeft: cw(98),
+    // marginBottom: cw(31),
+    // marginLeft: cw(-16),
+  },
+
+  contactContainer: {
+    height: cw(108),
+    justifyContent: "space-between",
+    marginTop: cw(11),
+    marginBottom: cw(26),
+  },
+
+  contactField: {
+    flexDirection: "row",
+    width: cw(344),
+    height: cw(28),
+    borderRadius: cw(8),
+    alignItems: "center",
+    paddingHorizontal: cw(8),
+    backgroundColor: "#F1F1F1",
+  },
+
+  contactIcon: {
+    marginRight: cw(8),
+  },
+
+  contactInput: {
+    fontFamily: "Raleway_500Medium",
+    fontSize: cw(14),
+    color: "#707070",
+    flex: 1,
   },
 
   detailsInput: {
@@ -260,7 +365,7 @@ export default StyleSheet.create({
     borderRadius: cw(12),
 
     marginTop: cw(8),
-    marginBottom: cw(38),
+    marginBottom: cw(30),
     paddingVertical: cw(17),
     paddingHorizontal: cw(15),
 
@@ -288,57 +393,13 @@ export default StyleSheet.create({
     alignItems: "center",
     height: cw(25.93),
     marginBottom: cw(8.15),
-    // marginRight: cw(3.56),
+    // marginRight: cw(10),
   },
 
   categoryButtonText: {
     fontSize: cw(10),
     alignSelf: "center",
     // marginHorizontal: cw(5.17),
-  },
-
-  freeEventText: {
-    alignSelf: "center",
-    fontFamily: "Raleway_700Bold",
-    fontSize: cw(15),
-    color: "#707070",
-  },
-
-  organizerContainer: {
-    flexDirection: "row",
-    width: cw(340),
-    height: cw(32),
-    alignItems: "center",
-
-    borderRadius: 12,
-    backgroundColor: "#F1F1F1",
-
-    marginBottom: cw(14),
-    marginLeft: cw(4),
-    paddingLeft: cw(8),
-    paddingRight: cw(8),
-  },
-
-  addRemoveOrganizer: {
-    fontFamily: "Raleway_500Medium",
-    fontSize: cw(38),
-    color: "#019B92",
-
-    marginRight: cw(8),
-  },
-
-  organizerInput: {
-    flex: 1,
-    fontFamily: "Raleway_400Regular",
-    fontSize: cw(14),
-    color: "#707070",
-  },
-
-  organizerName: {
-    flex: 1,
-    fontFamily: "Raleway_400Regular",
-    fontSize: cw(14),
-    color: "#707070",
   },
 
   saveButton: {

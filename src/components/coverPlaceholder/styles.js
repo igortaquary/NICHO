@@ -10,16 +10,16 @@ export default StyleSheet.create({
     height: cw(199),
     flexGrow: 1,
 
-    backgroundColor: "rgba(0,0,0,0.5)",
+    // backgroundColor: "rgba(0,0,0,0.5)",
     // backgroundColor: "transparent",
   },
 
   text: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(14),
+    fontSize: cw(12),
     color: "#FFFFFF",
-
-    marginLeft: cw(3.62),
+    // zIndex: 9,
+    marginLeft: cw(3),
   },
 
   errorMessage: {
@@ -37,9 +37,13 @@ export default StyleSheet.create({
     height: cw(199),
   },
   image: {
+    backgroundColor: "rgba(0,0,0,0.5)",
     // flexGrow: 1,
+    position: "absolute",
+    zIndex: 9,
     width: Dimensions.get("window").width,
     height: cw(199),
+
     // top: -162,
   },
   animationContainer: {

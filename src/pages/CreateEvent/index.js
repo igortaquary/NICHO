@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   LogBox,
+  Keyboard,
 } from "react-native";
 import Style from "./styles";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
@@ -13,6 +14,9 @@ import Icon from "./../../components/Icon/index";
 import CoverPlaceholder from "./../../components/coverPlaceholder";
 import moment from "moment";
 import { Feather } from "@expo/vector-icons";
+import * as Permissions from "expo-permissions";
+import * as IntentLauncher from "expo-intent-launcher";
+import Constants from "expo-constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AutocompleteWithMaps from "../../components/AutocompleteWithMaps";
 import { AddSpacePhotos } from "../../components/AddSpacePhotos";
@@ -23,11 +27,17 @@ import {
 } from "./../../components/Converter";
 
 export default function CreateEvent({ navigation }) {
+  // ---------------------- Cover ----------------------
+
   const [coverImage, setCoverImage] = useState([]);
   const [coverImageErrorMessage, setCoverImageErrorMessage] = useState("");
 
+  // ---------------------- Event name ----------------------
+
   const [eventName, setEventName] = useState("");
   const [eventNameErrorMessage, setEventNameErrorMessage] = useState("");
+
+  // ---------------------- Location 1 ----------------------
 
   const [eventLocationText, setEventLocationText] = useState("");
   const [placeName, setPlaceName] = useState("");
@@ -39,6 +49,8 @@ export default function CreateEvent({ navigation }) {
     setEventLocationTextErrorMessage,
   ] = useState("");
 
+  // ---------------------- Dates ----------------------
+
   const [datetimes, setDatetimes] = useState([
     {
       date: { from: undefined, to: undefined },
@@ -46,7 +58,6 @@ export default function CreateEvent({ navigation }) {
     },
   ]);
   const [date, setDate] = useState(Date.now());
-  const [currentDatetime, setCurrentDatetime] = useState();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [field, setField] = useState();
   const [mode, setMode] = useState("date");
@@ -79,10 +90,54 @@ export default function CreateEvent({ navigation }) {
   const [organizersErrorMessage, setOrganizersErrorMessage] = useState("");
 
   const [images, setImages] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [imagesErrorMessage, setImagesErrorMessage] = useState("");
 
   const scrollViewRef = useRef();
+  const autocompleteFieldRef = useRef();
+
+  const pkg = Constants.manifest.releaseChannel
+    ? Constants.manifest.android.package
+    : "host.exp.exponent";
+  const openAppSettings = () => {
+    IntentLauncher.startActivityAsync(
+      IntentLauncher.ACTION_APPLICATION_DETAILS_SETTINGS,
+      { data: "package:" + pkg }
+    );
+  };
+
+  const [
+    permission,
+    askForPermission,
+    getPermission,
+  ] = Permissions.usePermissions(Permissions.LOCATION, {
+    get: true,
+    ask: true,
+  });
+
+  if (permission && permission.status !== "granted") {
+    Alert.alert(
+      "Localização",
+      "A localização é necessária para alguns recursos do aplicativo",
+      [
+        {
+          text: "Me lembre depois",
+          onPress: () => console.log("Me lembre depois"),
+        },
+        {
+          text: "Cancelar",
+          onPress: () => console.log("Cancelado"),
+        },
+        {
+          text: "Ativar",
+          onPress: () =>
+            permission.canAskAgain ? askForPermission() : openAppSettings(),
+        },
+      ],
+      {
+        cancelable: false,
+      }
+    );
+  }
 
   const handleSave = () => {
     let error = false;
@@ -127,7 +182,9 @@ export default function CreateEvent({ navigation }) {
     if (found.length) {
       error = true;
       setDatetimesErrorIndexes(auxArray);
-      setDatetimesErrorMessage("Precisamos da data e do horário de início!!");
+      setDatetimesErrorMessage(
+        "Precisamos, pelo menos, da data e do horário de início!!"
+      );
     } else setDatetimesErrorMessage("");
 
     auxArray = [];
@@ -135,22 +192,28 @@ export default function CreateEvent({ navigation }) {
       // console.log("oiii");
       // console.log(datetime);
       let include = false;
-      if (moment(datetime.date.from).isBefore(new Date(), "day")) {
+      if (
+        // moment(datetime.date.from).isBefore(new Date(), "day") ||
+        !datetime.date.from
+      ) {
         auxArray.push([index, "date", "from"]);
         include = true;
       }
-      if (moment(datetime.date.to).isBefore(new Date(), "day")) {
-        auxArray.push([index, "date", "to"]);
-        include = true;
-      }
-      if (moment(datetime.time.from).isBefore(new Date(), "minute")) {
+      // if (moment(datetime.date.to).isBefore(new Date(), "day")) {
+      //   auxArray.push([index, "date", "to"]);
+      //   include = true;
+      // }
+      if (
+        // moment(datetime.time.from).isBefore(new Date(), "minute") ||
+        !datetime.time.from
+      ) {
         auxArray.push([index, "time", "from"]);
         include = true;
       }
-      if (moment(datetime.time.to).isBefore(new Date(), "minute")) {
-        auxArray.push([index, "time", "to"]);
-        include = true;
-      }
+      // if (moment(datetime.time.to).isBefore(new Date(), "minute")) {
+      //   auxArray.push([index, "time", "to"]);
+      //   include = true;
+      // }
       if (moment(datetime.date.from).isAfter(moment(datetime.date.to))) {
         auxArray.push([index, "date"]);
 
@@ -176,12 +239,14 @@ export default function CreateEvent({ navigation }) {
       setDetailsErrorMessage("Insira uma descrição do evento!");
     } else setDetailsErrorMessage("");
 
-    const selected = categories.find((category) => category.selected == true);
+    const selected = categories
+      .filter((category) => category.selected)
+      .map((element) => element.text);
 
-    if (!selected) {
+    if (!selected.length) {
       error = true;
       setCategoriesErrorMessage("Selecione ao menos uma categoria!");
-    } else setEventNameErrorMessage("");
+    } else setCategoriesErrorMessage("");
 
     if (organizers.length == 0) {
       error = true;
@@ -196,6 +261,7 @@ export default function CreateEvent({ navigation }) {
     if (!error) {
       console.warn("Enviou!!!!");
       let event = {
+        cover: coverImage,
         name: eventName,
         localization: {
           name: placeName,
@@ -204,19 +270,80 @@ export default function CreateEvent({ navigation }) {
         },
         dates: datetimes,
         details: details,
-        categories: categories
-          .filter((element) => element.selected)
-          .map((element) => element.text),
+        categories: selected,
         isFree: isFree,
         organizers: organizers,
         spacePhotos: images,
       };
       console.log(event);
+      clearPage();
     } else {
-      console.log(incorrectDatetimes);
-      scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
+      // console.log(incorrectDatetimes);
+      Keyboard.dismiss();
+      setTimeout(scrollToTop, 10);
     }
   };
+
+  function clearPage() {
+    setCoverImage([]);
+    setCoverImageErrorMessage("");
+
+    setEventName("");
+    setEventNameErrorMessage("");
+
+    autocompleteFieldRef.current?.setAddressText("");
+    setEventLocationText("");
+    setPlaceName("");
+    setPlaceGeometry();
+    setPlaceAddress("");
+    setUseMaps(true);
+    setEventLocationTextErrorMessage("");
+
+    setDatetimes([
+      {
+        date: { from: undefined, to: undefined },
+        time: { from: undefined, to: undefined },
+      },
+    ]);
+    setDate(Date.now());
+    setCurrentIndex(0);
+    setField();
+    setMode("date");
+    setShow(false);
+    setDatetimesErrorMessage("");
+    setDatetimesErrorIndexes([]);
+    setIncorrectDatetimeMessage("");
+    setIncorrectDatetimes([]);
+
+    setDetails("");
+    setDetailsErrorMessage("");
+
+    setCategories([
+      { text: "Arte digital", selected: false },
+      { text: "Para vestir", selected: false },
+      { text: "Decoração", selected: false },
+      { text: "Papelaria", selected: false },
+      { text: "Cosméticos", selected: false },
+      { text: "Jardim", selected: false },
+      { text: "Esculturas", selected: false },
+      { text: "Desenhos e Pinturas", selected: false },
+      { text: "Acessórios", selected: false },
+    ]);
+    setCategoriesErrorMessage("");
+
+    setIsFree(false);
+
+    setOrganizers([]);
+    setOrganizer("");
+    setOrganizersErrorMessage("");
+
+    setImages([]);
+    setImagesErrorMessage("");
+  }
+
+  function scrollToTop() {
+    scrollViewRef.current.scrollTo({ y: 0, animated: true });
+  }
 
   const handleSetCategories = (button, index) => {
     setCategories(
@@ -227,10 +354,9 @@ export default function CreateEvent({ navigation }) {
   };
 
   const handleOrganizers = (organizer, index) => {
-    console.log(organizer, index);
     if (!/^\s*$/.test(organizer) || index >= 0) {
       let copyOrganizers = [...organizers];
-      console.log("entrou", copyOrganizers);
+
       if (organizer) {
         copyOrganizers.splice(copyOrganizers.length, 1, organizer);
         setOrganizer("");
@@ -268,10 +394,15 @@ export default function CreateEvent({ navigation }) {
         let addType = mode == "date" ? "days" : "hours";
         let toDate = moment(date).add(1, addType);
 
+        if (mode == "time") {
+          toDate = toDate.isAfter(moment(date), "day")
+            ? moment().endOf("day")
+            : toDate;
+        }
         // muda o estado da array afetando apenas a posiçao desejada
-        auxArray[currentIndex][mode]["to"] = toDate;
+        auxArray[currentIndex][mode]["to"] = toDate.toDate();
       }
-      auxArray[currentIndex][mode][field] = moment(date);
+      auxArray[currentIndex][mode][field] = moment(date).toDate();
       setDatetimes(auxArray);
     }
   };
@@ -282,8 +413,9 @@ export default function CreateEvent({ navigation }) {
   // }, [datetimes]);
 
   const Picker = () => {
-    function openPicker(index, mode, field) {
-      setDate(new Date());
+    function openPicker(index, mode, field, currentDate) {
+      currentDate.pop();
+      setDate(moment(currentDate).toDate());
       setMode(mode);
       setField(field);
       setShow(true);
@@ -295,33 +427,33 @@ export default function CreateEvent({ navigation }) {
       let [dateFrom, dateTo, timeFrom, timeTo] = Array(4).fill("");
       // console.log(datetime[attribute] ? true : false);
       if (datetime.date.from) {
-        dateFrom = moment(datetime.date.from).format("L");
-        dateFrom = dateFrom.split("/");
+        dateFrom = moment(datetime.date.from).toArray();
+        // dateFrom = dateFrom.split("/");
       }
       if (datetime.date.to) {
-        dateTo = moment(datetime.date.to).format("L");
-        dateTo = dateTo.split("/");
+        dateTo = moment(datetime.date.to).toArray();
+        // dateTo = dateTo.split("/");
       }
       if (datetime.time.from) {
-        timeFrom = moment(datetime.time.from).format("HH:mm");
-        timeFrom = timeFrom.match(/\w\w/g);
+        timeFrom = moment(datetime.time.from).toArray();
+        // timeFrom = timeFrom.match(/\w\w/g);
       }
       if (datetime.time.to) {
-        timeTo = moment(datetime.time.to).format("HH:mm");
-        timeTo = timeTo.match(/\w\w/g);
+        timeTo = moment(datetime.time.to).toArray();
+        // timeTo = timeTo.match(/\w\w/g);
       }
 
-      dateFrom = [...dateFrom, checkError(dateFrom, index, "date", "from")];
-      dateTo = [...dateTo, checkError(dateTo, index, "date", "to")];
-      timeFrom = [...timeFrom, checkError(timeFrom, index, "time", "from")];
-      timeTo = [...timeTo, checkError(timeTo, index, "time", "to")];
+      dateFrom = [...dateFrom, checkError(index, "date", "from")];
+      dateTo = [...dateTo, checkError(index, "date", "to")];
+      timeFrom = [...timeFrom, checkError(index, "time", "from")];
+      timeTo = [...timeTo, checkError(index, "time", "to")];
 
       // (^\d+|\d\B.)(?!$)
 
       return { dateFrom, dateTo, timeFrom, timeTo };
     }
 
-    function checkError(TimeOrDateArray, index, mode, field) {
+    function checkError(index, mode, field) {
       const includesError = incorrectDatetimes.some((incorrect) => {
         if (incorrect[0] == index && incorrect[1] == mode) {
           if (!incorrect[2]) {
@@ -333,9 +465,15 @@ export default function CreateEvent({ navigation }) {
       });
 
       return (
-        (!TimeOrDateArray && !!datetimesErrorMessage) ||
-        (!!incorrectDatetimeMessage && includesError)
+        (!!datetimesErrorMessage || !!incorrectDatetimeMessage) && includesError
       );
+    }
+
+    function handleRemoveDate(index) {
+      let auxArray = [...datetimes];
+
+      auxArray.splice(index, 1);
+      setDatetimes(auxArray);
     }
 
     return datetimes.map((datetime, index) => {
@@ -346,24 +484,37 @@ export default function CreateEvent({ navigation }) {
 
       return (
         <Fragment key={index}>
-          <Text style={Style.caption}>Data {index + 1}:</Text>
-
-          {datetimesErrorIndexes.includes(index) && (
-            <Text
-              style={[
-                Style.errorMessage,
-                { marginTop: cw(-16.9), marginBottom: cw(5) },
-              ]}
-            >
+          <View style={Style.captionHeader}>
+            <Text style={Style.caption}>Data {index + 1}:</Text>
+            {index != 0 && (
+              <TouchableOpacity
+                onPress={() => handleRemoveDate(index)}
+                style={{
+                  top: cw(-4),
+                }}
+                hitSlop={{
+                  bottom: 7,
+                  left: 7,
+                  right: 7,
+                  top: 7,
+                }}
+              >
+                <Icon name="x" size={cw(14)} color="#838383" />
+              </TouchableOpacity>
+            )}
+          </View>
+          {datetimesErrorIndexes.includes(index) && !!datetimesErrorMessage && (
+            <Text style={[Style.errorMessage, { marginTop: cw(-10) }]}>
               {datetimesErrorMessage}
             </Text>
           )}
 
-          {incorrectDatetimes.some((element) => element[0] == index) && (
-            <Text style={[Style.errorMessage, { marginBottom: cw(10) }]}>
-              {incorrectDatetimeMessage}
-            </Text>
-          )}
+          {incorrectDatetimes.some((element) => element[0] == index) &&
+            !!incorrectDatetimeMessage && (
+              <Text style={[Style.errorMessage, { marginBottom: cw(5) }]}>
+                {incorrectDatetimeMessage}
+              </Text>
+            )}
 
           <View style={Style.scheduleDateHourContainer}>
             <Icon name="calendar" size={cw(21.94)} color="#707070" />
@@ -376,13 +527,19 @@ export default function CreateEvent({ navigation }) {
                   borderWidth: 1,
                 },
               ]}
-              onPress={() => openPicker(index, "date", "from")}
+              onPress={() => openPicker(index, "date", "from", dateFrom)}
             >
+              <Text style={Style.datetime}>
+                {dateFrom[2] < 10 ? "0" + dateFrom[2] : dateFrom[2]}
+              </Text>
+              <Text style={Style.bars}>/</Text>
+              <Text style={Style.datetime}>
+                {dateFrom[1] < 10
+                  ? "0" + (dateFrom[1] + 1)
+                  : dateFrom[1] + 1 || "     "}
+              </Text>
+              <Text style={Style.bars}>/</Text>
               <Text style={Style.datetime}>{dateFrom[0]}</Text>
-              <Text style={Style.bars}>/</Text>
-              <Text style={Style.datetime}>{dateFrom[1] || "     "}</Text>
-              <Text style={Style.bars}>/</Text>
-              <Text style={Style.datetime}>{dateFrom[2]}</Text>
             </TouchableOpacity>
             <Text style={[Style.fromToText, { marginLeft: cw(20) }]}>Até:</Text>
             <TouchableOpacity
@@ -390,13 +547,19 @@ export default function CreateEvent({ navigation }) {
                 Style.scheduleInputContainer,
                 dateTo.includes(true) && { borderColor: "red", borderWidth: 1 },
               ]}
-              onPress={() => openPicker(index, "date", "to")}
+              onPress={() => openPicker(index, "date", "to", dateTo)}
             >
+              <Text style={Style.datetime}>
+                {dateTo[2] < 10 ? "0" + dateTo[2] : dateTo[2]}
+              </Text>
+              <Text style={Style.bars}>/</Text>
+              <Text style={Style.datetime}>
+                {dateTo[1] < 10
+                  ? "0" + (dateTo[1] + 1)
+                  : dateTo[1] + 1 || "     "}
+              </Text>
+              <Text style={Style.bars}>/</Text>
               <Text style={Style.datetime}>{dateTo[0]}</Text>
-              <Text style={Style.bars}>/</Text>
-              <Text style={Style.datetime}>{dateTo[1] || "     "}</Text>
-              <Text style={Style.bars}>/</Text>
-              <Text style={Style.datetime}>{dateTo[2]}</Text>
             </TouchableOpacity>
           </View>
           <View style={Style.scheduleDateHourContainer}>
@@ -411,11 +574,15 @@ export default function CreateEvent({ navigation }) {
                   borderWidth: 1,
                 },
               ]}
-              onPress={() => openPicker(index, "time", "from")}
+              onPress={() => openPicker(index, "time", "from", timeFrom)}
             >
-              <Text style={Style.datetime}>{timeFrom[0]}</Text>
+              <Text style={Style.datetime}>
+                {timeFrom[3] < 10 ? "0" + timeFrom[3] : timeFrom[3]}
+              </Text>
               <Text style={[Style.colons, { paddingRight: cw(-6) }]}>:</Text>
-              <Text style={Style.datetime}>{timeFrom[1]}</Text>
+              <Text style={Style.datetime}>
+                {timeFrom[4] < 10 ? "0" + timeFrom[4] : timeFrom[4]}
+              </Text>
             </TouchableOpacity>
             <Text style={[Style.fromToText, { marginLeft: cw(20) }]}>Até:</Text>
             <TouchableOpacity
@@ -423,11 +590,15 @@ export default function CreateEvent({ navigation }) {
                 Style.scheduleInputContainer,
                 timeTo.includes(true) && { borderColor: "red", borderWidth: 1 },
               ]}
-              onPress={() => openPicker(index, "time", "to")}
+              onPress={() => openPicker(index, "time", "to", timeTo)}
             >
-              <Text style={Style.datetime}>{timeTo[0]}</Text>
+              <Text style={Style.datetime}>
+                {timeTo[3] < 10 ? "0" + timeTo[3] : timeTo[3]}
+              </Text>
               <Text style={Style.colons}>:</Text>
-              <Text style={Style.datetime}>{timeTo[1]}</Text>
+              <Text style={Style.datetime}>
+                {timeTo[4] < 10 ? "0" + timeTo[4] : timeTo[4]}
+              </Text>
             </TouchableOpacity>
           </View>
         </Fragment>
@@ -492,8 +663,8 @@ export default function CreateEvent({ navigation }) {
         <View style={[Style.locationContainer]}>
           <AutocompleteWithMaps
             placeholderText="Digite o local do evento"
-            eventLocationText={eventLocationText}
-            setEventLocationText={setEventLocationText}
+            locationText={eventLocationText}
+            setLocationText={setEventLocationText}
             placeAddress={placeAddress}
             setPlaceAddress={setPlaceAddress}
             placeName={placeName}
@@ -503,6 +674,7 @@ export default function CreateEvent({ navigation }) {
             useMaps={useMaps}
             setUseMaps={setUseMaps}
             errorMessage={eventLocationTextErrorMessage}
+            inputFieldReference={autocompleteFieldRef}
           />
         </View>
 
@@ -523,8 +695,7 @@ export default function CreateEvent({ navigation }) {
           />
         )}
 
-        <Text
-          style={Style.addDateText}
+        <TouchableOpacity
           onPress={() =>
             setDatetimes([
               ...datetimes,
@@ -535,8 +706,8 @@ export default function CreateEvent({ navigation }) {
             ])
           }
         >
-          + Adicionar outra data
-        </Text>
+          <Text style={Style.addDateText}>+ Adicionar outra data</Text>
+        </TouchableOpacity>
       </View>
 
       <View
@@ -587,6 +758,7 @@ export default function CreateEvent({ navigation }) {
             categoriesErrorMessage != "" && {
               borderColor: "red",
               borderWidth: 1,
+              borderRadius: 5,
             },
           ]}
         >

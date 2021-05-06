@@ -1,4 +1,4 @@
-﻿import React, { Fragment, useRef, useLayoutEffect } from "react";
+﻿import React, { Fragment, useRef, useLayoutEffect, useEffect } from "react";
 import {
   Text,
   View,
@@ -22,8 +22,8 @@ LogBox.ignoreLogs([
 
 export default function AutocompleteWithMaps({
   placeholderText,
-  eventLocationText,
-  setEventLocationText,
+  locationText,
+  setLocationText,
   placeName,
   setPlaceName,
   placeAddress,
@@ -33,6 +33,8 @@ export default function AutocompleteWithMaps({
   useMaps,
   setUseMaps,
   errorMessage,
+  onXPress,
+  inputFieldReference,
 }) {
   const inputRef = useRef();
   const latitudeDelta =
@@ -54,12 +56,19 @@ export default function AutocompleteWithMaps({
 
   useLayoutEffect(() => {
     inputRef.current?.setAddressText("");
+    setPlaceName("");
+    setPlaceGeometry("");
+    setPlaceAddress("");
   }, [useMaps]);
 
   return (
     <Fragment>
+      {errorMessage != "" && (
+        <Text style={Style.errorMessage}>{errorMessage}</Text>
+      )}
       <GooglePlacesAutocomplete
         ref={inputRef}
+        ref={inputFieldReference}
         placeholder={"  " + placeholderText}
         minLength={3}
         autoFocus={false}
@@ -101,21 +110,23 @@ export default function AutocompleteWithMaps({
           );
         }}
         onTimeout={() => console.log("timeout")}
-        onFail={() => console.log("fail")}
+        onFail={(fail) => console.log(fail)}
         onNotFound={() => console.log("not found")}
         onPress={(data, details = null) => {
-          setPlaceName(data.structured_formatting.main_text);
-          setPlaceAddress(data.structured_formatting.secondary_text);
-          setPlaceGeometry(details.geometry);
-          console.log(
-            details.geometry.viewport.northeast.lat -
-              details.geometry.viewport.southwest.lat,
-            details.geometry.viewport.northeast.lng -
-              details.geometry.viewport.southwest.lng
-          );
+          if (setPlaceName && setPlaceAddress && setPlaceGeometry) {
+            setPlaceName(data.structured_formatting.main_text);
+            setPlaceAddress(data.structured_formatting.secondary_text);
+            setPlaceGeometry(details.geometry);
+          }
+          // console.log(
+          //   details.geometry.viewport.northeast.lat -
+          //     details.geometry.viewport.southwest.lat,
+          //   details.geometry.viewport.northeast.lng -
+          //     details.geometry.viewport.southwest.lng
+          // );
         }}
         query={{
-          key: "AIzaSyCucbcbZEEceOtEUZUuJqKnbX0OgPMJXgw",
+          key: keys.placesAPI.apiKey,
           language: "pt-BR",
           components: "country:br",
         }}
@@ -144,18 +155,12 @@ export default function AutocompleteWithMaps({
             errorMessage.length && { borderColor: "red", borderWidth: 1 },
           ]}
           placeholder={"  " + placeholderText}
-          value={eventLocationText}
+          value={locationText}
           onChangeText={(text) => {
-            setEventLocationText(text);
+            setLocationText(text);
           }}
         />
       )}
-
-      {errorMessage != "" && (
-        <Text style={Style.errorMessage}>{errorMessage}</Text>
-      )}
-
-      {console.log(eventLocationText)}
 
       <View style={Style.checkboxContainer}>
         <TouchableOpacity style={[Style.checkbox]} onPress={handleCheckbox}>
@@ -168,15 +173,36 @@ export default function AutocompleteWithMaps({
         <Text style={Style.useMapsText}>Adicionar no Google Maps</Text>
       </View>
 
-      {useMaps && !!placeGeometry && (
-        <View style={[Style.iconAddressContainer]}>
-          <View style={{ flexDirection: "row" }}>
-            <Icon name="marker" size={cw(26.61)} color={"#019b92"} />
-            <View style={Style.locationNameAddress}>
-              <Text style={Style.placeName}>{placeName}</Text>
-              <Text style={Style.placeAddress}>{placeAddress}</Text>
-            </View>
+      <View style={[Style.iconAddressContainer]}>
+        <View style={{ flexDirection: "row" }}>
+          <Icon
+            name="marker"
+            size={cw(26.61)}
+            style={{
+              width: cw(16.46),
+              height: cw(26.61),
+            }}
+            color={"#019b92"}
+          />
+
+          <View
+            style={[
+              Style.locationNameAddress,
+              (!useMaps || !placeGeometry) && { marginBottom: 0 },
+            ]}
+          >
+            <Text style={Style.placeName}>{placeName || locationText}</Text>
+            <Text style={[Style.placeAddress]}>
+              {placeAddress || locationText}
+            </Text>
           </View>
+        </View>
+        {onXPress && (
+          <TouchableOpacity onPress={onXPress} style={Style.buttonArea}>
+            <Icon name="x" size={cw(12)} color="#838383" />
+          </TouchableOpacity>
+        )}
+        {useMaps && !!placeGeometry && (
           <ShowLocation
             destinationLatitude={placeGeometry.location.lat}
             destinationLongitude={placeGeometry.location.lng}
@@ -185,8 +211,8 @@ export default function AutocompleteWithMaps({
             destinationName={placeName}
             style={{ width: cw(312), height: cw(97) }}
           />
-        </View>
-      )}
+        )}
+      </View>
     </Fragment>
   );
 }

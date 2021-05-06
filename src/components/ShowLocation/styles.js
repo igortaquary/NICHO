@@ -11,7 +11,7 @@ export default StyleSheet.create({
     // width: "120%",
     // height: "120%",
     width: cw(150),
-    minHeight: cw(50),
+    minHeight: cw(60),
     zIndex: 2,
     elevation: 2,
   },
