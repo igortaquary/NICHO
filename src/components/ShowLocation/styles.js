@@ -5,6 +5,7 @@ export default StyleSheet.create({
   callout: {
     // position: "absolute",
 
+
     // flexShrink: 1,
     left: cw(3),
     top: ch(2.3),
@@ -14,6 +15,7 @@ export default StyleSheet.create({
     minHeight: cw(60),
     zIndex: 2,
     elevation: 2,
+
   },
 
   calloutText: {

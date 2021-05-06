@@ -11,9 +11,8 @@ export default async function fetchUser(uid) {
       return {...documentSnapshot.data(), id: documentSnapshot.id};
     });
   try {
-    if (userDocument.foto) {
-      console.log(userDocument.foto);
-      const url = await firebase.storage().ref(userDocument.foto).getDownloadURL();
+    if (userDocument.nome) {
+      const url = await firebase.storage().ref("user_photo/" + userDocument.id).getDownloadURL();
       userDocument.foto = url;
     }
   } catch (e) {

@@ -6,6 +6,7 @@ import Style from "./styles";
 export default function RoundedButton({
   activeOpacity = 0.2,
   children,
+
   active,
   style,
   textStyle,
@@ -13,6 +14,8 @@ export default function RoundedButton({
   onPressIn,
   onPressOut,
   text,
+
+
 }) {
   return (
     <TouchableOpacity

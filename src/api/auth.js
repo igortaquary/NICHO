@@ -2,15 +2,13 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import {Alert} from "react-native";
 
-export async function signIn(email, password, navigation) {
+export async function signIn(email, password) {
   try {
-   await firebase
+   const loggedUser = await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('User signed in!');
-        navigation.navigate('Main')
-      });
+
+   return loggedUser.user.uid;
   } catch (err) {
     Alert.alert("Erro de autenticação!", err.message);
   }

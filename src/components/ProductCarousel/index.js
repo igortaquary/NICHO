@@ -12,7 +12,7 @@ import {
   IconContainer
 } from './styles';
 
-const ProductCarousel = ({ data }) => {
+const ProductCarousel = ({ data, onSavePress }) => {
 
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -34,8 +34,8 @@ const ProductCarousel = ({ data }) => {
           onScroll={handleScroll}
           style={{ height: 450, width: Dimensions.get('window').width, flexDirection: 'row' }}
         >
-          {data.map((item) => (
-            <Image source={{ uri: item.url }} key={item.id} style={{ flex: 1, width: Dimensions.get('window').width, backgroundColor: item.color }} />
+          {data.map((item, index) => (
+            <Image source={{ uri: item.url || item.uri || item}} key={index} style={{ flex: 1, width: Dimensions.get('window').width }} />
           ))}
         </ScrollView>
         <LeftFixedIcons>
@@ -48,7 +48,7 @@ const ProductCarousel = ({ data }) => {
           <IconContainer style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
            <Icon name="compartilhar" size={16} color="white" />
           </IconContainer>
-          <IconContainer style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
+          <IconContainer onPress={onSavePress} style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
             <Icon name="salvar" size={16} color="white" />
           </IconContainer>
         </RightFixedIcons>

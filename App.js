@@ -6,10 +6,11 @@ import {
   View,
   ActivityIndicator,
   SafeAreaView,
+  LogBox,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./src/routes";
-import UserData from "./src/contexts/userData";
+import {UserProvider} from "./src/contexts/userContext";
 import fetchUser from "./src/api/fetchUser";
 
 import * as firebase from 'firebase';
@@ -79,8 +80,9 @@ export default function App() {
     }
   }
 
+  LogBox.ignoreLogs(['Setting a timer']);
+
   useEffect(() => {
-    console.log("rodou")
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
@@ -90,11 +92,11 @@ export default function App() {
 
   } else {
     return (
-      <UserData.Provider value={[state, setState]}>
+      <UserProvider>
         <SafeAreaView style={{ flex: 1 }}>
           <Routes />
         </SafeAreaView>
-      </UserData.Provider>
+      </UserProvider>
     );
   }
 }

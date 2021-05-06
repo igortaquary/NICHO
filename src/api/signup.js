@@ -1,14 +1,21 @@
 import * as firebase from "firebase";
 import "firebase/firestore";
+import "firebase/storage";
 import {Alert} from "react-native";
 
-export async function signUp(name, email, user, password, gender, region, newsletter, navigation) {
+export async function signUp(name, email, user, password, gender, region, newsletter, image) {
   try {
    await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
+      .then(async () => {
         const currentUser = firebase.auth().currentUser;
+        if(image){
+          const reference = firebase.storage().ref('user_photo/' + currentUser.uid);
+          const response = await fetch(image)
+          const blob = await response.blob();
+          await reference.put(blob);
+        }
         firebase.firestore()
         .collection('usuario')
         .doc(currentUser.uid)
@@ -21,7 +28,6 @@ export async function signUp(name, email, user, password, gender, region, newsle
         })
         .then(() => {
           console.log('User added!');
-          navigation.navigate('Main')
         });
     })
   } catch (err) {

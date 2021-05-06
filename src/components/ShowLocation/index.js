@@ -1,4 +1,7 @@
-﻿import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+
+
 import { Alert, View, Text } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import Constants from "expo-constants";
@@ -11,6 +14,7 @@ import Style from "./styles";
 import { ConvertWidth as cw, ConvertHeight as ch } from "../Converter";
 import moment from "moment";
 import "moment/locale/pt-br";
+
 
 export default function ShowLocation({
   destinationLatitude,
@@ -38,9 +42,7 @@ export default function ShowLocation({
   ) => {
     let maxTries = 3;
     let count = 0;
-    console.log(
-      `http://router.project-osrm.org/table/v1/car/${longitudeSource},${latitudeSource};${destinationLongitude},${destinationLatitude}?annotations=duration`
-    );
+
     await fetch(
       `http://router.project-osrm.org/table/v1/car/${longitudeSource},${latitudeSource};${destinationLongitude},${destinationLatitude}?annotations=duration`
     )
@@ -75,25 +77,28 @@ export default function ShowLocation({
   };
 
   useEffect(() => {
-    let rem;
 
+    let rem;
     (async () => {
       let unsubscribe = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.BestForNavigation,
           distanceInterval: 200,
         },
+
         async (position) => {
           console.log("listener de localizacao");
 
           await getEta(
             position.coords.longitude,
             position.coords.latitude,
+
             destinationLongitude,
             destinationLatitude
           );
         }
       );
+
       rem = unsubscribe;
     })();
 
@@ -124,6 +129,8 @@ export default function ShowLocation({
     fetchEta();
   }, [destinationLongitude, destinationLatitude]);
 
+
+
   const showInfo = () => {
     if (refMarker && refMarker.current && refMarker.current.showCallout) {
       refMarker.current.showCallout();
@@ -146,6 +153,7 @@ export default function ShowLocation({
     >
       <MapView
         style={style}
+
         region={{
           latitude: destinationLatitude,
           longitude: destinationLongitude,
@@ -181,6 +189,7 @@ export default function ShowLocation({
         >
           <Callout tooltip={true}>
             <View style={Style.callout}>
+
               <Text style={Style.calloutText} numberOfLines={2}>
                 {destinationName}
               </Text>
@@ -189,6 +198,7 @@ export default function ShowLocation({
                   ? eta + "carro - local atual"
                   : "tempo de viagem indisponivel"}
               </Text>
+
               {console.log(eta)}
             </View>
           </Callout>
