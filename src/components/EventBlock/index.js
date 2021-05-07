@@ -6,6 +6,7 @@ import {
   ConvertWidth as cw,
   ConvertHeight as ch,
 } from "./../../components/Converter";
+import * as firebase from "firebase";
 
 export default function EventBlock({
   name,
@@ -14,7 +15,8 @@ export default function EventBlock({
   location,
   address,
   schedule,
-  onPress,
+  navigation,
+  event,
 }) {
   const month = [
     "JAN",
@@ -30,7 +32,18 @@ export default function EventBlock({
     "NOV",
     "DEZ",
   ];
-
+  const onEventClick = async () => {
+    var i;
+    const images = []
+    images.push(event.image.uri)
+    for (i = 1; i < 4; i++){
+      const url = await firebase.storage().ref('events/' + event.anunciante + '/' + event.titulo + '/' + i).getDownloadURL()
+      images.push(url)
+    }
+    event.image = images
+    console.log(event)
+    navigation.navigate("Página de Evento", {event})
+  }
   return (
     <>
       <Text style={Style.eventName}>{name}</Text>
@@ -44,7 +57,7 @@ export default function EventBlock({
         <TouchableOpacity activeOpacity={0.7} style={Style.iconContainer}>
           <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+        <TouchableOpacity activeOpacity={0.7} onPress={onEventClick}>
           <Image style={Style.additionalEventImage} source={image} />
         </TouchableOpacity>
       </View>

@@ -14,22 +14,16 @@ import {
   ConvertWidth as cw,
   ConvertHeight as ch,
 } from "./../../components/Converter";
+import { event } from "react-native-reanimated";
 
-export default function EventPage({ navigation }) {
+export default function EventPage({ navigation, route }) {
+  const event = route.params.event;
   const [seguindoBrio, setSeguindoBrio] = useState(true);
   const [seguindoBicuda, setSeguindoBicuda] = useState(true);
-  const [location, setLocation] = useState();
-  const [remover, setRemover] = useState(null);
-  const [perm, setPerm] = useState(null);
 
-  const eventName = "Feira Liga Pontos";
-  const localName = "Brio - Café e Espaço Colaborativo ";
   const mockedDate = moment().local().format();
   const finishDate = moment(mockedDate).add(1, "hour").format();
 
-  const coverImage = {
-    uri: "https://source.unsplash.com/collection/227043",
-  };
   const BrioPicture = {
     uri:
       "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/64702081_653936445081182_6307125986315993088_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=lnK4VDmcCNMAX8L7XVu&_nc_ht=scontent.fbsb3-1.fna&oh=1a1e5f5d2e14b84c6873e6710937a922&oe=60785EAB",
@@ -70,10 +64,10 @@ export default function EventPage({ navigation }) {
       console.log(typeof mockedDate);
       console.log(finishDate);
       let event = await Calendar.createEventAsync(defaultCalendar.id, {
-        title: eventName,
+        title: event.titulo,
         startDate: new Date(mockedDate),
         endDate: new Date(finishDate ? finishDate : finishDate.add(1, "hour")),
-        location: localName,
+        location: event.organizador,
         alarms: [{ relativeOffset: -30, method: Calendar.AlarmMethod.DEFAULT }],
         timeZone: timezone,
       });
@@ -83,7 +77,7 @@ export default function EventPage({ navigation }) {
 
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
-      <Image style={Style.coverImage} source={coverImage} />
+      <Image style={Style.coverImage} source={{uri: event?.image[0]}} />
 
       <View
         style={{
@@ -98,7 +92,7 @@ export default function EventPage({ navigation }) {
               <Text style={Style.dateText}>SEX, 08 DE DEZ ÀS 14:00</Text>
               {isToday && <Text style={Style.today}>Hoje!</Text>}
             </View>
-            <Text style={Style.localName}>{eventName}</Text>
+            <Text style={Style.localName}>{event.titulo}</Text>
             <Text style={Style.localNeighborhood}>DF - Asa Sul</Text>
             <Text style={Style.localAddress}>
               SQN 311/312 no gramado entrequadras
@@ -166,7 +160,7 @@ export default function EventPage({ navigation }) {
         <ShowLocation
           destinationLatitude={parseFloat(latitudeDestination)}
           destinationLongitude={parseFloat(longitudeDestination)}
-          destinationName={localName}
+          destinationName={event.organizador}
           style={Style.map}
         />
         <View style={Style.attentionTextContainer}>

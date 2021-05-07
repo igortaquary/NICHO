@@ -7,7 +7,6 @@ import * as firebase from "firebase";
 const PhotosGrid = ({navigation, refreshing, products}) => {
 
     const goToProductPage = (product) => {
-        console.log(product);
         navigation.navigate('ProductPage', {product});
     }
 

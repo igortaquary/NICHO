@@ -14,6 +14,7 @@ import CreateSpace from "../pages/CreateSpace";
 import HomePage from "../pages/HomePage";
 import DrawerHeader from "../components/DrawerHeader";
 import { StatusBar } from "react-native";
+import SavedPage from "../pages/SavedPage"
 
 
 const Tab = createBottomTabNavigator();
