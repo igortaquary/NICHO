@@ -26,6 +26,8 @@ export default function EventPage({ navigation }) {
   const localName = "Brio - Café e Espaço Colaborativo ";
   const mockedDate = moment().local().format();
   const finishDate = moment(mockedDate).add(1, "hour").format();
+  const latitudeDelta = 0.00023;
+  const longitudeDelta = 0.03;
 
   const coverImage = {
     uri: "https://source.unsplash.com/collection/227043",
@@ -83,7 +85,22 @@ export default function EventPage({ navigation }) {
 
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
-      <Image style={Style.coverImage} source={coverImage} />
+      <View>
+        <View>
+          <TouchableOpacity style={{ ...Style.iconContainer, top: cw(189) }}>
+            <Icon
+              name="share"
+              size={cw(16.9)}
+              color="#FFFFFF"
+              style={{ left: cw(-1) }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={Style.iconContainer}>
+            <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
+        <Image style={Style.coverImage} source={coverImage} />
+      </View>
 
       <View
         style={{
@@ -111,10 +128,7 @@ export default function EventPage({ navigation }) {
               activeOpacity={0.7}
               onPress={() => addToCalendar()}
             >
-              <Image
-                style={{ width: 21.94 }}
-                source={require("../../assets/calendar.png")}
-              />
+              <Icon name="calendar" size={21.94} color="#707070" />
             </TouchableOpacity>
             <Text style={Style.addToCalendarText}>
               adicionar ao meu calendário
@@ -125,10 +139,7 @@ export default function EventPage({ navigation }) {
         <View style={Style.stripe} />
 
         <View style={Style.iconAndInfoContainer}>
-          <Image
-            style={{ width: 14.37 }}
-            source={require("../../assets/flag.png")}
-          />
+          <Icon name="flag" size={13.5} color="#019B92" />
           <Text style={Style.infoText}>
             evento de{" "}
             <Text style={Style.organizerName}>Brio Espaço Colaborativo</Text> e{" "}
@@ -137,10 +148,7 @@ export default function EventPage({ navigation }) {
         </View>
 
         <View style={Style.iconAndInfoContainer}>
-          <Image
-            style={{ aspectRatio: 1 }}
-            source={require("../../assets/minuto.png")}
-          />
+          <Icon name="clock" size={15.5} color="#019B92" />
           <Text style={Style.infoText}>
 
             acontecerá na Sexta das 14 às 17:00h
@@ -149,15 +157,12 @@ export default function EventPage({ navigation }) {
         </View>
 
         <View style={Style.iconAndInfoContainer}>
-          <Image
-            // style={{ width: 18 }}
-            source={require("../../assets/ticket.png")}
-          />
+          <Icon name="ticket" size={16} color="#019B92" />
           <Text style={Style.infoText}>evento gratuito</Text>
         </View>
 
         <View style={Style.iconAndInfoContainer}>
-          <Icon name="locais" size={17} color="#019B92" />
+          <Icon name="locais" size={16} color="#019B92" />
           <Text style={Style.infoText}>
             Taguatinga norte - QNL 12, Conjunto G
           </Text>
@@ -166,6 +171,8 @@ export default function EventPage({ navigation }) {
         <ShowLocation
           destinationLatitude={parseFloat(latitudeDestination)}
           destinationLongitude={parseFloat(longitudeDestination)}
+          latitudeDelta={latitudeDelta}
+          longitudeDelta={longitudeDelta}
           destinationName={localName}
           style={Style.map}
         />
@@ -258,13 +265,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
         <Text style={Style.eventName}>Encontro dos Brechós</Text>
 
         <View>
-          <TouchableOpacity style={{ ...Style.iconContainer, top: cw(189) }}>
-            <Icon name="compartilhar" size={cw(18.18)} color="#FFFFFF" />
-          </TouchableOpacity>
-          <TouchableOpacity style={Style.iconContainer}>
-            <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
-          </TouchableOpacity>
           <Image style={Style.additionalEventImage} source={eventBrio} />
+          <TouchableOpacity style={Style.additionalEventShareIcon}>
+            <Icon
+              name="share"
+              size={16.9}
+              color="#FFFFFF"
+              style={{ right: cw(1) }}
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={Style.additionalEventInfo}>
@@ -285,6 +294,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
               Sexta à partir de 11:00h
             </Text>
           </View>
+
+          <TouchableOpacity style={Style.additionalEventSaveIcon}>
+            <Icon name="salvar" size={17.32} color="#707070" />
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
