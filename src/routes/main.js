@@ -6,15 +6,15 @@ import Home from "./home";
 import Locations from "./locations";
 import NotFoundPage from "../pages/NotFoundPage";
 import ArtistPage from "../pages/ArtistPage";
-import Icon from "../components/Icon";
-
+import SavedPage from "../pages/SavedPage";
 import EventPage from "../pages/EventPage";
 import CreateEvent from "../pages/CreateEvent";
 import CreateSpace from "../pages/CreateSpace";
 import HomePage from "../pages/HomePage";
+import Icon from "../components/Icon";
+import CustomDrawer from "../components/CustomDrawer";
 import DrawerHeader from "../components/DrawerHeader";
 import { StatusBar } from "react-native";
-
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -42,8 +42,6 @@ const HomePages = () => {
       }}
     >
       <Tab.Screen
-
-
         options={{
           tabBarIcon: ({ focused, color }) => (
             <Icon name="home" size={21} color={color} />
@@ -64,29 +62,24 @@ const HomePages = () => {
       <Tab.Screen
         options={{
           tabBarIcon: ({ focused, color }) => (
-
             <Icon name="salvos" size={21} color={color} />
           ),
         }}
         name="Salvos"
         component={SavedPage}
-
       />
       <Tab.Screen
         options={{
           tabBarIcon: ({ focused, color }) => (
-
             <Icon name="seguindo" size={21} color={color} />
           ),
         }}
         name="Seguindo"
-
         component={NotFoundPage}
       />
       <Tab.Screen
         options={{
           tabBarIcon: ({ focused, color }) => (
-
             <Icon name="chat" size={21} color={color} />
           ),
         }}
@@ -99,8 +92,8 @@ const HomePages = () => {
 
 const MainPages = () => {
   return (
-
     <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawer {...props} />}
       screenOptions={{
         headerShown: true,
         header: ({ scene }) => <DrawerHeader scene={scene} />,
@@ -112,7 +105,6 @@ const MainPages = () => {
       <Drawer.Screen name="Página de Evento" component={EventPage} />
       <Drawer.Screen name="Criar Evento" component={CreateEvent} />
       <Drawer.Screen name="Criar Espaço" component={CreateSpace} />
-
     </Drawer.Navigator>
   );
 };
