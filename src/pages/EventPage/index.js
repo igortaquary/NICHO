@@ -89,7 +89,7 @@ export default function EventPage({ navigation }) {
         <View>
           <TouchableOpacity style={{ ...Style.iconContainer, top: cw(189) }}>
             <Icon
-              name="share"
+              name="compartilhar"
               size={cw(16.9)}
               color="#FFFFFF"
               style={{ left: cw(-1) }}
@@ -150,9 +150,7 @@ export default function EventPage({ navigation }) {
         <View style={Style.iconAndInfoContainer}>
           <Icon name="clock" size={15.5} color="#019B92" />
           <Text style={Style.infoText}>
-
             acontecerá na Sexta das 14 às 17:00h
-
           </Text>
         </View>
 
@@ -268,7 +266,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
           <Image style={Style.additionalEventImage} source={eventBrio} />
           <TouchableOpacity style={Style.additionalEventShareIcon}>
             <Icon
-              name="share"
+              name="compartilhar"
               size={16.9}
               color="#FFFFFF"
               style={{ right: cw(1) }}

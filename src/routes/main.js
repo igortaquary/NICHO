@@ -10,6 +10,7 @@ import SavedPage from "../pages/SavedPage";
 import EventPage from "../pages/EventPage";
 import CreateEvent from "../pages/CreateEvent";
 import CreateSpace from "../pages/CreateSpace";
+import SpacePage from "../pages/SpacePage";
 import HomePage from "../pages/HomePage";
 import Icon from "../components/Icon";
 import CustomDrawer from "../components/CustomDrawer";
@@ -105,6 +106,7 @@ const MainPages = () => {
       <Drawer.Screen name="Página de Evento" component={EventPage} />
       <Drawer.Screen name="Criar Evento" component={CreateEvent} />
       <Drawer.Screen name="Criar Espaço" component={CreateSpace} />
+      <Drawer.Screen name="Página do Espaço" component={SpacePage} />
     </Drawer.Navigator>
   );
 };

@@ -5,7 +5,6 @@ export default StyleSheet.create({
   callout: {
     // position: "absolute",
 
-
     // flexShrink: 1,
     left: cw(3),
     top: ch(2.3),
@@ -15,7 +14,6 @@ export default StyleSheet.create({
     minHeight: cw(60),
     zIndex: 2,
     elevation: 2,
-
   },
 
   calloutText: {
@@ -31,5 +29,30 @@ export default StyleSheet.create({
     fontFamily: "Raleway_600SemiBold",
     color: "#2F7CE2",
     fontSize: cw(11),
+  },
+
+  attentionTextContainer: {
+    alignItems: "center",
+
+    flexDirection: "row",
+
+    // paddingLeft: cw(5),
+    // marginBottom: cw(29),
+  },
+
+  attention: {
+    width: cw(4),
+    height: cw(4),
+    borderRadius: cw(2),
+    marginRight: cw(3),
+
+    backgroundColor: "#019B92",
+  },
+
+  noteText: {
+    fontSize: cw(9),
+    fontFamily: "Raleway_300Light",
+    color: "#707070",
+    // backgroundColor: "#1111ff",
   },
 });

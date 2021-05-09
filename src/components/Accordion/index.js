@@ -16,9 +16,12 @@ import { Feather } from "@expo/vector-icons";
 const Accordion = ({
   children,
   title,
+  containerStyle,
   textStyle,
   toggleButtonStyle,
   contentContainerStyle,
+  iconContainerStyle,
+  iconSize,
 }) => {
   const [isToggled, setToggled] = useState(false);
   // const ref = useRef();
@@ -30,8 +33,9 @@ const Accordion = ({
 
   return (
     <Container
-    // ref={ref}
-    // transition={transition}
+      style={containerStyle}
+      // ref={ref}
+      // transition={transition}
     >
       <ToogleButton
         style={toggleButtonStyle}
@@ -48,9 +52,12 @@ const Accordion = ({
           {title}
         </ToggleButtonText>
         <View
-          style={{ transform: [{ rotate: isToggled ? "0deg" : "180deg" }] }}
+          style={{
+            transform: [{ rotate: isToggled ? "0deg" : "180deg" }],
+            ...iconContainerStyle,
+          }}
         >
-          <Feather name="chevron-down" size={21} color="#707070" />
+          <Feather name="chevron-down" size={iconSize || 21} color="#707070" />
         </View>
       </ToogleButton>
       {isToggled && <Content style={contentContainerStyle}>{children}</Content>}
