@@ -1,6 +1,4 @@
-
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
-
 
 import { Alert, View, Text } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
@@ -15,12 +13,12 @@ import { ConvertWidth as cw, ConvertHeight as ch } from "../Converter";
 import moment from "moment";
 import "moment/locale/pt-br";
 
-
 export default function ShowLocation({
   destinationLatitude,
   destinationLongitude,
   destinationName,
   style,
+  attentionContainerStyle,
   latitudeDelta,
   longitudeDelta,
 }) {
@@ -77,7 +75,6 @@ export default function ShowLocation({
   };
 
   useEffect(() => {
-
     let rem;
     (async () => {
       let unsubscribe = await Location.watchPositionAsync(
@@ -129,8 +126,6 @@ export default function ShowLocation({
     fetchEta();
   }, [destinationLongitude, destinationLatitude]);
 
-
-
   const showInfo = () => {
     if (refMarker && refMarker.current && refMarker.current.showCallout) {
       refMarker.current.showCallout();
@@ -153,7 +148,6 @@ export default function ShowLocation({
     >
       <MapView
         style={style}
-
         region={{
           latitude: destinationLatitude,
           longitude: destinationLongitude,
@@ -189,13 +183,12 @@ export default function ShowLocation({
         >
           <Callout tooltip={true}>
             <View style={Style.callout}>
-
               <Text style={Style.calloutText} numberOfLines={2}>
                 {destinationName}
               </Text>
               <Text style={Style.etaText}>
                 {eta != "indisponivel"
-                  ? eta + "carro - local atual"
+                  ? eta + " carro - local atual"
                   : "tempo de viagem indisponivel"}
               </Text>
 
@@ -204,6 +197,12 @@ export default function ShowLocation({
           </Callout>
         </Marker>
       </MapView>
+      <View style={[Style.attentionTextContainer, attentionContainerStyle]}>
+        <View style={Style.attention} />
+        <Text style={Style.noteText} numberOfLines={1}>
+          O tempo estimado de viagem não considera as condições de trânsito
+        </Text>
+      </View>
     </SkeletonContent>
   );
 }
