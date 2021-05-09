@@ -6,6 +6,7 @@ import {
   View,
   ActivityIndicator,
   SafeAreaView,
+  LogBox,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./src/routes";
@@ -79,6 +80,8 @@ export default function App() {
       setState({});
     }
   }
+
+  LogBox.ignoreLogs(['Setting a timer']);
 
   useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);

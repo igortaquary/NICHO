@@ -281,7 +281,7 @@ export default StyleSheet.create({
   iconContainer: {
     position: "absolute",
     top: cw(222),
-    left: cw(344),
+    left: cw(370.17),
 
     justifyContent: "center",
     alignItems: "center",
@@ -343,5 +343,24 @@ export default StyleSheet.create({
     fontFamily: "Raleway_400Regular",
     fontSize: cw(12),
     color: "#707070",
+  },
+
+  additionalEventShareIcon: {
+    width: cw(35),
+    height: cw(35),
+    borderRadius: 17.5,
+    position: "absolute",
+    alignSelf: "flex-end",
+    justifyContent: "center",
+    alignItems: "center",
+    bottom: cw(8),
+    right: cw(8),
+    backgroundColor: "rgba(0,0,0,0.67)",
+  },
+
+  additionalEventSaveIcon: {
+    alignSelf: "center",
+    marginLeft: cw(19.26),
+    top: cw(10.88),
   },
 });
