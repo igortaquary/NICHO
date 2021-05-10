@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useUserContext } from '../../contexts/userContext';
 import * as firebase from "firebase";
 import "firebase/firestore";
+import openChat from '../../api/chat';
 import {
   Container,
   Description,
@@ -36,7 +37,7 @@ const ProductPage = ({ navigation, route }) => {
   const product = route.params.product;
   
   const [images, setImages] = useState([]);
-  const { user } = useUserContext();
+  const { user, threads } = useUserContext();
   const modalizeRef = useRef(null);
 
   React.useEffect( () => {
@@ -121,7 +122,7 @@ const ProductPage = ({ navigation, route }) => {
             </OptionDetails>
           </Option>
           <ContactButton>
-            <ContactButtonText>
+            <ContactButtonText onPress={() => {openChat(navigation, user.id, product.anunciante, user.nome, product.nome, threads)}}>
               Fale com o artista!
           </ContactButtonText>
           </ContactButton>
