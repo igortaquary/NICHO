@@ -12,7 +12,7 @@ export const Container = styled.TouchableOpacity`
 export const Title = styled.Text`
     margin: 6px 12px;
     margin-left: ${props => props.icon ? 0 : 12}px;
-    font-family: 'Raleway_600SemiBold';
+    font-family: ${props => props.selected ? 'Raleway_600SemiBold' : 'Raleway_400Regular'};
     font-size: 10px;
     color: ${props => props.selected ? '#019B92' : '#707070'};
 `;
