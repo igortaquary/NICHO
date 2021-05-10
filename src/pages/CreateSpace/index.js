@@ -8,11 +8,12 @@ import {
   LogBox,
   Image,
   Keyboard,
+  Alert,
 } from "react-native";
 import Style from "./styles";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
 import Icon from "./../../components/Icon/index";
-import CoverPlaceholder from "./../../components/coverPlaceholder";
+import CoverPlaceholder from "../../components/CoverPlaceholder";
 import moment from "moment";
 import { Feather } from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";
@@ -234,42 +235,79 @@ export default function CreateSpace({ navigation }) {
             setLocationTextErrorMessage4(useMapsErrorMessage);
           } else {
             setLocationTextErrorMessage4("");
-            savingLocations.push(use);
+            savingLocations.push({
+              placeAddress: placeAddress4,
+              placeGeometry: placeGeometry4,
+              placeName: placeName4,
+            });
           }
         } else if (/^\s*$/.test(locationText4)) {
           error = true;
           setLocationTextErrorMessage4(nonMapsErrorMessage);
-        } else setLocationTextErrorMessage4("");
+        } else {
+          setLocationTextErrorMessage4("");
+          savingLocations.push({ locationText: locationText4 });
+        }
 
       case 1:
         if (useMaps3) {
           if (!placeAddress3 || !placeGeometry3 || !placeName3) {
             setLocationTextErrorMessage3(useMapsErrorMessage);
-          } else setLocationTextErrorMessage3("");
+          } else {
+            setLocationTextErrorMessage3("");
+            savingLocations.push({
+              placeAddress: placeAddress3,
+              placeGeometry: placeGeometry3,
+              placeName: placeName3,
+            });
+          }
         } else if (/^\s*$/.test(locationText3)) {
           error = true;
           setLocationTextErrorMessage3(nonMapsErrorMessage);
-        } else setLocationTextErrorMessage3("");
+        } else {
+          setLocationTextErrorMessage3("");
+          savingLocations.push({ locationText: locationText3 });
+        }
 
       case 0:
         if (useMaps2) {
           if (!placeAddress2 || !placeGeometry2 || !placeName2) {
             setLocationTextErrorMessage2(useMapsErrorMessage);
-          } else setLocationTextErrorMessage2("");
+          } else {
+            setLocationTextErrorMessage2("");
+            savingLocations.push({
+              placeAddress: placeAddress2,
+              placeGeometry: placeGeometry2,
+              placeName: placeName2,
+            });
+          }
         } else if (/^\s*$/.test(locationText2)) {
           error = true;
           setLocationTextErrorMessage2(nonMapsErrorMessage);
-        } else setLocationTextErrorMessage2("");
+        } else {
+          setLocationTextErrorMessage2("");
+          savingLocations.push({ locationText: locationText2 });
+        }
 
       default:
         if (useMaps1) {
           if (!placeAddress1 || !placeGeometry1 || !placeName1) {
             setLocationTextErrorMessage1(useMapsErrorMessage);
-          } else setLocationTextErrorMessage1("");
+          } else {
+            setLocationTextErrorMessage1("");
+            savingLocations.push({
+              placeAddress: placeAddress1,
+              placeGeometry: placeGeometry1,
+              placeName: placeName1,
+            });
+          }
         } else if (/^\s*$/.test(locationText1)) {
           error = true;
           setLocationTextErrorMessage1(nonMapsErrorMessage);
-        } else setLocationTextErrorMessage1("");
+        } else {
+          setLocationTextErrorMessage1("");
+          savingLocations.push({ locationText: locationText1 });
+        }
     }
 
     // businessHours.find(element => element.days.find(day => !day.selected) || )

@@ -1,8 +1,5 @@
 ﻿import { Dimensions, StyleSheet } from "react-native";
-import {
-  ConvertWidth as cw,
-  ConvertHeight as ch,
-} from "./../../components/Converter";
+import { ConvertWidth as cw, ConvertHeight as ch } from "../Converter";
 
 export default StyleSheet.create({
   cover: {

@@ -9,18 +9,54 @@ export default StyleSheet.create({
     backgroundColor: "#F1F1F1",
   },
 
+  sectionContainer: {
+    borderRadius: cw(15),
+    marginBottom: cw(3),
+    paddingLeft: cw(34),
+    paddingRight: cw(39),
+
+    backgroundColor: "#FFFFFF",
+  },
+
+  accordionContainer: {
+    borderRadius: cw(10),
+  },
+
   coverImage: {
     width: "100%",
     height: cw(259),
   },
 
-  sectionContainer: {
-    borderRadius: cw(15),
-    marginBottom: cw(3),
-    paddingLeft: cw(52),
-    paddingRight: cw(16),
+  spaceHeader: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: cw(18),
+    marginBottom: cw(15),
+  },
 
-    backgroundColor: "#FFFFFF",
+  profilePicture: {
+    width: cw(87),
+    height: cw(87),
+    borderRadius: cw(43.5),
+  },
+
+  spaceHeaderTextContainer: {
+    justifyContent: "center",
+    alignItems: "flex-start",
+    marginLeft: cw(13),
+  },
+
+  spaceName: {
+    fontFamily: "Raleway_700Bold",
+    color: "#707070",
+    fontSize: cw(20),
+  },
+
+  spaceCaption: {
+    fontFamily: "Raleway_400Regular",
+    fontSize: cw(9),
+    color: "#707070",
+    marginLeft: cw(1),
   },
 
   eventInfo: {
@@ -44,12 +80,6 @@ export default StyleSheet.create({
     color: "#019B92",
 
     marginRight: cw(9),
-  },
-
-  today: {
-    fontFamily: "Raleway_600SemiBold",
-    color: "#FF4B26",
-    fontSize: cw(12),
   },
 
   localName: {
@@ -104,48 +134,73 @@ export default StyleSheet.create({
     backgroundColor: "#F1F1F1",
     width: cw(382),
     height: cw(1),
-
-    marginBottom: cw(23),
-    left: cw(-36),
+    alignSelf: "center",
+    marginBottom: cw(10),
+    // left: cw(-36),
   },
 
   iconAndInfoContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
+    marginLeft: cw(37),
+    marginBottom: cw(17),
+  },
 
-    marginBottom: cw(16),
+  miniAccordion: {
+    maxWidth: cw(301),
+    height: cw(35),
+    // backgroundColor: "pink",
+    marginTop: cw(5),
+    paddingRight: 0,
+    paddingLeft: cw(40),
+
+    // top: cw(9),
+    // paddingRight: cw(70),
+  },
+
+  miniAccordionIcon: {
+    left: cw(-13),
+  },
+  miniAccordionContentContainer: {
+    width: cw(315),
+    height: cw(130),
+    marginBottom: cw(1),
   },
 
   map: {
-    width: cw(339),
+    width: cw(301),
     height: cw(97),
-
-    marginTop: cw(5),
-    marginBottom: cw(5),
+    left: cw(-8),
   },
 
-  attentionTextContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-
-    paddingLeft: cw(5),
-    marginBottom: cw(29),
+  mapAttentionTextContainer: {
+    left: cw(-4),
+    width: "125%",
   },
 
-  attention: {
-    width: cw(4),
-    height: cw(4),
-    borderRadius: cw(2),
-    marginRight: cw(3),
-
-    backgroundColor: "#019B92",
+  miniAccordionBusinessHoursContentContainer: {
+    // width: cw(300),
+    height: cw(156),
+    left: cw(32),
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingBottom: 0,
+    borderRadius: 0,
   },
 
-  noteText: {
-    fontSize: cw(9),
-    fontFamily: "Raleway_300Light",
+  businessHour: {
+    fontSize: cw(10),
     color: "#707070",
-    // backgroundColor: "#1111ff",
+    fontFamily: "Raleway_400Regular",
+    width: cw(65),
+    marginRight: cw(26),
+  },
+
+  businessHourContainer: {
+    flex: 1,
+    // width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 
   infoText: {
@@ -154,6 +209,7 @@ export default StyleSheet.create({
     color: "#707070",
 
     marginLeft: cw(17),
+    marginRight: cw(12),
   },
 
   organizerName: {
@@ -163,14 +219,15 @@ export default StyleSheet.create({
   },
 
   toggleButtonStyle: {
-    paddingLeft: cw(57),
+    paddingLeft: cw(38),
     paddingRight: cw(16.65),
   },
 
   contentContainerStyle: {
-    paddingBottom: 0,
-    paddingLeft: cw(58),
-    paddingRight: cw(16),
+    paddingBottom: cw(14),
+    paddingLeft: cw(36),
+    paddingRight: cw(38),
+    paddingTop: cw(0),
   },
 
   title: {
@@ -183,6 +240,7 @@ export default StyleSheet.create({
     fontFamily: "Raleway_400Regular",
     fontSize: cw(10),
     color: "#707070",
+    width: cw(340),
 
     marginTop: cw(1),
     marginBottom: cw(15),
@@ -206,7 +264,7 @@ export default StyleSheet.create({
     borderColor: "#F1F1F1",
     height: cw(23),
 
-    marginBottom: cw(21),
+    marginBottom: cw(5),
     marginRight: cw(4),
   },
 
@@ -217,59 +275,61 @@ export default StyleSheet.create({
     marginHorizontal: cw(11),
   },
 
-  organizerContainer: {
+  imagesContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    justifyContent: "space-between",
+    // backgroundColor: "blue",
+    width: cw(390),
 
-    marginBottom: cw(22),
-    marginLeft: cw(6),
+    paddingBottom: cw(30),
+    paddingLeft: cw(25),
+    paddingRight: cw(0),
+    paddingTop: cw(5),
   },
 
-  organizerPicture: {
-    height: cw(62),
-    width: cw(62),
-    borderRadius: cw(31),
+  image: {
+    width: cw(115),
+    height: cw(82),
+    borderRadius: cw(12),
+  },
+  eventImagesContainer: {
+    paddingLeft: cw(14),
+    paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: cw(20),
+  },
+  eventHeader: {
+    marginBottom: cw(6),
+    marginLeft: cw(5),
   },
 
-  nameAndButtonContainer: {
-    height: cw(62),
-    marginLeft: cw(16),
-    justifyContent: "space-evenly",
+  eventDateContainer: {
+    flexDirection: "row",
   },
 
-  organizerTitle: {
+  eventDateText: {
     fontFamily: "Raleway_400Regular",
-    fontSize: cw(14),
-    color: "#707070",
-  },
-
-  followingButton: {
-    width: cw(74),
-  },
-
-  followingButtonText: {
-    fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(12),
-    marginHorizontal: cw(9),
-    marginVertical: cw(4),
-    color: "#707070",
-  },
-
-  greenTitleText: {
-    fontFamily: "Raleway_400Regular",
-    fontSize: cw(16),
+    fontSize: cw(8),
     color: "#019B92",
+  },
 
-    marginTop: cw(20),
-    marginBottom: cw(12),
+  today: {
+    fontFamily: "Raleway_400Regular",
+    color: "#FF4B26",
+    fontSize: cw(8),
+    marginLeft: cw(4),
   },
 
   eventName: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(15),
+    fontSize: cw(12),
     color: "#707070",
+  },
 
-    marginBottom: cw(7),
+  eventCover: {
+    width: cw(242),
+    height: cw(165),
+    borderRadius: cw(10),
   },
 
   additionalEventImage: {
@@ -280,7 +340,7 @@ export default StyleSheet.create({
 
   iconContainer: {
     position: "absolute",
-    top: cw(222),
+    top: cw(212.31),
     left: cw(370.17),
 
     justifyContent: "center",

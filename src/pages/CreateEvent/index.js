@@ -11,7 +11,7 @@ import {
 import Style from "./styles";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
 import Icon from "./../../components/Icon/index";
-import CoverPlaceholder from "./../../components/coverPlaceholder";
+import CoverPlaceholder from "../../components/CoverPlaceholder/index";
 import moment from "moment";
 import { Feather } from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";
@@ -260,6 +260,17 @@ export default function CreateEvent({ navigation }) {
 
     if (!error) {
       console.warn("Enviou!!!!");
+      let savingDatetimes = datetimes.map((datetime) => {
+        let dateFrom = moment(datetime.date.from)
+          .hours(moment(datetime.time.from).hours())
+          .minutes(moment(datetime.time.from).minutes());
+        let dateTo = moment(datetime.date.to)
+          .hours(moment(datetime.time.to).hours())
+          .minutes(moment(datetime.time.to).minutes());
+
+        return { from: dateFrom, to: dateTo };
+      });
+
       let event = {
         cover: coverImage,
         name: eventName,
@@ -268,7 +279,7 @@ export default function CreateEvent({ navigation }) {
           address: useMaps ? placeAddress : eventLocationText,
           geometry: placeGeometry,
         },
-        dates: datetimes,
+        dates: savingDatetimes,
         details: details,
         categories: selected,
         isFree: isFree,

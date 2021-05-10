@@ -8,12 +8,12 @@ import {
   Dimensions,
 } from "react-native";
 import { ImageModal, pickImage } from "../ImagePickerWithModal";
-import { ConvertWidth as cw } from "./../../components/Converter";
-import Icon from "./../../components/Icon/index";
+import { ConvertWidth as cw } from "../Converter";
+import Icon from "../Icon/index";
 import Style from "./styles";
 import SkeletonContent from "react-native-skeleton-content";
 
-export default function coverPlaceholder({
+export default function CoverPlaceholder({
   buttonStyle,
   image,
   setImage,

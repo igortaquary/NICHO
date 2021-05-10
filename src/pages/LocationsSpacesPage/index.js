@@ -247,7 +247,11 @@ export default function LocationsSpacesPage({ navigation }) {
           showsHorizontalScrollIndicator={false}
         >
           {photos.map((photo, index) => (
-            <TouchableOpacity activeOpacity={0.7} key={index} onPress={onSpaceClick}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              key={index}
+              onPress={() => navigation.navigate("Página do Espaço")}
+            >
               <Image source={photo} style={Style.photo} />
             </TouchableOpacity>
           ))}
