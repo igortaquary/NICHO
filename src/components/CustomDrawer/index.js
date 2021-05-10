@@ -52,9 +52,12 @@ const CustomDrawer = ({navigation}) => {
                 isSelected={selected==='chat'} 
                 onPress={() => setSelected('chat')}
             />
-            <Button>
-                <ButtonText>Torne-se um expositor!</ButtonText>
-            </Button>
+            {
+                !user?.isExpositor &&
+                (<Button onPress={() => navigation.navigate('Expositor')}>
+                    <ButtonText>Torne-se um expositor!</ButtonText>
+                </Button>)
+            }
 
             <Links>
                 <Link>

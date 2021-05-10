@@ -116,6 +116,26 @@ const UserProvider = ({ children }) => {
         Alert.alert('Produto adicionado!')
     }
 
+    const updateUserToExpositor = async (expositorData, profileUrl, bannerUrl) => {
+        if(profileUrl != user.foto){
+            const profileReference = firebase.storage().ref('user_photo/' + user.id);
+            const response = await fetch(profileUrl);
+            const blob = await response.blob();
+            await profileReference.put(blob);      
+        }
+        const reference = firebase.storage().ref('expositor_banners/' + user.id);
+        const response = await fetch(bannerUrl);
+        const blob = await response.blob();
+        await reference.put(blob);        
+        await firebase
+            .firestore()
+            .collection('usuario')
+            .doc(user.id)
+            .update(expositorData);
+        const currentUser = await fetchUser(user.id);
+        setUser(currentUser);
+    }
+
     const SignIn = async (email, password, navigation) => {
         const loggedUid = await signIn(email, password);
         const currentUser = await fetchUser(loggedUid);
@@ -129,7 +149,13 @@ const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ user: user, collections: collections, SignIn, loadCollections, SignUp, addProductToCollection, addProductToNewCollection, threads: threads }}>
+
+        <UserContext.Provider 
+            value={{ user, collections, 
+                  SignIn, loadCollections, SignUp, 
+                  addProductToCollection, addProductToNewCollection, 
+                  updateUserToExpositor, threads,
+        }}>
             {children}
         </UserContext.Provider>
     )
