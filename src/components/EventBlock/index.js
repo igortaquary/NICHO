@@ -33,10 +33,9 @@ export default function EventBlock({
     "DEZ",
   ];
   const onEventClick = async () => {
-    var i;
     const images = []
     images.push(event.image.uri)
-    for (i = 1; i < 4; i++){
+    for (let i = 1; i < 4; i++){
       const url = await firebase.storage().ref('events/' + event.anunciante + '/' + event.titulo + '/' + i).getDownloadURL()
       images.push(url)
     }

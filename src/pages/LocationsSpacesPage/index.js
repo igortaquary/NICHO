@@ -1,4 +1,4 @@
-﻿import React, { Fragment } from "react";
+﻿import React, { Fragment, useEffect, useState, useRef } from "react";
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import Icon from "../../components/Icon";
 import Style from "./styles";
@@ -6,13 +6,14 @@ import {
   ConvertWidth as cw,
   ConvertHeight as ch,
 } from "./../../components/Converter";
+import * as firebase from "firebase";
 
 export default function LocationsSpacesPage({ navigation }) {
   const closerToYou = [
     {
       id: "SAIJJ229JSD84JGH733",
-      name: "Brio Espaço Colaborativo",
-      photos: [
+      titulo: "Brio Espaço Colaborativo",
+      images: [
         {
           uri:
             "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/80100433_775919502882875_1481004186513440768_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=0debeb&_nc_ohc=1S7MIUY5rt4AX-XIlyX&_nc_ht=scontent.fbsb3-1.fna&oh=888fefb186871100e31158808ba6c9bc&oe=608604CE",
@@ -43,8 +44,8 @@ export default function LocationsSpacesPage({ navigation }) {
     },
     {
       id: "IYJBM5UI38C8362NC643",
-      name: "Estúdio Bicuda",
-      photos: [
+      titulo: "Estúdio Bicuda",
+      images: [
         {
           uri:
             "https://lh5.googleusercontent.com/p/AF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS=s1258-k-no",
@@ -74,8 +75,8 @@ export default function LocationsSpacesPage({ navigation }) {
   const otherSpaces = [
     {
       id: "HJ68FKJ30F958VJE3",
-      name: "Mercado Sul",
-      photos: [
+      titulo: "Mercado Sul",
+      images: [
         {
           uri:
             "https://i0.wp.com/www.mercadosul.org/wp-content/uploads/2012/08/foto_beco_sindrome_criativa-1024x6821.jpg",
@@ -102,8 +103,8 @@ export default function LocationsSpacesPage({ navigation }) {
     },
     {
       id: "GK59CV834KFK45",
-      name: "Ernesto Café",
-      photos: [
+      titulo: "Ernesto Café",
+      images: [
         {
           uri:
             "https://www.desfrutecultural.com.br/wp-content/uploads/2018/10/ErnestoNorte_043_ByGilbertoEvangelista.jpg",
@@ -130,10 +131,50 @@ export default function LocationsSpacesPage({ navigation }) {
     },
   ];
 
-  const Space = ({ name, photos, address, rating, businessHours }) => {
+  const [spaceList, setSpaces] = useState([]);
+
+  const fetchSpaces = async (spaces) => {
+    const Documents = await firebase.firestore()
+      .collection('local')
+      .get()
+      .then((querrySnapshot) => {
+        querrySnapshot.forEach((documentSnapshot) => {
+          const doc = documentSnapshot.data()
+          doc.id = documentSnapshot.id
+          spaces.push(doc);
+        });
+      });
+  };
+
+  const fetchImages = async (spaces) => {
+    for (const item of spaces){
+      const images = []
+      for (let i = 0; i < 3; i++){
+        const url = {uri: await firebase.storage().ref('spaces/' + item.anunciante + '/' + item.titulo + '/' + i).getDownloadURL()}
+        images.push(url)
+      }
+      item.images = images
+    }
+  };
+
+  useEffect(() => {
+    const spaces = [];
+    fetchSpaces(spaces).then(() => {
+      fetchImages(spaces).then(() => {
+        setSpaces(spaces);
+        console.log(spaces);
+      });
+    });
+  }, []);
+
+  const Space = ({ name, photos, address, rating, businessHours, space }) => {
     const days = ["seg", "ter", "qua", "qui", "sex", "sab", "dom"];
     let stars = Array(5);
 
+    const onSpaceClick = async () => {
+      console.log(space)
+    }
+    
     stars.fill("#F1F1F1");
     stars.fill("#E09F2B", 0, rating.value);
 
@@ -206,7 +247,7 @@ export default function LocationsSpacesPage({ navigation }) {
           showsHorizontalScrollIndicator={false}
         >
           {photos.map((photo, index) => (
-            <TouchableOpacity activeOpacity={0.7} key={index}>
+            <TouchableOpacity activeOpacity={0.7} key={index} onPress={onSpaceClick}>
               <Image source={photo} style={Style.photo} />
             </TouchableOpacity>
           ))}
@@ -246,15 +287,27 @@ export default function LocationsSpacesPage({ navigation }) {
         ]}
       >
         <Text style={Style.titleText}>Mais próximos de você</Text>
-        {closerToYou.map((local, index) => (
+        {spaceList.map((local, index) => (
           <Fragment key={local.id}>
             {index > 0 && <View style={Style.stripe} />}
             <Space
-              name={local.name}
-              photos={local.photos}
-              address={local.address}
-              rating={local.rating}
-              businessHours={local.businessHours}
+              space={local}
+              name={local.titulo}
+              photos={local.images}
+              address={"Taguatinga sul - QSC 03 Conj F loja 23"}
+              rating={{
+                value: 5,
+                votes: 12,
+              }}
+              businessHours={[
+                "09:00h-20:00h",
+                "09:00h-20:00h",
+                "09:00h-20:00h",
+                "09:00h-20:00h",
+                "09:00h-20:00h",
+                "09:00h-20:00h",
+                "Fechado",
+              ]}
             />
           </Fragment>
         ))}
@@ -275,8 +328,8 @@ export default function LocationsSpacesPage({ navigation }) {
           <Fragment key={local.id}>
             {index > 0 && <View style={Style.stripe} />}
             <Space
-              name={local.name}
-              photos={local.photos}
+              name={local.titulo}
+              photos={local.images}
               address={local.address}
               rating={local.rating}
               businessHours={local.businessHours}

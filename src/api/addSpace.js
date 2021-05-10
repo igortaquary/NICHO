@@ -19,13 +19,11 @@ export async function addSpace(space, navigation) {
         .collection('local')
         .add({
           anunciante: currentUser.uid,
-          organizador: space.organizers,
           titulo: space.name,
           descricao: space.details,
           categorias: space.categories,
           local: space.locations,
           links: space.contacts,
-          ingresso: space.isFree,
         })
         .then(() => {
           console.log('space added!');
