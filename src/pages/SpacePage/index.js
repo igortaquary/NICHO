@@ -12,16 +12,8 @@ import {
 } from "./../../components/Converter";
 import { locationPermission } from "../../components/Permissions";
 
-export default function SpacePage({ navigation }) {
-  const spaceName = "Brio Espaço Colaborativo";
-  const spaceCaption = "cafeteria e loja colaborativa";
-  const coverImage = {
-    uri: "https://source.unsplash.com/collection/227043",
-  };
-  const profilePicture = {
-    uri:
-      "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.6435-9/64702081_653936445081182_6307125986315993088_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=vkELm_foOboAX_7ZCAZ&_nc_ht=scontent.fbsb3-1.fna&oh=7c321b00c4c69b01820313d469341192&oe=60BBCC98",
-  };
+export default function SpacePage({ navigation, route }) {
+  const space = route.params.space;
   const locations = [
     {
       placeName: "Brio - Espaço Colaborativo",
@@ -34,11 +26,6 @@ export default function SpacePage({ navigation }) {
     },
   ];
   const mockedDate = moment().local().format();
-  const contacts = {
-    instagram: "instagram.com/briocafe",
-    phone: "+55 61 30369614",
-    website: "briocafe.com.br",
-  };
   const businessHours = [
     {
       days: ["Segunda", "Terça", "Quarta"],
@@ -58,19 +45,7 @@ export default function SpacePage({ navigation }) {
   const details = `O mercado das pulgas (português brasileiro) ou feira da ladra (português europeu) é um local onde diversos vendedores se reúnem para comercializar bens antigos, usados e outras mercadorias, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
 
   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore`;
-  const categories = [
-    "Adesivos",
-    "Para Vestir",
-    "Para sua Casa",
-    "Papelaria",
-    "Cosméticos",
-    "Impressões",
-  ];
-  const images = [
-    "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.6435-9/80326557_775919546216204_5457814027646271488_n.jpg?_nc_cat=111&ccb=1-3&_nc_sid=0debeb&_nc_ohc=NHjY1SvlQjoAX96jNzl&_nc_ht=scontent.fbsb3-1.fna&oh=86af7a2137184fa10048e517366c2cee&oe=60BB26FD",
-    "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.6435-9/78755701_775919826216176_322984220718792704_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=0debeb&_nc_ohc=dVZKwaQD9NkAX-kNoPS&_nc_oc=AQkR7iDMvQV8CiP-S5QskUV4MM5PiAtuJ__x7P9oesH4znoZEN5U0NHFzW2aLbSKMLs&_nc_ht=scontent.fbsb3-1.fna&oh=7da732b97259230dba802eac68749307&oe=60BB829F",
-    "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.6435-9/78606104_775920106216148_3125259062040592384_n.jpg?_nc_cat=103&ccb=1-3&_nc_sid=0debeb&_nc_ohc=yiaT6CQ0pvsAX-ECMey&_nc_ht=scontent.fbsb3-1.fna&oh=4c27cbd130000b2f2fd9e7d66859eb02&oe=60BE73E2",
-  ];
+
   const events = [
     {
       id: "AWHUEIHAWUI23980234E45TEO",
@@ -266,7 +241,7 @@ export default function SpacePage({ navigation }) {
             <Icon name="salvar" size={cw(15)} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-        <Image style={Style.coverImage} source={coverImage} />
+        <Image style={Style.coverImage} source={space.images[0]} />
       </View>
       <View
         style={{
@@ -276,10 +251,10 @@ export default function SpacePage({ navigation }) {
         }}
       >
         <View style={Style.spaceHeader}>
-          <Image source={profilePicture} style={Style.profilePicture} />
+          <Image source={space.images[1]} style={Style.profilePicture} />
           <View style={Style.spaceHeaderTextContainer}>
-            <Text style={Style.spaceName}>{spaceName}</Text>
-            <Text style={Style.spaceCaption}>{spaceCaption}</Text>
+            <Text style={Style.spaceName}>{space.titulo}</Text>
+            <Text style={Style.spaceCaption}>{space.descricao}</Text>
           </View>
         </View>
 
@@ -361,19 +336,19 @@ export default function SpacePage({ navigation }) {
 
         <BusinessHours />
 
-        {!!contacts.phone && (
+        {!!space.links.phone && (
           <View style={[Style.iconAndInfoContainer, { alignItems: "center" }]}>
             <Icon name="telephone" size={cw(17)} color="#019B92" />
             <Text
               style={[Style.infoText, { textDecorationLine: "underline" }]}
-              onPress={() => handlePressContact(`tel:${contacts.phone}`)}
+              onPress={() => handlePressContact(`tel:${space.links.phone}`)}
             >
-              {contacts.phone}
+              {space.links.phone}
             </Text>
           </View>
         )}
 
-        {!!contacts.website && (
+        {!!space.links.website && (
           <View style={[Style.iconAndInfoContainer, { alignItems: "center" }]}>
             <Icon
               name="website"
@@ -383,14 +358,14 @@ export default function SpacePage({ navigation }) {
             />
             <Text
               style={[Style.infoText, { textDecorationLine: "underline" }]}
-              onPress={() => handlePressContact(`https://${contacts.website}`)}
+              onPress={() => handlePressContact(`https://${space.links.website}`)}
             >
-              {contacts.website}
+              {space.links.website}
             </Text>
           </View>
         )}
 
-        {!!contacts.instagram && (
+        {!!space.links.instagram && (
           <View style={[Style.iconAndInfoContainer, { alignItems: "center" }]}>
             <Icon
               name="instagram"
@@ -401,10 +376,10 @@ export default function SpacePage({ navigation }) {
             <Text
               style={[Style.infoText, { textDecorationLine: "underline" }]}
               onPress={() =>
-                handlePressContact(`https://${contacts.instagram}`)
+                handlePressContact(`https://${space.links.instagram}`)
               }
             >
-              {contacts.instagram}
+              {space.links.instagram}
             </Text>
           </View>
         )}
@@ -422,7 +397,7 @@ export default function SpacePage({ navigation }) {
         <Text style={Style.text}>{details}</Text>
 
         <View style={Style.tagsContainer}>
-          {categories.map((category) => {
+          {space.categorias.map((category) => {
             return (
               <View key={category} style={Style.tag}>
                 <Text style={Style.tagText}>{category}</Text>
@@ -441,9 +416,9 @@ export default function SpacePage({ navigation }) {
         iconSize={cw(26)}
         contentContainerStyle={Style.imagesContainer}
       >
-        {images.map((image, index) => {
+        {space.images.map((image, index) => {
           return (
-            <Image key={index} source={{ uri: image }} style={Style.image} />
+            <Image key={index} source={ image } style={Style.image} />
           );
         })}
       </Accordion>

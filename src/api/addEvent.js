@@ -14,7 +14,6 @@ export async function addEvent(event, navigation) {
         await reference.put(blob);
       }
     }
-    console.log(event.dates[0].date.from)
     await firebase
         .firestore()
         .collection('evento')

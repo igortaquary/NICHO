@@ -149,9 +149,13 @@ export default function LocationsSpacesPage({ navigation }) {
   const fetchImages = async (spaces) => {
     for (const item of spaces){
       const images = []
-      for (let i = 0; i < 3; i++){
-        const url = {uri: await firebase.storage().ref('spaces/' + item.anunciante + '/' + item.titulo + '/' + i).getDownloadURL()}
-        images.push(url)
+      try{
+        for (let i = 0; i < 3; i++){
+          const url = {uri: await firebase.storage().ref('spaces/' + item.anunciante + '/' + item.titulo + '/' + i).getDownloadURL()}
+          images.push(url)
+        }
+      }catch(fail){
+        console.log(fail)
       }
       item.images = images
     }
@@ -172,9 +176,10 @@ export default function LocationsSpacesPage({ navigation }) {
     let stars = Array(5);
 
     const onSpaceClick = async () => {
+      navigation.navigate("Página do Espaço", {space})
       console.log(space)
     }
-    
+
     stars.fill("#F1F1F1");
     stars.fill("#E09F2B", 0, rating.value);
 
@@ -250,7 +255,7 @@ export default function LocationsSpacesPage({ navigation }) {
             <TouchableOpacity
               activeOpacity={0.7}
               key={index}
-              onPress={() => navigation.navigate("Página do Espaço")}
+              onPress={onSpaceClick}
             >
               <Image source={photo} style={Style.photo} />
             </TouchableOpacity>

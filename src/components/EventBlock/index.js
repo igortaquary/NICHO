@@ -35,9 +35,13 @@ export default function EventBlock({
   const onEventClick = async () => {
     const images = []
     images.push(event.image.uri)
-    for (let i = 1; i < 4; i++){
-      const url = await firebase.storage().ref('events/' + event.anunciante + '/' + event.titulo + '/' + i).getDownloadURL()
-      images.push(url)
+    try{
+      for (let i = 1; i < 4; i++){
+        const url = await firebase.storage().ref('events/' + event.anunciante + '/' + event.titulo + '/' + i).getDownloadURL()
+        images.push(url)
+      }
+    }catch(fail){
+      console.log(fail)
     }
     event.image = images
     console.log(event)
