@@ -49,7 +49,7 @@ const DrawerHeader = ({ scene }) => {
           <Icon name="busca" size={18} color={"#AEAEAE"} />
         </IconContainer>
         <IconContainer
-          onPress={() => scene.descriptor.navigation.navigate("Mensagens")}
+          onPress={() => scene.descriptor.navigation.navigate("Chat")}
         >
           <Icon name="chat" size={18} color={"#AEAEAE"} />
         </IconContainer>

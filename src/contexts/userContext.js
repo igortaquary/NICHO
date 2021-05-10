@@ -12,6 +12,9 @@ const UserProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
     const [collections, setCollections] = useState([])
+    const [threads, setThreads] = useState([]);
+    const [threads1, setThreads1] = useState([]);
+    const [threads2, setThreads2] = useState([]);
 
     useEffect(() => {
         console.log('context effect')
@@ -19,6 +22,47 @@ const UserProvider = ({ children }) => {
             loadCollections();
         }
     }, [user])
+
+    useEffect(() => {
+        if(user){
+            const unsubscribe1 = firebase.firestore()
+            .collection('MESSAGE_THREADS')
+            .where("uid1", "==", user.id)
+            .onSnapshot(querySnapshot => {
+                const threads = querySnapshot.docs.map(documentSnapshot => {
+                    return {
+                        _id: documentSnapshot.id,
+                        name: '',
+                        latestMessage: { text: '' },
+                        ...documentSnapshot.data()
+                    }
+                })
+                setThreads1(threads);
+            })
+
+            const unsubscribe2 = firebase.firestore()
+            .collection('MESSAGE_THREADS')
+            .where("uid2", "==", user.id)
+            .onSnapshot(querySnapshot => {
+                const threads = querySnapshot.docs.map(documentSnapshot => {
+                    return {
+                        _id: documentSnapshot.id,
+                        name: '',
+                        latestMessage: { text: '' },
+                        ...documentSnapshot.data()
+                    }
+                })
+                setThreads2(threads);
+            })
+            
+
+            return () => (unsubscribe1(), unsubscribe2());
+        }
+    }, [user])
+
+    useEffect(() => {
+        setThreads([...threads1, ...threads2].sort((x, y) => (y.createdAt - x.createdAt)));
+    }, [threads1, threads2]);
 
     const loadCollections = async () => {
         console.log('loadCollections');
@@ -105,7 +149,13 @@ const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ user: user, collections: collections,SignIn, loadCollections, SignUp, addProductToCollection, addProductToNewCollection, updateUserToExpositor }}>
+
+        <UserContext.Provider 
+            value={{ user, collections, 
+                  SignIn, loadCollections, SignUp, 
+                  addProductToCollection, addProductToNewCollection, 
+                  updateUserToExpositor, threads,
+        }}>
             {children}
         </UserContext.Provider>
     )
