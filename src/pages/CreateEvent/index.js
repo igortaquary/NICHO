@@ -11,7 +11,7 @@ import {
 import Style from "./styles";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
 import Icon from "./../../components/Icon/index";
-import CoverPlaceholder from "../../components/CoverPlaceholder/index";
+import CoverPlaceholder from "../../components/coverPlaceholder/index";
 import moment from "moment";
 import { Feather } from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";
@@ -20,7 +20,7 @@ import Constants from "expo-constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AutocompleteWithMaps from "../../components/AutocompleteWithMaps";
 import { AddSpacePhotos } from "../../components/AddSpacePhotos";
-
+import {addEvent} from '../../api/addEvent';
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
@@ -284,9 +284,10 @@ export default function CreateEvent({ navigation }) {
         categories: selected,
         isFree: isFree,
         organizers: organizers,
-        spacePhotos: images,
+        spacePhotos: coverImage.concat(images),
       };
       console.log(event);
+      addEvent(event, navigation)
       clearPage();
     } else {
       // console.log(incorrectDatetimes);

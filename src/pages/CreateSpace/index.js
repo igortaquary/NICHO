@@ -13,7 +13,7 @@ import {
 import Style from "./styles";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
 import Icon from "./../../components/Icon/index";
-import CoverPlaceholder from "../../components/CoverPlaceholder";
+import CoverPlaceholder from "../../components/coverPlaceholder";
 import moment from "moment";
 import { Feather } from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";
@@ -22,7 +22,7 @@ import Constants from "expo-constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AutocompleteWithMaps from "../../components/AutocompleteWithMaps";
 import { AddSpacePhotos } from "../../components/AddSpacePhotos";
-
+import {addSpace} from '../../api/addSpace';
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
@@ -390,16 +390,15 @@ export default function CreateSpace({ navigation }) {
     if (!error) {
       console.warn("ENVIOOOU!!!");
       let establishment = {
-        cover: coverImage,
-        profilePicture: profilePicture,
         name: establishmentName,
         locations: savingLocations,
         businessHours: savingBusinessHours,
         contacts: { instagram: instagram, phone: phone, website: website },
         details: details,
         categories: selected,
-        images: images,
+        images: coverImage.concat(profilePicture).concat(images),
       };
+      addSpace(establishment, navigation)
       clearPage();
       console.log(establishment);
     } else {
