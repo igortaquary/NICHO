@@ -9,6 +9,7 @@ import { useUserContext } from '../../contexts/userContext';
 import * as firebase from "firebase";
 import "firebase/firestore";
 import openChat from '../../api/chat';
+import AccessController from '../../components/AccessController';
 import {
   Container,
   Description,
@@ -163,11 +164,13 @@ const ProductPage = ({ navigation, route }) => {
                detalhes de produção e pagamento, é preciso entrar em contato com o vendedor.</OptionDescription>
             </OptionDetails>
           </Option>
-          <ContactButton>
-            <ContactButtonText onPress={() => {openChat(navigation, user.id, product.anunciante, user.nome, anunciante.nome, threads)}}>
-              Fale com o artista!
-          </ContactButtonText>
-          </ContactButton>
+          <AccessController profile="logado">
+            <ContactButton>
+              <ContactButtonText onPress={() => {openChat(navigation, user.id, product.anunciante, user.nome, anunciante.nome, threads)}}>
+                Fale com o artista!
+              </ContactButtonText>
+            </ContactButton>
+          </AccessController>
         </Accordion>
 
         
