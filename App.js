@@ -11,6 +11,7 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./src/routes";
 import {UserProvider} from "./src/contexts/userContext";
+import {FilterProvider} from "./src/contexts/filterContext";
 import fetchUser from "./src/api/fetchUser";
 
 import * as firebase from 'firebase';
@@ -93,9 +94,11 @@ export default function App() {
   } else {
     return (
       <UserProvider>
-        <SafeAreaView style={{ flex: 1 }}>
-          <Routes />
-        </SafeAreaView>
+        <FilterProvider>
+          <SafeAreaView style={{ flex: 1 }}>
+            <Routes />
+          </SafeAreaView>
+        </FilterProvider>
       </UserProvider>
     );
   }

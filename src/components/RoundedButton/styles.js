@@ -4,7 +4,7 @@ import { ConvertWidth as cw, ConvertHeight as ch } from "../Converter";
 export default StyleSheet.create({
   normalButton: {
     backgroundColor: "#FFFFFF",
-
+    margin: cw(5),
     height: cw(23),
 
     justifyContent: "center",

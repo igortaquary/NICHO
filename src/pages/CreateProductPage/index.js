@@ -10,21 +10,32 @@ import CreateProductCarousel from '../../components/CreateProductCarousel';
 import OptionButton from '../../components/OptionButton';
 import Label from '../../components/Label';
 import {addProduct} from '../../api/addProduct';
+import { ActivityIndicator } from 'react-native';
 
-const categories = [
+/* const categories = [
   "Adesivos", "Para vestir", "Para sua casa", 
-  "Papelaria", "Cosméticos","Impressões", "Esculturas", 
-  "Desenhos", "Acessórios", "Pinturas" ]
-//const selectedCategories = ["Cosméticos", "Adesivos"]
+  "Papelaria", "Cosméticos", "Impressões", "Esculturas", 
+  "Desenhos", "Acessórios", "Pinturas" ] */
+
+const categories = {
+  "Adesivos": [],
+  "Para vestir": ["Blusas", "Calças", "Roupas", "Calçados", "Saias", "Vestidos", "Blusões", "Tops", "Casacos", "Shorts"], 
+  "Para sua casa": ["Quadros", "Vasos de plantas", "Móveis", "Luminárias", "Cadeiras", "Mesas", "Puff", "Cabeceira", "Estantes", "Prateleiras", "Armários", "Bancos", "Terrários", "Madeira de demolição", "Pallets", "Mesa de Cabeceira"], 
+  "Papelaria": ["Cadernos", "Canetas", "Zines"],
+  "Cosméticos": ["Desodorantes", "Sabonetes", "Maquiagem" ],
+  "Impressões": ["Prints", "Arte digital", "Xilogravura", "Serigrafia", "Adesivos" ],
+  "Esculturas": ["Argila", "Pedras", "Cristais", "Metais", "Madeira", "Vidro", "Resina"],
+  "Desenhos": ["Lápis", "Digital", "Esboços" ],
+  "Acessórios": ["Bolsas", "Brincos", "Piercings", "Aneis", "Pulseiras", "Colares", "Alianças"],
+  "Pinturas": ["Aquarela", "Acrílica", "Óleo", "Técnicas mistas", "Colagens", "Carvão"]
+}
 
 const regions = [  "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO" ]
-//const selectedRegions = [ "DF"]
 
 const primas = [
   "Biscuit", "Papel", "Upcycling", "Metais", "Lápis", "Tinta",
   "Tecido", "Barro e argila", "Madeira", "Vidro", "Cristais e pedras",
   "Plástico", "Cimento", "Linhas e cordas", "Resina"]
-//const selectedPrimas = ["Biscuit", "Resina"]
 
 const CreateProductPage = ({navigation}) => {
 
@@ -38,13 +49,25 @@ const CreateProductPage = ({navigation}) => {
     const [productPrice2, setProductPrice2] = useState('');
     //Options vars
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedSubCategories, setSelectedSubCategories] = useState([]);
     const [selectedRegions, setSelectedRegions] = useState([]);
     const [selectedPrimas, setSelectedPrimas] = useState([]);
     const [selectedDelivery, setSelectedDelivery] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const handlePress = () => {
       if(checkInputs()){
-        addProduct(productTitle, productDescription, selectedCategories, selectedDelivery, selectedRegions, selectedPrimas, productPrice, images, navigation);
+        const auxProduct = {
+          titulo: productTitle,
+          descricao: productDescription,
+          categorias: selectedCategories,
+          subcategorias: selectedSubCategories,
+          regioes: selectedRegions,
+          materias: selectedPrimas,
+          preco: productPrice,
+          entrega: selectedDelivery
+        }
+        addProduct(auxProduct, images, navigation, setLoading);
       }
     };
 
@@ -83,6 +106,9 @@ const CreateProductPage = ({navigation}) => {
     }
 
     return(
+        loading ?
+        <ActivityIndicator color="#019B92" style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '50%'}}/>
+        :
         <Container>
             <CreateProductCarousel images={images} setImages={setImages}/>
             <Input>
@@ -108,17 +134,29 @@ const CreateProductPage = ({navigation}) => {
                 </InputContainer>
             </Input>
             <Input>
-                <InputLabel>Escolha as categorias do seu produto</InputLabel>
+                <InputLabel>Escolha a categoria do seu produto</InputLabel>
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
-                  { categories.map( (item) => 
+                  { Object.keys(categories).map( (item) => 
                     <OptionButton key={item} title={item} selected={selectedCategories.includes(item)}
-                      onPress={ 
-                        () => setSelectedCategories( prev => prev.includes(item) ? 
-                        prev.filter(e => e !== item) : [...prev, item] ) 
-                      } /> 
+                      /* onPress={ () => setSelectedCategories( prev => prev.includes(item) ? 
+                        prev.filter(e => e !== item) : [...prev, item] ) } */
+                      onPress={ () => {setSelectedCategories([item]); setSelectedSubCategories([]); }}
+                       /> 
                   )}
                 </View>
             </Input>
+            { selectedCategories[0] && categories[selectedCategories[0]].length > 0 &&
+            <Input>
+                <InputLabel>Escolha a sub-categoria do seu produto</InputLabel>
+                <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
+                  {  categories[selectedCategories[0]].map( (item) => 
+                    <OptionButton key={item} title={item} selected={selectedSubCategories.includes(item)}
+                    onPress={ () => setSelectedSubCategories([item])}
+                    /> 
+                    )}
+                </View>
+            </Input>
+            }
             <Input>
                 <InputLabel>Opções de entrega</InputLabel>
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -128,11 +166,11 @@ const CreateProductPage = ({navigation}) => {
                     () => setSelectedDelivery( prev => prev.includes("Encomendas") ? 
                     prev.filter(e => e !== "Encomendas") : [...prev, "Encomendas"] ) 
                   }/>
-                  <OptionButton title="Pronta Entrega" icon="check"
-                  selected={selectedDelivery.includes("Pronta Entrega")}
+                  <OptionButton title="Pronta-entrega" icon="check"
+                  selected={selectedDelivery.includes("Pronta-entrega")}
                   onPress={ 
-                    () => setSelectedDelivery( prev => prev.includes("Pronta Entrega") ? 
-                    prev.filter(e => e !== "Pronta Entrega") : [...prev, "Pronta Entrega"] ) 
+                    () => setSelectedDelivery( prev => prev.includes("Pronta-entrega") ? 
+                    prev.filter(e => e !== "Pronta-entrega") : [...prev, "Pronta-entrega"] ) 
                   }/>
                 </View>
             </Input>
@@ -169,10 +207,10 @@ const CreateProductPage = ({navigation}) => {
                 <Description>Você pode determinar um preço fixo ou uma faixa de preço!</Description>
                 { priceType === 'unique' ?
                   <>
-                    <Text style={{fontSize: 14, padding: 10, color: '#019B92', textAlign: 'right'}}
+                    <Text style={{fontSize: 14, padding: 3, color: '#019B92', textAlign: 'right'}}
                     onPress={ () => setPriceType('variable')}>Usar faixa de preço</Text>
                     <InputContainer>
-                      <InputLabel style={{fontSize: 16, marginTop: 5, marginRight: 5}}>R$</InputLabel>
+                      <InputLabel style={{fontSize: 16, marginTop: 3, marginRight: 5}}>R$</InputLabel>
                       <TextInput 
                           textAlign="left"
                           keyboardType="number-pad"
@@ -183,10 +221,10 @@ const CreateProductPage = ({navigation}) => {
                   </>
                   :
                   <>
-                    <Text style={{fontSize: 14, padding: 10, color: '#019B92', textAlign: 'right'}}
+                    <Text style={{fontSize: 14, padding: 3, color: '#019B92', textAlign: 'right'}}
                     onPress={ () => setPriceType('unique')}>Usar preço único</Text>
                     <InputContainer>
-                      <InputLabel style={{fontSize: 16, marginTop: 5, marginRight: 5}}>R$</InputLabel>
+                      <InputLabel style={{fontSize: 16, marginTop: 3, marginRight: 5}}>R$</InputLabel>
                       <TextInput 
                           textAlign="left"
                           keyboardType="number-pad"

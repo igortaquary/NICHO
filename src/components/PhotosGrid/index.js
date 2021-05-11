@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Container, LabelsContainer } from './styles';
+import { View, Text } from 'react-native';
 import Masonry from 'react-native-masonry-list';
 import Label from '../Label';
-import * as firebase from "firebase";
 
-const PhotosGrid = ({navigation, refreshing, products}) => {
+const PhotosGrid = ({navigation, refreshing, products, addMore}) => {
 
     const goToProductPage = (product) => {
         navigation.navigate('ProductPage', {product});
     }
 
     return(
+        products.length > 0 ?
         <Masonry
             images={products}
             refreshing={refreshing}
-            rerender={refreshing}
+            onEndReached={addMore ? addMore : () => {}} //addMore = function
+            onEndReachedThreshold={5}
             initialNumInColsToRender={10}
             onPressImage={ (item) => {goToProductPage(item)}}
             renderIndividualFooter={
@@ -30,6 +32,10 @@ const PhotosGrid = ({navigation, refreshing, products}) => {
                 borderRadius: 10,
             }}
         />
+        :
+        <Text style={{color: '#aaa', marginLeft: 'auto', marginRight: 'auto', marginTop: '40%'}}>
+            Nenhum produto foi encontrado.
+        </Text>
     )
 }
 

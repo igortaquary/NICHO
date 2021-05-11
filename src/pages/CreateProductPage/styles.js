@@ -29,10 +29,10 @@ export const InputLabel = styled.Text`
 export const InputContainer = styled.View`
   background-color: rgba(196,196,196,0.2);
   border-radius: 8px;
-  padding: 5px 9px;
+  padding: 9px 9px;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
 `;
 
 export const TextInput = styled.TextInput`

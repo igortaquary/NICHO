@@ -54,7 +54,7 @@ const ProductPage = ({ navigation, route }) => {
       auxImages.push(await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/1').getDownloadURL());
       auxImages.push(await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/2').getDownloadURL());
     } catch (err) {
-      console.log(err);
+      //console.log(err);
     }
     setImages(auxImages);
   }

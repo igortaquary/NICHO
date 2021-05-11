@@ -1,41 +1,55 @@
-import React, { useState, useEffect} from 'react';
+import React from 'react';
+import { HeaderContainer, FilterContainer, Filters, FilterButton, SearchContainer, CategoryContainer, CategoryText } from './styles';
+import OptionButton from '../../components/OptionButton';
 import PhotosGrid from '../../components/PhotosGrid';
-import * as firebase from "firebase";
+import { ActivityIndicator, View, TextInput } from 'react-native';
+import { useFilterContext } from '../../contexts/filterContext';
+import Icon from '../../components/Icon';
 
-const HomePage = ({navigation}) => {
+const categories = [ "Adesivos", "Para vestir", "Para sua casa", "Papelaria", "Cosméticos", "Impressões", "Esculturas", "Desenhos", "Acessórios", "Pinturas" ];
 
-    const [refreshing, setRefreshing] = useState(false);
-    //const [images, setImages] = useState([]);
-    const [products, setProducts] = useState([]);
+const HomePage = ({navigation, route}) => {
 
-    useEffect(() => {
-        console.log(refreshing);
-        if(refreshing === false){
-            fetchProducts();
-        }
-    }, [])
-
-    const fetchProducts = async () => {
-        setRefreshing(true);
-        //console.log('fetch products');
-        const auxProducts = [];
-        const auxImages = [];
-        const querySnapshot = await firebase.firestore().collection('produto').get()
-        querySnapshot.forEach( documentSnapshot => {
-            const data = documentSnapshot.data();
-            const id = documentSnapshot.id;
-            auxProducts.push({...data, id});
-        });
-        for(const product of auxProducts){
-            const uri = await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/0').getDownloadURL();
-            auxImages.push({...product, uri});
-        }
-        setProducts(auxImages);
-        setRefreshing(false);
-    }
+    const { products, loading, filters, setFilters, search } = useFilterContext();
 
     return(
-        <PhotosGrid products={products} refreshing={refreshing} navigation={navigation} />
+        <View style={{flex: 1, backgroundColor: '#FFF'}}>
+            <HeaderContainer>
+                <FilterContainer>
+                    <Filters horizontal={true}>
+                        { filters.category && 
+                        <CategoryContainer onPress={ () => setFilters(prev => { return {...prev, category: null}} )}>
+                            <CategoryText selected={false}>
+                                Todos
+                            </CategoryText>
+                        </CategoryContainer>}
+                        {
+                            categories.map( (item, i) => 
+                                <CategoryContainer key={i} onPress={ () => setFilters(prev => { return {...prev, category: item}} )}>
+                                    <CategoryText selected={filters.category === item || !filters.category}>
+                                        {item}
+                                    </CategoryText>
+                                </CategoryContainer>
+                            )
+                        }
+                    </Filters>
+                    <FilterButton onPress={() => navigation.navigate("Filters")}>
+                        <Icon name='filtros' size={20} color={"#FFF"} />
+                    </FilterButton>
+                </FilterContainer>
+                <SearchContainer>
+                    <Icon name='busca' size={16} color={"#707070"}/>
+                    <TextInput placeholder="Pesquise por itens" style={{marginLeft: 8, width: '100%'}} 
+                    returnKeyType="search" onSubmitEditing={ e => search(e.nativeEvent.text)} />
+                </SearchContainer>
+            </HeaderContainer>
+            { loading ?
+            <ActivityIndicator color="#019B92" style={{marginTop: "50%"}}/>
+            :
+            <PhotosGrid products={products} refreshing={loading} navigation={navigation} />
+            }
+        </View>
+        
     )
 };
 

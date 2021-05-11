@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
-  
+  margin-bottom: 10px;
 `;
 
 export const Carousel = styled.View`
@@ -10,7 +10,7 @@ export const Carousel = styled.View`
   overflow: hidden;
   width: 300px;
   height: 300px;
-  background-color: #707070;
+  background-color: #EEE;
   margin: auto;
 `;
 
@@ -42,5 +42,5 @@ export const CurrentIndicator = styled.View`
   height: 10px;
   border-radius: 50px;
   border: 1px solid #707070;
-  margin: 24px 12px 0px 12px;
+  margin: 16px 12px;
 `;
