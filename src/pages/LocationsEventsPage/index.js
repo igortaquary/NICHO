@@ -94,11 +94,11 @@ export default function LocationsEventsPage({ navigation }) {
         {index > 0 && <ItemSeparator />}
         <EventBlock
           name={item.titulo}
-          date={item.datas[0].from.toDate()}
-          location={item.localName}
+          date={new Date("2020-12-08")}
+          location={"Taguatinga sul - St. B Sul QSB 13"}
           image={item.image}
-          address={item.region}
-          schedule={item.datas[0].from.toDate()}
+          address={"DF - Asa sul"}
+          schedule={"2020-12-08"}
           navigation={navigation}
           event={item}
         />
@@ -119,7 +119,7 @@ export default function LocationsEventsPage({ navigation }) {
       </View>
       <View style={Style.sectionContainer}>
         <Text style={Style.titleText}>Mais próximo de você</Text>
-        <RenderItem data={eventList} />
+        <RenderItem data={CloserToYou} />
       </View>
       <View
         style={[
@@ -132,7 +132,7 @@ export default function LocationsEventsPage({ navigation }) {
         ]}
       >
         <Text style={Style.titleText}>Mais eventos para você</Text>
-        <RenderItem data={eventList} />
+        <RenderItem data={MoreEvents} />
       </View>
     </ScrollView>
   );

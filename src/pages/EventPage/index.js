@@ -49,8 +49,8 @@ export default function EventPage({ navigation, route }) {
 
   // const latitudeSource = "-15.833891";
   // const longitudeSource = "-48.051603";
-  const latitudeDestination = event.local.geometry.location.lat;
-  const longitudeDestination = event.local.geometry.location.lng;
+  const latitudeDestination = "-15.835981";
+  const longitudeDestination = "-48.050079";
 
   const addToCalendar = async () => {
     const { timezone } = await Localization.getLocalizationAsync();
@@ -106,12 +106,14 @@ export default function EventPage({ navigation, route }) {
         <View style={Style.eventInfo}>
           <View style={Style.eventLeftContainer}>
             <View style={Style.dateContainer}>
-              <Text style={Style.dateText}>{event.datas[0].from.toDate().toLocaleString('pt-BR')}</Text>
+              <Text style={Style.dateText}>SEX, 08 DE DEZ ÀS 14:00</Text>
               {isToday && <Text style={Style.today}>Hoje!</Text>}
             </View>
             <Text style={Style.localName}>{event.titulo}</Text>
-            <Text style={Style.localNeighborhood}>{event.localName}</Text>
-            <Text style={Style.localAddress}>{event.location + ', ' + event.region}</Text>
+            <Text style={Style.localNeighborhood}>DF - Asa Sul</Text>
+            <Text style={Style.localAddress}>
+              SQN 311/312 no gramado entrequadras
+            </Text>
           </View>
 
           <View style={Style.addToCalendarContainer}>
@@ -134,25 +136,28 @@ export default function EventPage({ navigation, route }) {
           <Icon name="flag" size={13.5} color="#019B92" />
           <Text style={Style.infoText}>
             evento de{" "}
-            <Text style={Style.organizerName}>{event.organizador[0]}</Text>
+            <Text style={Style.organizerName}>Brio Espaço Colaborativo</Text> e{" "}
+            <Text style={Style.organizerName}>Estúdio Bicuda</Text>
           </Text>
         </View>
 
         <View style={Style.iconAndInfoContainer}>
           <Icon name="clock" size={15.5} color="#019B92" />
           <Text style={Style.infoText}>
-            {"acontecerá dia " + event.datas[0].from.toDate().getDate() + " das " + event.datas[0].from.toDate().getHours() + "h às " + event.datas[0].to.toDate().getHours() + "h"}
+            acontecerá na Sexta das 14 às 17:00h
           </Text>
         </View>
 
         <View style={Style.iconAndInfoContainer}>
           <Icon name="ticket" size={16} color="#019B92" />
-          <Text style={Style.infoText}>{event.ingresso ? "evento gratuito" : "evento pago"}</Text>
+          <Text style={Style.infoText}>evento gratuito</Text>
         </View>
 
         <View style={Style.iconAndInfoContainer}>
           <Icon name="locais" size={16} color="#019B92" />
-          <Text style={Style.infoText}>{event.localName + ", " + event.location + ", " + event.region}</Text>
+          <Text style={Style.infoText}>
+            Taguatinga norte - QNL 12, Conjunto G
+          </Text>
         </View>
 
         <ShowLocation
@@ -179,7 +184,11 @@ export default function EventPage({ navigation, route }) {
         textStyle={{ ...Style.title }}
         contentContainerStyle={Style.contentContainerStyle}
       >
-        <Text style={Style.text}>{event.descricao}</Text>
+        <Text style={Style.text}>
+          {`O mercado das pulgas (português brasileiro) ou feira da ladra (português europeu) é um local onde diversos vendedores se reúnem para comercializar bens antigos, usados e outras mercadorias, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore`}
+        </Text>
         <View style={Style.tagsContainer}>
           <View style={Style.tag}>
             <Text style={Style.tagText}>Feira</Text>

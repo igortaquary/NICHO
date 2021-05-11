@@ -74,7 +74,7 @@ export default function EventBlock({
 
           <Text style={Style.additionalEventLocationAddress}>{address}</Text>
 
-          <Text style={Style.additionalEventLocationTime}>{schedule.getDate() + '-' + schedule.getMonth() + '-' + schedule.getFullYear()}</Text>
+          <Text style={Style.additionalEventLocationTime}>{schedule}</Text>
         </View>
       </View>
     </>
