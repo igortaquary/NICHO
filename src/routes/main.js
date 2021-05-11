@@ -17,6 +17,7 @@ import Icon from "../components/Icon";
 import CustomDrawer from "../components/CustomDrawer";
 import DrawerHeader from "../components/DrawerHeader";
 import { StatusBar } from "react-native";
+import FollowingPage from "../pages/FollowingPage";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -77,7 +78,7 @@ const HomePages = () => {
           ),
         }}
         name="Seguindo"
-        component={NotFoundPage}
+        component={FollowingPage}
       />
       <Tab.Screen
         options={{
