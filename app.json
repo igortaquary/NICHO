@@ -8,14 +8,11 @@
     "splash": {
       "image": "./assets/apresentacao.png",
       "resizeMode": "cover"
-      
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },

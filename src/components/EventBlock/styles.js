@@ -28,10 +28,19 @@ export default StyleSheet.create({
     alignItems: "center",
 
     zIndex: 1,
-    width: cw(28),
-    height: cw(28),
+    width: cw(35),
+    height: cw(35),
     backgroundColor: "rgba(0,0,0,0.67)",
-    borderRadius: cw(14),
+    borderRadius: cw(17.5),
+  },
+
+  saveIcon: {
+    position: "absolute",
+    top: cw(248.88),
+    left: cw(352),
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
   },
 
   additionalEventInfo: {

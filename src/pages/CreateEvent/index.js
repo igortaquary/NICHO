@@ -11,7 +11,7 @@ import {
 import Style from "./styles";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
 import Icon from "./../../components/Icon/index";
-import CoverPlaceholder from "../../components/coverPlaceholder/index";
+import CoverPlaceholder from "../../components/CoverPlaceholder/index";
 import moment from "moment";
 import { Feather } from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";
@@ -20,7 +20,7 @@ import Constants from "expo-constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AutocompleteWithMaps from "../../components/AutocompleteWithMaps";
 import { AddSpacePhotos } from "../../components/AddSpacePhotos";
-import {addEvent} from '../../api/addEvent';
+import { addEvent } from "../../api/addEvent";
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
@@ -44,10 +44,8 @@ export default function CreateEvent({ navigation }) {
   const [placeGeometry, setPlaceGeometry] = useState();
   const [placeAddress, setPlaceAddress] = useState("");
   const [useMaps, setUseMaps] = useState(true);
-  const [
-    eventLocationTextErrorMessage,
-    setEventLocationTextErrorMessage,
-  ] = useState("");
+  const [eventLocationTextErrorMessage, setEventLocationTextErrorMessage] =
+    useState("");
 
   // ---------------------- Dates ----------------------
 
@@ -105,14 +103,11 @@ export default function CreateEvent({ navigation }) {
     );
   };
 
-  const [
-    permission,
-    askForPermission,
-    getPermission,
-  ] = Permissions.usePermissions(Permissions.LOCATION, {
-    get: true,
-    ask: true,
-  });
+  const [permission, askForPermission, getPermission] =
+    Permissions.usePermissions(Permissions.LOCATION, {
+      get: true,
+      ask: true,
+    });
 
   if (permission && permission.status !== "granted") {
     Alert.alert(
@@ -287,7 +282,7 @@ export default function CreateEvent({ navigation }) {
         spacePhotos: coverImage.concat(images),
       };
       console.log(event);
-      addEvent(event, navigation)
+      addEvent(event, navigation);
       clearPage();
     } else {
       // console.log(incorrectDatetimes);

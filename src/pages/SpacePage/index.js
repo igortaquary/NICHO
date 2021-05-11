@@ -21,7 +21,7 @@ export default function SpacePage({ navigation, route }) {
       placeGeometry: { location: space.local[0].placeGeometry.location },
     },
     {
-      locationText:space.localName,
+      locationText: space.localName,
     },
   ];
   const mockedDate = moment().local().format();
@@ -41,7 +41,7 @@ export default function SpacePage({ navigation, route }) {
       },
     },
   ];
-  
+
   const events = [
     {
       id: "AWHUEIHAWUI23980234E45TEO",
@@ -239,6 +239,7 @@ export default function SpacePage({ navigation, route }) {
         </View>
         <Image style={Style.coverImage} source={space.images[0]} />
       </View>
+
       <View
         style={{
           ...Style.sectionContainer,
@@ -354,7 +355,9 @@ export default function SpacePage({ navigation, route }) {
             />
             <Text
               style={[Style.infoText, { textDecorationLine: "underline" }]}
-              onPress={() => handlePressContact(`https://${space.links.website}`)}
+              onPress={() =>
+                handlePressContact(`https://${space.links.website}`)
+              }
             >
               {space.links.website}
             </Text>
@@ -413,9 +416,7 @@ export default function SpacePage({ navigation, route }) {
         contentContainerStyle={Style.imagesContainer}
       >
         {space.images.map((image, index) => {
-          return (
-            <Image key={index} source={ image } style={Style.image} />
-          );
+          return <Image key={index} source={image} style={Style.image} />;
         })}
       </Accordion>
 

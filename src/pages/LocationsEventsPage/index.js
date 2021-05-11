@@ -14,8 +14,7 @@ export default function LocationsEventsPage({ navigation }) {
       id: "RH245465YRTGFD3",
       name: "Multirão de reforma - Estúdio Bicuda",
       image: {
-        uri:
-          "https://www.google.com/maps/uv?pb=!1s0x935a3361d53f3871%3A0xba9242c3671143ed!3m1!7e115!4shttps%3A%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS%3Dw347-h160-k-no!5sest%C3%BAdio%20bicuda%20-%20Google%20Search!15sCgIgAQ&imagekey=!1e10!2sAF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS&hl=en&sa=X&ved=2ahUKEwjFgMeAhbbvAhWlJrkGHR4qD0sQoiowE3oECCMQAw",
+        uri: "https://www.google.com/maps/uv?pb=!1s0x935a3361d53f3871%3A0xba9242c3671143ed!3m1!7e115!4shttps%3A%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS%3Dw347-h160-k-no!5sest%C3%BAdio%20bicuda%20-%20Google%20Search!15sCgIgAQ&imagekey=!1e10!2sAF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS&hl=en&sa=X&ved=2ahUKEwjFgMeAhbbvAhWlJrkGHR4qD0sQoiowE3oECCMQAw",
       },
       date: "2020-12-10",
       location: "Estúdio Bicuda - DF - Taguatinga Sul",
@@ -28,8 +27,7 @@ export default function LocationsEventsPage({ navigation }) {
       id: "FJ39309J4JFW0JERFW",
       name: "Encontro de Brechós",
       image: {
-        uri:
-          "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/79779044_775918186216340_2266589207151509504_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=0debeb&_nc_ohc=AlVD0iskulcAX8WmLCi&_nc_ht=scontent.fbsb3-1.fna&oh=1ca3bb0a03534f4cec1b9f6c516df41e&oe=60789F3A",
+        uri: "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/79779044_775918186216340_2266589207151509504_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=0debeb&_nc_ohc=AlVD0iskulcAX8WmLCi&_nc_ht=scontent.fbsb3-1.fna&oh=1ca3bb0a03534f4cec1b9f6c516df41e&oe=60789F3A",
       },
       date: "2020-12-18",
       location: "Brio Espaço Colaborativo - DF - Taguatinga Sul",
@@ -40,8 +38,7 @@ export default function LocationsEventsPage({ navigation }) {
       id: "FJ235G9J4JFW0JERFW",
       name: "Mercado de Pulgas",
       image: {
-        uri:
-          "http://espiandopelomundo.com.br/wp-content/uploads/2017/11/Mercado-de-Pulgas-de-Col%C3%B4nia-2-e1511558720837.jpg",
+        uri: "http://espiandopelomundo.com.br/wp-content/uploads/2017/11/Mercado-de-Pulgas-de-Col%C3%B4nia-2-e1511558720837.jpg",
       },
       date: "2020-12-20",
       location: "DF - Taguatinga Norte",
@@ -53,28 +50,33 @@ export default function LocationsEventsPage({ navigation }) {
   const [eventList, setEvents] = useState([]);
 
   const fetchEvents = async (events) => {
-    const Documents = await firebase.firestore()
-      .collection('evento')
+    const Documents = await firebase
+      .firestore()
+      .collection("evento")
       .get()
       .then((querrySnapshot) => {
         querrySnapshot.forEach((documentSnapshot) => {
-          const doc = documentSnapshot.data()
-          const fullAddress = doc.local.address
-          const splitAddress = fullAddress.split("-")
-          doc.region = splitAddress[1]
-          doc.location = splitAddress[0]
-          doc.localName = doc.local.name
-          doc.id = documentSnapshot.id
+          const doc = documentSnapshot.data();
+          const fullAddress = doc.local.address;
+          const splitAddress = fullAddress.split("-");
+          doc.region = splitAddress[1];
+          doc.location = splitAddress[0];
+          doc.localName = doc.local.name;
+          doc.id = documentSnapshot.id;
           events.push(doc);
         });
       });
   };
 
   const fetchImagem = async (events) => {
-    for (const item of events){
-      item.image = {uri: await firebase.storage().ref('events/' + item.anunciante + '/' + item.titulo + '/' + 0).getDownloadURL()}
+    for (const item of events) {
+      item.image = {
+        uri: await firebase
+          .storage()
+          .ref("events/" + item.anunciante + "/" + item.titulo + "/" + 0)
+          .getDownloadURL(),
+      };
     }
-
   };
 
   useEffect(() => {
@@ -85,7 +87,7 @@ export default function LocationsEventsPage({ navigation }) {
       });
     });
   }, []);
-  
+
   const ItemSeparator = () => <View style={Style.stripe} />;
 
   const RenderItem = ({ data }) => {
@@ -101,6 +103,7 @@ export default function LocationsEventsPage({ navigation }) {
           schedule={item.datas[0].from.toDate()}
           navigation={navigation}
           event={item}
+          isList
         />
       </Fragment>
     ));

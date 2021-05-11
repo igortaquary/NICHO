@@ -18,6 +18,9 @@ import { event } from "react-native-reanimated";
 
 export default function EventPage({ navigation, route }) {
   const event = route.params.event;
+  const eventDate = moment(event.datas[0].from.toDate())
+    .format("ddd, DD [DE] MMM [ÀS] HH:mm")
+    .toUpperCase();
   const [seguindoBrio, setSeguindoBrio] = useState(true);
   const [seguindoBicuda, setSeguindoBicuda] = useState(true);
 
@@ -27,16 +30,13 @@ export default function EventPage({ navigation, route }) {
   const longitudeDelta = 0.03;
 
   const BrioPicture = {
-    uri:
-      "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/64702081_653936445081182_6307125986315993088_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=lnK4VDmcCNMAX8L7XVu&_nc_ht=scontent.fbsb3-1.fna&oh=1a1e5f5d2e14b84c6873e6710937a922&oe=60785EAB",
+    uri: "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/64702081_653936445081182_6307125986315993088_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=lnK4VDmcCNMAX8L7XVu&_nc_ht=scontent.fbsb3-1.fna&oh=1a1e5f5d2e14b84c6873e6710937a922&oe=60785EAB",
   };
   const BicudaPicture = {
-    uri:
-      "https://www.google.com/maps/uv?pb=!1s0x935a3361d53f3871%3A0xba9242c3671143ed!3m1!7e115!4shttps%3A%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS%3Dw347-h160-k-no!5sest%C3%BAdio%20bicuda%20-%20Google%20Search!15sCgIgAQ&imagekey=!1e10!2sAF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS&hl=en&sa=X&ved=2ahUKEwjFgMeAhbbvAhWlJrkGHR4qD0sQoiowE3oECCMQAw",
+    uri: "https://www.google.com/maps/uv?pb=!1s0x935a3361d53f3871%3A0xba9242c3671143ed!3m1!7e115!4shttps%3A%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS%3Dw347-h160-k-no!5sest%C3%BAdio%20bicuda%20-%20Google%20Search!15sCgIgAQ&imagekey=!1e10!2sAF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS&hl=en&sa=X&ved=2ahUKEwjFgMeAhbbvAhWlJrkGHR4qD0sQoiowE3oECCMQAw",
   };
   const eventBrio = {
-    uri:
-      "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/79779044_775918186216340_2266589207151509504_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=0debeb&_nc_ohc=AlVD0iskulcAX8WmLCi&_nc_ht=scontent.fbsb3-1.fna&oh=1ca3bb0a03534f4cec1b9f6c516df41e&oe=60789F3A",
+    uri: "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/79779044_775918186216340_2266589207151509504_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=0debeb&_nc_ohc=AlVD0iskulcAX8WmLCi&_nc_ht=scontent.fbsb3-1.fna&oh=1ca3bb0a03534f4cec1b9f6c516df41e&oe=60789F3A",
   };
 
   const isToday = (date) => {
@@ -93,7 +93,7 @@ export default function EventPage({ navigation, route }) {
             <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-        <Image style={Style.coverImage} source={{uri: event?.image[0]}} />
+        <Image style={Style.coverImage} source={{ uri: event?.images[0] }} />
       </View>
 
       <View
@@ -101,17 +101,20 @@ export default function EventPage({ navigation, route }) {
           ...Style.sectionContainer,
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
+          paddingBottom: cw(29),
         }}
       >
         <View style={Style.eventInfo}>
           <View style={Style.eventLeftContainer}>
             <View style={Style.dateContainer}>
-              <Text style={Style.dateText}>{event.datas[0].from.toDate().toLocaleString('pt-BR')}</Text>
+              <Text style={Style.dateText}>{eventDate}</Text>
               {isToday && <Text style={Style.today}>Hoje!</Text>}
             </View>
             <Text style={Style.localName}>{event.titulo}</Text>
             <Text style={Style.localNeighborhood}>{event.localName}</Text>
-            <Text style={Style.localAddress}>{event.location + ', ' + event.region}</Text>
+            <Text style={Style.localAddress}>
+              {event.location + ", " + event.region}
+            </Text>
           </View>
 
           <View style={Style.addToCalendarContainer}>
@@ -141,18 +144,28 @@ export default function EventPage({ navigation, route }) {
         <View style={Style.iconAndInfoContainer}>
           <Icon name="clock" size={15.5} color="#019B92" />
           <Text style={Style.infoText}>
-            {"acontecerá dia " + event.datas[0].from.toDate().getDate() + " das " + event.datas[0].from.toDate().getHours() + "h às " + event.datas[0].to.toDate().getHours() + "h"}
+            {"acontecerá na " +
+              moment(event.datas[0].from.toDate()).format("dddd") +
+              " das " +
+              moment(event.datas[0].from.toDate()).format("HH:mm") +
+              "h às " +
+              moment(event.datas[0].to.toDate()).format("HH:mm") +
+              "h"}
           </Text>
         </View>
 
         <View style={Style.iconAndInfoContainer}>
           <Icon name="ticket" size={16} color="#019B92" />
-          <Text style={Style.infoText}>{event.ingresso ? "evento gratuito" : "evento pago"}</Text>
+          <Text style={Style.infoText}>
+            {event.ingresso ? "evento gratuito" : "evento pago"}
+          </Text>
         </View>
 
         <View style={Style.iconAndInfoContainer}>
           <Icon name="locais" size={16} color="#019B92" />
-          <Text style={Style.infoText}>{event.localName + ", " + event.location + ", " + event.region}</Text>
+          <Text style={Style.infoText}>
+            {event.localName + ", " + event.location + ", " + event.region}
+          </Text>
         </View>
 
         <ShowLocation
@@ -163,12 +176,6 @@ export default function EventPage({ navigation, route }) {
           destinationName={event.organizador}
           style={Style.map}
         />
-        <View style={Style.attentionTextContainer}>
-          <View style={Style.attention} />
-          <Text style={Style.noteText}>
-            O tempo estimado de viagem não considera as condições de trânsito
-          </Text>
-        </View>
 
         {/* MAPA ----------------------------------- */}
       </View>
@@ -181,18 +188,11 @@ export default function EventPage({ navigation, route }) {
       >
         <Text style={Style.text}>{event.descricao}</Text>
         <View style={Style.tagsContainer}>
-          <View style={Style.tag}>
-            <Text style={Style.tagText}>Feira</Text>
-          </View>
-          <View style={Style.tag}>
-            <Text style={Style.tagText}>Artesanais</Text>
-          </View>
-          <View style={Style.tag}>
-            <Text style={Style.tagText}>Objetos</Text>
-          </View>
-          <View style={Style.tag}>
-            <Text style={Style.tagText}>Compra e venda</Text>
-          </View>
+          {event.categorias.map((category) => (
+            <View key={category} style={Style.tag}>
+              <Text style={Style.tagText}>{category}</Text>
+            </View>
+          ))}
         </View>
       </Accordion>
 
@@ -201,40 +201,21 @@ export default function EventPage({ navigation, route }) {
           style={{
             ...Style.title,
             marginTop: cw(14),
-            marginBottom: cw(23),
+            marginBottom: cw(16),
             marginLeft: cw(6),
           }}
         >
           Organizado por
         </Text>
 
-        <View style={Style.organizerContainer}>
-          <Image style={Style.organizerPicture} source={BrioPicture} />
-          <View style={Style.nameAndButtonContainer}>
-            <Text style={Style.organizerTitle}>Brio Espaço Colaborativo</Text>
-            <RoundedButton
-              active={seguindoBrio}
-              text="seguindo"
-              style={Style.followingButton}
-              textStyle={Style.followingButtonText}
-              onPress={() => setSeguindoBrio(!seguindoBrio)}
-            />
+        {event.organizador.map((organizer) => (
+          <View style={Style.organizerContainer}>
+            {/* <Image style={Style.organizerPicture} source={BrioPicture} /> */}
+            <View style={Style.nameAndButtonContainer}>
+              <Text style={Style.organizerTitle}>{organizer}</Text>
+            </View>
           </View>
-        </View>
-
-        <View style={Style.organizerContainer}>
-          <Image style={Style.organizerPicture} source={BicudaPicture} />
-          <View style={Style.nameAndButtonContainer}>
-            <Text style={Style.organizerTitle}>Estúdio Bicuda</Text>
-            <RoundedButton
-              active={seguindoBicuda}
-              text="seguindo"
-              style={Style.followingButton}
-              textStyle={Style.followingButtonText}
-              onPress={() => setSeguindoBicuda(!seguindoBicuda)}
-            />
-          </View>
-        </View>
+        ))}
       </View>
 
       <View
