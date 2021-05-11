@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Container, LabelsContainer } from './styles';
+import { View, Text } from 'react-native';
 import Masonry from 'react-native-masonry-list';
 import Label from '../Label';
-import * as firebase from "firebase";
 
 const PhotosGrid = ({navigation, refreshing, products, addMore}) => {
 
@@ -12,6 +12,7 @@ const PhotosGrid = ({navigation, refreshing, products, addMore}) => {
     }
 
     return(
+        products.length > 0 ?
         <Masonry
             images={products}
             refreshing={refreshing}
@@ -32,6 +33,10 @@ const PhotosGrid = ({navigation, refreshing, products, addMore}) => {
                 borderRadius: 10,
             }}
         />
+        :
+        <Text style={{color: '#aaa', marginLeft: 'auto', marginRight: 'auto', marginTop: '40%'}}>
+            Nenhum produto foi encontrado.
+        </Text>
     )
 }
 

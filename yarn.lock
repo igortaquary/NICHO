@@ -2185,10 +2185,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-15.0.1.tgz#ef34dea0881028d11398be5bf4e856743e3dc35a"
   integrity sha512-TMkXt0Ck1y0KKsGr9gJtWGjttxlZnnvDtphxUOSd0bfaR6Q1jle+sPvrzNR1urqYTWMinoKvjKfXUGsumaO1PA==
 
-"@types/node@^13.7.0":
-  version "13.13.51"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.51.tgz#a424c5282f99fc1ca41f11b727b6aea80668bcba"
-  integrity sha512-66/xg5I5Te4oGi5Jws11PtNmKkZbOPZWyBZZ/l5AOrWj1Dyw+6Ge/JhYTq/2/Yvdqyhrue8RL+DGI298OJ0xcg==
+"@types/node@>=13.7.0":
+  version "15.0.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-15.0.2.tgz#51e9c0920d1b45936ea04341aa3e2e58d339fb67"
+  integrity sha512-p68+a+KoxpoB47015IeYZYRrdqMUcpbK8re/zpFB8Ld46LHC1lPEbp3EXgkEhAYEcPvjJF6ZO+869SQ0aH1dcA==
 
 "@types/prop-types@*":
   version "15.7.3"
@@ -3426,6 +3426,11 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
+es6-promise@^3.0.2:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-3.3.1.tgz#a08cdde84ccdbf34d027a1451bc91d4bcd28a613"
+  integrity sha1-oIzd6EzNvzTQJ6FFG8kdS80ophM=
+
 escalade@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/escalade/-/escalade-3.1.1.tgz"
@@ -4613,6 +4618,13 @@ isomorphic-fetch@^2.1.1:
   dependencies:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
+
+jaccard-index@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/jaccard-index/-/jaccard-index-0.2.0.tgz#636a8db9eab0b85ee53adbbbf3c5ce4108436636"
+  integrity sha1-Y2qNueqwuF7lOtu788XOQQhDZjY=
+  dependencies:
+    promisen "^0.1.1"
 
 jest-get-type@^24.9.0:
   version "24.9.0"
@@ -5948,6 +5960,13 @@ promise@^8.0.3:
   integrity sha512-W04AqnILOL/sPRXziNicCjSNRruLAuIHEOVBazepu0545DDNGYHz7ar9ZgZ1fMU8/MA4mVxp5rkBWRi6OXIy3Q==
   dependencies:
     asap "~2.0.6"
+
+promisen@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/promisen/-/promisen-0.1.1.tgz#29e113fec03722fd94399df59d1ca6f2ec728bbf"
+  integrity sha1-KeET/sA3Iv2UOZ31nRym8uxyi78=
+  dependencies:
+    es6-promise "^3.0.2"
 
 prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"

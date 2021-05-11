@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import Icon from '../Icon';
 import { Container, Input, SearchInput } from './styles';
 
-const SearchBar = ({placeholder, onTextChange}) => {
+const SearchBar = ({ placeholder, onTextChange }) => {
     return (
         <Container>
             <SearchInput>
@@ -13,7 +13,7 @@ const SearchBar = ({placeholder, onTextChange}) => {
                     onChangeText={onTextChange}
                 />
             </SearchInput>
-            <TouchableOpacity onPress={onPressFilter}>
+            <TouchableOpacity>
                 <Icon name='filtros' size={16} />
             </TouchableOpacity>
         </Container>

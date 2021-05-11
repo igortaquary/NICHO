@@ -76,10 +76,10 @@ const CreateProductCarousel = ({ images, setImages }) => {
             <Image source={{ uri: item }} key={index} style={{ flex: 1, width: 300, backgroundColor: 'grey'}} />
           ))}
           { images.length < 3 && 
-            <TouchableOpacity onPress={pickImage} style={{ height: 300, width: 300, backgroundColor: 'lightgray', 
+            <TouchableOpacity onPress={pickImage} style={{ height: 300, width: 300, backgroundColor: '#EEE', 
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-              <Feather name="camera" size={45} color={"#707070"}/>
-              <Text style={{color: '#707070'}}>Adicionar Imagem</Text>
+              <Feather name="camera" size={45} color={"#AAA"}/>
+              <Text style={{color: '#AAA'}}>Adicionar Imagem</Text>
             </TouchableOpacity>
           }
         </ScrollView>
@@ -99,7 +99,7 @@ const CreateProductCarousel = ({ images, setImages }) => {
         {images.map((i, index) => (
           <CurrentIndicator key={index} style={{ backgroundColor: index == currentImage ? '#707070' : 'transparent' }}></CurrentIndicator>
         ))}
-        { images.length < 3 &&
+        { images.length < 3 && images.length > 0 &&
           <CurrentIndicator key='new' style={{ backgroundColor: images.length == currentImage ? '#707070' : 'transparent' }}></CurrentIndicator>
         }
       </Indicator>

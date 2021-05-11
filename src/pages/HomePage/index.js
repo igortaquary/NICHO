@@ -1,21 +1,55 @@
-import React, { useState, useEffect} from 'react';
-import * as firebase from "firebase";
+import React from 'react';
+import { HeaderContainer, FilterContainer, Filters, FilterButton, SearchContainer, CategoryContainer, CategoryText } from './styles';
+import OptionButton from '../../components/OptionButton';
 import PhotosGrid from '../../components/PhotosGrid';
-import SearchBar from '../../components/SearchBar';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { ActivityIndicator, View, TextInput } from 'react-native';
 import { useFilterContext } from '../../contexts/filterContext';
+import Icon from '../../components/Icon';
+
+const categories = [ "Adesivos", "Para vestir", "Para sua casa", "Papelaria", "Cosméticos", "Impressões", "Esculturas", "Desenhos", "Acessórios", "Pinturas" ];
 
 const HomePage = ({navigation, route}) => {
 
-    const { products, loading } = useFilterContext();
+    const { products, loading, filters, setFilters, search } = useFilterContext();
 
     return(
-        <View style={{flex: 1}}>
-            <View style={{marginTop: 10, marginTop: 10, marginLeft: 20, marginRight: 20,  }}>
-                <SearchBar onPressFilter={() => navigation.navigate("Filters")}/>
-            </View>
+        <View style={{flex: 1, backgroundColor: '#FFF'}}>
+            <HeaderContainer>
+                <FilterContainer>
+                    <Filters horizontal={true}>
+                        { filters.category && 
+                        <CategoryContainer onPress={ () => setFilters(prev => { return {...prev, category: null}} )}>
+                            <CategoryText selected={false}>
+                                Todos
+                            </CategoryText>
+                        </CategoryContainer>}
+                        {
+                            categories.map( (item, i) => 
+                                <CategoryContainer key={i} onPress={ () => setFilters(prev => { return {...prev, category: item}} )}>
+                                    <CategoryText selected={filters.category === item || !filters.category}>
+                                        {item}
+                                    </CategoryText>
+                                </CategoryContainer>
+                            )
+                        }
+                    </Filters>
+                    <FilterButton onPress={() => navigation.navigate("Filters")}>
+                        <Icon name='filtros' size={20} color={"#FFF"} />
+                    </FilterButton>
+                </FilterContainer>
+                <SearchContainer>
+                    <Icon name='busca' size={16} color={"#707070"}/>
+                    <TextInput placeholder="Pesquise por itens" style={{marginLeft: 8, width: '100%'}} 
+                    returnKeyType="search" onSubmitEditing={ e => search(e.nativeEvent.text)} />
+                </SearchContainer>
+            </HeaderContainer>
+            { loading ?
+            <ActivityIndicator color="#019B92" style={{marginTop: "50%"}}/>
+            :
             <PhotosGrid products={products} refreshing={loading} navigation={navigation} />
+            }
         </View>
+        
     )
 };
 
