@@ -18,6 +18,7 @@ import CustomDrawer from "../components/CustomDrawer";
 import DrawerHeader from "../components/DrawerHeader";
 import {useUserContext} from '../contexts/userContext';
 import { StatusBar } from "react-native";
+import FollowingPage from "../pages/FollowingPage";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -79,7 +80,7 @@ const HomePages = () => {
           ),
         }}
         name="Seguindo"
-        component={NotFoundPage}
+        component={FollowingPage}
       /> : null}
       
       {user ? <Tab.Screen

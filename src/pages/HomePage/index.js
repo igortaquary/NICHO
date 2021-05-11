@@ -18,7 +18,7 @@ const HomePage = ({navigation, route}) => {
                 <FilterContainer>
                     <Filters showsHorizontalScrollIndicator={false} horizontal={true}>
                         { filters.category && 
-                        <CategoryContainer onPress={ () => setFilters(prev => { return {...prev, category: null}} )}>
+                        <CategoryContainer onPress={ () => setFilters({})}>
                             <CategoryText selected={false}>
                                 Todos
                             </CategoryText>

@@ -20,6 +20,7 @@ import { useState, useEffect } from "react";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import PhotosGrid from "../../components/PhotosGrid";
+import { useUserContext } from "../../contexts/userContext";
 
 export default function ArtistPage({ navigation, route }) {
 
@@ -29,6 +30,7 @@ export default function ArtistPage({ navigation, route }) {
   const [products, setProducts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
+  const {user, followArtist} = useUserContext();
 
   const getImages = async () => {
     const profile = await firebase.storage().ref('user_photo/' + anunciante.id).getDownloadURL();
@@ -40,7 +42,9 @@ export default function ArtistPage({ navigation, route }) {
   useEffect(() => {
     getImages();
     fetchProducts();
-  }, [])
+    console.log('refresh')
+  }, [route.params])
+
 
   const fetchProducts = async () => {
     //console.log('fetch products');
@@ -65,6 +69,14 @@ export default function ArtistPage({ navigation, route }) {
     setRefreshing(false);
   }
 
+  const checkFollowage = () => {
+    if(user?.seguindo && user?.seguindo?.indexOf(anunciante.id) != -1) {
+      return true;
+    }else {
+      return false;
+    }
+  }
+
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View style={Style.coverContainer}>
@@ -86,9 +98,11 @@ export default function ArtistPage({ navigation, route }) {
 
         <View style={Style.buttonRow}>
           <RoundedButton
+            onPress={async () => await followArtist(anunciante.id)}
             style={Style.followingButton}
             textStyle={Style.followingButtonText}
-            text="seguindo"
+            text={checkFollowage() ? 'seguindo' : 'seguir'}
+            disabled={checkFollowage() ? true : false}
           >
             <Feather
               name="chevron-down"
