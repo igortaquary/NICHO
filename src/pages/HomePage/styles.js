@@ -37,6 +37,7 @@ export const SearchContainer = styled.View`
     padding: 8px 15px;
     border-radius: 16px;
     background-color: #F1F1F1;
+    align-items: center;
 `;
 
 export const CategoryContainer = styled.TouchableOpacity`
@@ -48,6 +49,6 @@ export const CategoryContainer = styled.TouchableOpacity`
 
 export const CategoryText = styled.Text`
     color: ${ props => props.selected ? "#019B92" : "#707070"};
-    font-weight: ${ props => props.selected ? "bold" : "normal"};
+    font-weight: normal;
     font-size: 10px;
 `;

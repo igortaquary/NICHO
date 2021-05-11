@@ -23,7 +23,7 @@ export default StyleSheet.create({
     fontFamily: "Raleway_400Regular",
     color: "#707070",
 
-    fontSize: cw(10),
+    fontSize: 10,
     marginHorizontal: cw(7),
   },
 

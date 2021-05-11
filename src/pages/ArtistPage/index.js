@@ -127,21 +127,21 @@ export default function ArtistPage({ navigation, route }) {
           {
             anunciante.dados_vendedor.links?.instagram &&
             <TouchableOpacity onPress={() => Linking.openURL(`https://instagram.com/${anunciante.dados_vendedor.links?.instagram}`)}>
-              <Icon name="instagram" size={cw(20)} color="#019B92" />
+              <Icon name="instagram" size={20} color="#019B92" />
             </TouchableOpacity>
           }
 
           {
             anunciante.dados_vendedor.links?.linkedin &&
             <TouchableOpacity onPress={() => Linking.openURL(anunciante.dados_vendedor.links?.linkedin)}>
-              <Icon name="linkedin" size={cw(21.94)} color="#019B92" />
+              <Icon name="linkedin" size={20} color="#019B92" />
             </TouchableOpacity>
           }
 
           {
             anunciante.dados_vendedor.links?.website &&
             <TouchableOpacity onPress={() => Linking.openURL(`https://${anunciante.dados_vendedor.links?.website}`)}>
-              <Icon name="website" size={cw(20.11)} color="#019B92" />
+              <Icon name="website" size={20} color="#019B92" />
             </TouchableOpacity>
           }
         </View>

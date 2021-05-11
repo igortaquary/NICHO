@@ -12,7 +12,7 @@ import {
   IconContainer
 } from './styles';
 
-const ProductCarousel = ({ data, onSavePress }) => {
+const ProductCarousel = ({ data, onSavePress, preco }) => {
 
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -39,7 +39,7 @@ const ProductCarousel = ({ data, onSavePress }) => {
           ))}
         </ScrollView>
         <LeftFixedIcons>
-          <Text style={{padding: 10, color: 'white', backgroundColor: 'rgba(0,0,0,0.67)', borderRadius: 50, marginBottom: 10}}>R$ 40 a 50</Text>
+          <Text style={{padding: 10, color: 'white', backgroundColor: 'rgba(0,0,0,0.67)', borderRadius: 50, marginBottom: 10}}>R$ {preco}</Text>
           <IconContainer>
             <Icon name="comprar" size={16} color="black" style={{}} />
           </IconContainer>

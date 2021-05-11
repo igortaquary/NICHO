@@ -132,7 +132,7 @@ export default StyleSheet.create({
 
   description: {
     fontFamily: "Raleway_400Regular",
-    fontSize: cw(13),
+    fontSize: 12,
     color: "#707070",
     textAlign: "center",
   },

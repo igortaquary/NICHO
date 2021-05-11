@@ -5,10 +5,11 @@ export const MainContainer = styled.View`
     background-color: #F1F1F1;
     display: flex;
     flex-direction: row;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     padding-top: ${StatusBar.currentHeight ? StatusBar.currentHeight : 15}px;
     padding-bottom: 5px;
+    elevation: 10;
 `;
 
 export const Container = styled.View`

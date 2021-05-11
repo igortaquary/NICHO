@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Modal, Text, TouchableOpacity } from 'react-native';
+import { Alert, Modal, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 
 import Accordion from '../../components/Accordion';
 import Label from '../../components/Label';
@@ -31,6 +31,7 @@ import {
   More
 } from './styles';
 import SaveProductModal from '../../components/SaveProductModal';
+import PhotosGrid from '../../components/PhotosGrid';
 
 const ProductPage = ({ navigation, route }) => {  
   //const images = route.params.images;
@@ -40,13 +41,40 @@ const ProductPage = ({ navigation, route }) => {
   const { user, threads } = useUserContext();
   const [anunciante, setAnunciante] = useState();
   const [idAnunciante, setIdAnunciante] = useState();
+  const [products, setProducts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   const modalizeRef = useRef(null);
 
   React.useEffect( () => {
     navigation.setOptions({ title: product.titulo });
     getAnuncianteData();
     getImages();
-  }, [])
+    fetchProducts();
+  }, [route.params.product])
+
+  const fetchProducts = async () => {
+    //console.log('fetch products');
+    setRefreshing(true);
+    const auxProducts = [];
+    const auxImages = [];
+    const querySnapshot = await firebase
+      .firestore()
+      .collection('produto')
+      .where('anunciante', '==', product.anunciante)
+      .limit(6)
+      .get()
+    querySnapshot.forEach(documentSnapshot => {
+      const data = documentSnapshot.data();
+      const id = documentSnapshot.id;
+      auxProducts.push({ ...data, id });
+    });
+    for (const product of auxProducts) {
+      const uri = await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/0').getDownloadURL();
+      auxImages.push({ ...product, uri });
+    }
+    setProducts(auxImages);
+    setRefreshing(false);
+  }
 
   const getImages = async () => {
     const auxImages = [];
@@ -104,7 +132,7 @@ const ProductPage = ({ navigation, route }) => {
     <>
       <SaveProductModal modalizeRef={modalizeRef} product={product} />
       <Container>
-        <ProductCarousel data={images} onSavePress={handleSavePress} />
+        <ProductCarousel preco={product?.preco} data={images} onSavePress={handleSavePress} />
         <MainInfo>
           <Artist onPress={() => navigation.navigate('Página do Artista', {anunciante: {...anunciante, id: idAnunciante}})}>
             <ArtistText>Por {anunciante?.nome}</ArtistText>
@@ -142,32 +170,13 @@ const ProductPage = ({ navigation, route }) => {
           </ContactButton>
         </Accordion>
 
-        <Accordion title='Comentários' key={3}>
-          <Comment>
-            <CommentHeader>
-              <CommentAuthor>Fulano Rodrigues</CommentAuthor>
-              <FontAwesome name="star" size={12} color="#019B92" />
-            </CommentHeader>
-            <CommentContent>
-              Melhor chapéu de cogumelo já criado na história da humanidade!
-              Simplesmente perfeito! Não vou tirar nunca mais!!! OBRIGADA DEUS
-              POR ESSE CHAPÉU
-          </CommentContent>
-            <CommentResponse>
-              <CommentHeader>
-                <FontAwesome name="pencil" size={14} color="#019B92" />
-                <CommentAuthor style={{ color: "#019B92", marginLeft: 5 }}>Juliana Daglio</CommentAuthor>
-              </CommentHeader>
-              <CommentContent>
-                Fico muito feliz em saber! Per aumento de cachacis, eu reclamis. Si
-                num tem leite então bota uma pinga aí cumpadi!
-          </CommentContent>
-            </CommentResponse>
-          </Comment>
-        </Accordion>
+        
 
         <More>
-          <Text style={{ fontSize: 15, fontFamily: 'Raleway_700Bold', color: '#707070' }}>Mais como esse</Text>
+          <Text style={{ fontSize: 15, fontFamily: 'Raleway_700Bold', color: '#707070' }}>Mais desse artista</Text>
+          <View style={{ flex: 1, width: '100%' }}>
+            <PhotosGrid products={products} refreshing={refreshing} navigation={navigation} />
+          </View>
         </More>
 
       </Container>

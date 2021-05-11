@@ -16,7 +16,7 @@ const HomePage = ({navigation, route}) => {
         <View style={{flex: 1, backgroundColor: '#FFF'}}>
             <HeaderContainer>
                 <FilterContainer>
-                    <Filters horizontal={true}>
+                    <Filters showsHorizontalScrollIndicator={false} horizontal={true}>
                         { filters.category && 
                         <CategoryContainer onPress={ () => setFilters(prev => { return {...prev, category: null}} )}>
                             <CategoryText selected={false}>

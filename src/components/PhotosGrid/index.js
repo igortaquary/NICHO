@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, LabelsContainer } from './styles';
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import Masonry from 'react-native-masonry-list';
 import Label from '../Label';
 
@@ -11,6 +11,7 @@ const PhotosGrid = ({navigation, refreshing, products, addMore}) => {
     }
 
     return(
+        !refreshing ? 
         products.length > 0 ?
         <Masonry
             images={products}
@@ -36,6 +37,8 @@ const PhotosGrid = ({navigation, refreshing, products, addMore}) => {
         <Text style={{color: '#aaa', marginLeft: 'auto', marginRight: 'auto', marginTop: '40%'}}>
             Nenhum produto foi encontrado.
         </Text>
+        :
+        <ActivityIndicator style={{marginTop: 5}} color='green' />
     )
 }
 
