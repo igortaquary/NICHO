@@ -52,7 +52,7 @@ export default function EventBlock({
     }catch(fail){
       console.log(fail)
     }
-    event.image = images
+    event.images = images
     navigation.navigate("Página de Evento", {event, recommendations})
   }
   return (

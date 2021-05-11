@@ -89,7 +89,7 @@ export default function EventPage({ navigation, route }) {
             <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-        <Image style={Style.coverImage} source={{uri: event?.image[0]}} />
+        <Image style={Style.coverImage} source={{uri: event?.images[0]}} />
       </View>
 
       <View
