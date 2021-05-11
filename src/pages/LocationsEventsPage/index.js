@@ -60,9 +60,9 @@ export default function LocationsEventsPage({ navigation }) {
         querrySnapshot.forEach((documentSnapshot) => {
           const doc = documentSnapshot.data()
           const fullAddress = doc.local.address
-          const splitAdress = fullAddress.split("-")
-          doc.region = splitAdress[1]
-          doc.location = splitAdress[0]
+          const splitAddress = fullAddress.split("-")
+          doc.region = splitAddress[1]
+          doc.location = splitAddress[0]
           doc.localName = doc.local.name
           doc.id = documentSnapshot.id
           events.push(doc);

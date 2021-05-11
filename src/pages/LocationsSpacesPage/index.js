@@ -21,9 +21,9 @@ export default function LocationsSpacesPage({ navigation }) {
           const doc = documentSnapshot.data()
           doc.id = documentSnapshot.id
           const fullAddress = doc.local[0].placeAddress
-          const splitAdress = fullAddress.split("-")
-          doc.region = splitAdress[1]
-          doc.location = splitAdress[0]
+          const splitAddress = fullAddress.split("-")
+          doc.region = splitAddress[1]
+          doc.location = splitAddress[0]
           doc.localName = doc.local[0].placeName
           doc.id = documentSnapshot.id
           spaces.push(doc);
