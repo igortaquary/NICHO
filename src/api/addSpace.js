@@ -27,7 +27,7 @@ export async function addSpace(space, navigation) {
         })
         .then(() => {
           console.log('space added!');
-          navigation.navigate('Inicio')
+          navigation.navigate('Main')
         });
   } catch (err) {
     Alert.alert("Erro de autenticação!", err.message);
