@@ -9,7 +9,7 @@ export async function addEvent(event, navigation) {
       date.from = date.from.toDate()
       date.to = date.to.toDate()
     }
-    for(i = 0; i < 4; i++){
+    for(let i = 0; i < 4; i++){
       if(event.spacePhotos[i]){
         const reference = firebase.storage().ref('events/' + currentUser.uid + '/' + event.name + '/' + i);
         const response = await fetch(event.spacePhotos[i])
