@@ -13,7 +13,7 @@ import {
 import Style from "./styles";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
 import Icon from "./../../components/Icon/index";
-import CoverPlaceholder from "../../components/coverPlaceholder";
+import CoverPlaceholder from "../../components/CoverPlaceholder";
 import moment from "moment";
 import { Feather } from "@expo/vector-icons";
 import * as Permissions from "expo-permissions";

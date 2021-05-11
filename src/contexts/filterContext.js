@@ -62,7 +62,8 @@ const FilterProvider = ({ children }) => {
         const querySnapshot = await productsRef.get();
         querySnapshot.forEach( documentSnapshot => {
             const data = documentSnapshot.data();
-            auxProducts.push(data);
+            const id = documentSnapshot.id;
+            auxProducts.push({...data, id });
         });
         console.log('meio');
         for(const product of auxProducts){

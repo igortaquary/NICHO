@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import { useUserContext } from '../../contexts/userContext';
 import DrawerOption from '../DrawerOption';
 import RoundedButton from '../RoundedButton/RoundedButton';
+import AccessController from '../AccessController';
 import { 
     Container,
     Avatar,
@@ -46,21 +47,24 @@ const CustomDrawer = ({navigation}) => {
                 isSelected={selected==='contact'} 
                 onPress={() => setSelected('contact')}
             />
-            <DrawerOption 
-                text='Mensagens' 
-                icon='chat' 
-                isSelected={selected==='chat'} 
-                onPress={() => setSelected('chat')}
-            />            
-            {
-                (!user?.isExpositor && user !== null) ?
-                (<Button onPress={() => navigation.navigate('Expositor')}>
+            <AccessController profile="logado">
+                <DrawerOption 
+                    text='Mensagens' 
+                    icon='chat' 
+                    isSelected={selected==='chat'} 
+                    onPress={() => setSelected('chat')}
+                />
+            </AccessController>     
+            <AccessController profile="not-expositor">
+                <Button onPress={() => navigation.navigate('Expositor')}>
                     <ButtonText>Torne-se um expositor!</ButtonText>
-                </Button>) :
-                (<Button onPress={() => navigation.navigate('SignUp')}>
+                </Button>
+            </AccessController>
+            <AccessController profile="not-logado">
+                <Button onPress={() => navigation.navigate('SignUp')}>
                     <ButtonText>Cadastre-se!</ButtonText>
-                </Button>)
-            }
+                </Button>
+            </AccessController>
 
 
             <Links>
