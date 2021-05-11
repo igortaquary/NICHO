@@ -141,6 +141,12 @@ export default function LocationsSpacesPage({ navigation }) {
         querrySnapshot.forEach((documentSnapshot) => {
           const doc = documentSnapshot.data()
           doc.id = documentSnapshot.id
+          const fullAddress = doc.local[0].placeAddress
+          const splitAddress = fullAddress.split("-")
+          doc.region = splitAddress[1]
+          doc.location = splitAddress[0]
+          doc.localName = doc.local[0].placeName
+          doc.id = documentSnapshot.id
           spaces.push(doc);
         });
       });
