@@ -66,7 +66,6 @@ const UserProvider = ({ children }) => {
 
     const loadCollections = async () => {
         console.log('loadCollections');
-        console.log(user);
         const auxCollections = []
         const res = await firebase
             .firestore()
@@ -79,7 +78,7 @@ const UserProvider = ({ children }) => {
             for(const product of doc.data().produtos){
                 const produto = await firebase.firestore().collection('produto').doc(product.id).get();
                 const firstImage = await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/0').getDownloadURL();
-                auxProdutos.push({...produto.data(), uri: firstImage});
+                auxProdutos.push({...produto.data(), uri: firstImage, id: produto.id});
             }
             auxCollections.push({titulo: doc.data().titulo, produtos: auxProdutos, ref: doc.ref})
         }
@@ -99,6 +98,8 @@ const UserProvider = ({ children }) => {
     }
 
     const addProductToNewCollection = async (product, newCollectionTitle) => {
+        console.log('test');
+        console.log(product)
         await firebase
             .firestore()
             .collection('usuario')
