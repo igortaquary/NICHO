@@ -14,11 +14,12 @@ export default function RoundedButton({
   onPressIn,
   onPressOut,
   text,
-
+  disabled
 
 }) {
   return (
     <TouchableOpacity
+      disabled={disabled}
       activeOpacity={activeOpacity}
       style={
         active

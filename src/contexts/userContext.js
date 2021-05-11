@@ -136,6 +136,18 @@ const UserProvider = ({ children }) => {
         setUser(currentUser);
     }
 
+    const followArtist = async (artistId) => {
+        await firebase
+            .firestore()
+            .collection('usuario')
+            .doc(user.id)
+            .update({
+                seguindo: firebase.firestore.FieldValue.arrayUnion(artistId)
+            });
+        const currentUser = await fetchUser(user.id);
+        setUser(currentUser);
+    }
+
     const SignIn = async (email, password, navigation) => {
         const loggedUid = await signIn(email, password);
         const currentUser = await fetchUser(loggedUid);
@@ -154,7 +166,7 @@ const UserProvider = ({ children }) => {
             value={{ user, collections, 
                   SignIn, loadCollections, SignUp, 
                   addProductToCollection, addProductToNewCollection, 
-                  updateUserToExpositor, threads,
+                  updateUserToExpositor, threads,followArtist
         }}>
             {children}
         </UserContext.Provider>
