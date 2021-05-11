@@ -39,6 +39,7 @@ const ProductPage = ({ navigation, route }) => {
   const [images, setImages] = useState([]);
   const { user, threads } = useUserContext();
   const [anunciante, setAnunciante] = useState();
+  const [idAnunciante, setIdAnunciante] = useState();
   const modalizeRef = useRef(null);
 
   React.useEffect( () => {
@@ -66,6 +67,7 @@ const ProductPage = ({ navigation, route }) => {
         .get()
         .then((doc) => {
             setAnunciante(doc.data());
+            setIdAnunciante(doc.id);
         })
   }
 
@@ -104,7 +106,7 @@ const ProductPage = ({ navigation, route }) => {
       <Container>
         <ProductCarousel data={images} onSavePress={handleSavePress} />
         <MainInfo>
-          <Artist onPress={() => navigation.navigate('Página do Artista')}>
+          <Artist onPress={() => navigation.navigate('Página do Artista', {anunciante: {...anunciante, id: idAnunciante}})}>
             <ArtistText>Por {anunciante?.nome}</ArtistText>
           </Artist>
           <ProductName>{product.titulo}</ProductName>

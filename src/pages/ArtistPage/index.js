@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View, Linking } from "react-native";
 import {
   Feather,
   Ionicons,
@@ -16,21 +16,63 @@ import {
 } from "./../../components/Converter";
 import Accordion from "../../components/Accordion";
 import Icon from "../../components/Icon";
+import { useState, useEffect } from "react";
+import * as firebase from "firebase";
+import "firebase/firestore";
+import PhotosGrid from "../../components/PhotosGrid";
 
-export default function ArtistPage({ navigation }) {
-  let imageSource = "https://source.unsplash.com/featured/412x115/?craft";
-  let profileImageSource = {
-    uri: "https://source.unsplash.com/featured/?woman,photo",
-  };
+export default function ArtistPage({ navigation, route }) {
+
+  const anunciante = route.params.anunciante;
+  const [profileImage, setProfileImage] = useState('https://source.unsplash.com/featured/?woman,photo');
+  const [bannerImage, setBannerImage] = useState("https://source.unsplash.com/featured/412x115/?craft");
+  const [products, setProducts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+
+  const getImages = async () => {
+    const profile = await firebase.storage().ref('user_photo/' + anunciante.id).getDownloadURL();
+    setProfileImage(profile);
+    const banner = await firebase.storage().ref('expositor_banners/' + anunciante.id).getDownloadURL();
+    setBannerImage(banner);
+  }
+
+  useEffect(() => {
+    getImages();
+    fetchProducts();
+  }, [])
+
+  const fetchProducts = async () => {
+    //console.log('fetch products');
+    setRefreshing(true);
+    const auxProducts = [];
+    const auxImages = [];
+    const querySnapshot = await firebase
+      .firestore()
+      .collection('produto')
+      .where('anunciante', '==', anunciante.id)
+      .get()
+    querySnapshot.forEach(documentSnapshot => {
+      const data = documentSnapshot.data();
+      const id = documentSnapshot.id;
+      auxProducts.push({ ...data, id });
+    });
+    for (const product of auxProducts) {
+      const uri = await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/0').getDownloadURL();
+      auxImages.push({ ...product, uri });
+    }
+    setProducts(auxImages);
+    setRefreshing(false);
+  }
 
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View style={Style.coverContainer}>
-        <Image source={{ uri: imageSource }} style={Style.coverImage} />
+        <Image source={{ uri: bannerImage }} style={Style.coverImage} />
       </View>
 
       <View style={Style.profilePicContainer}>
-        <Image source={profileImageSource} style={Style.profilePic} />
+        <Image source={{ uri: profileImage }} style={Style.profilePic} />
       </View>
 
       <View
@@ -40,7 +82,7 @@ export default function ArtistPage({ navigation }) {
           borderTopRightRadius: cw(0),
         }}
       >
-        <Text style={Style.name}>Juliana Daglio</Text>
+        <Text style={Style.name}>{anunciante.nome}</Text>
 
         <View style={Style.buttonRow}>
           <RoundedButton
@@ -69,10 +111,7 @@ export default function ArtistPage({ navigation }) {
         {/* colocar botões "seguindo" etc */}
         <View style={Style.descriptionContainer}>
           <Text style={Style.description}>
-            Olá, bem vindo ao meu perfil! Moro em Taguatinga - DF, e produzo
-            peças artesanais desde os dez anos de idade. Já fiz diversos cursos
-            de cerâmica e costura e há três anos vendo minhas peças online e em
-            feirinhas do DF e de outras cidades do Brasil.
+            {anunciante.dados_vendedor.descricao}
           </Text>
         </View>
         <RoundedButton
@@ -85,63 +124,54 @@ export default function ArtistPage({ navigation }) {
       <View style={Style.sectionContainer}>
         <Text style={Style.titleText}>Minhas outras redes</Text>
         <View style={Style.socialNetworkButtonRow}>
-          <TouchableOpacity>
-            <Icon name="instagram" size={cw(20)} color="#019B92" />
-          </TouchableOpacity>
+          {
+            anunciante.dados_vendedor.links?.instagram &&
+            <TouchableOpacity onPress={() => Linking.openURL(`https://instagram.com/${anunciante.dados_vendedor.links?.instagram}`)}>
+              <Icon name="instagram" size={cw(20)} color="#019B92" />
+            </TouchableOpacity>
+          }
 
-          <TouchableOpacity>
-            <Icon name="linkedin" size={cw(21.94)} color="#019B92" />
-          </TouchableOpacity>
+          {
+            anunciante.dados_vendedor.links?.linkedin &&
+            <TouchableOpacity onPress={() => Linking.openURL(anunciante.dados_vendedor.links?.linkedin)}>
+              <Icon name="linkedin" size={cw(21.94)} color="#019B92" />
+            </TouchableOpacity>
+          }
 
-          <TouchableOpacity>
-            <Icon name="website" size={cw(20.11)} color="#019B92" />
-          </TouchableOpacity>
+          {
+            anunciante.dados_vendedor.links?.website &&
+            <TouchableOpacity onPress={() => Linking.openURL(`https://${anunciante.dados_vendedor.links?.website}`)}>
+              <Icon name="website" size={cw(20.11)} color="#019B92" />
+            </TouchableOpacity>
+          }
         </View>
       </View>
 
       <View style={{ width: "100%" }}>
         <Accordion title="Locais físicos onde vendo">
           <View style={Style.physicalLocationContainer}>
-            <View style={Style.locationContainer}>
-              <EvilIcons
-                name="location"
-                size={cw(35)}
-                color="#019B92"
-                style={Style.locationIcon}
-              />
-              {/* <Marker /> */}
-              <View style={Style.locationTextContainer}>
-                <Text style={Style.locationName}>Endossa - Águas Claras</Text>
-                <Text
-                  style={{
-                    ...Style.locationName,
-                    fontFamily: "Raleway_400Regular",
-                  }}
-                >
-                  QSC 19 chácara 26 conjunto F loja 02 - DF
-                </Text>
+            {anunciante.dados_vendedor.locais.map(local => (
+              <View key={local.nome} style={Style.locationContainer}>
+                <EvilIcons
+                  name="location"
+                  size={cw(35)}
+                  color="#019B92"
+                  style={Style.locationIcon}
+                />
+                {/* <Marker /> */}
+                <View style={Style.locationTextContainer}>
+                  <Text style={Style.locationName}>{local.nome}</Text>
+                  <Text
+                    style={{
+                      ...Style.locationName,
+                      fontFamily: "Raleway_400Regular",
+                    }}
+                  >
+                    {local.endereco}
+                  </Text>
+                </View>
               </View>
-            </View>
-
-            <View style={Style.locationContainer}>
-              <EvilIcons
-                name="location"
-                size={cw(35)}
-                color="#019B92"
-                style={Style.locationIcon}
-              />
-              <View style={Style.locationTextContainer}>
-                <Text style={Style.locationName}>Feira Liga Pontos</Text>
-                <Text
-                  style={{
-                    ...Style.locationName,
-                    fontFamily: "Raleway_400Regular",
-                  }}
-                >
-                  SQS 215 - Bloco G/H - Jardim entrequadras
-                </Text>
-              </View>
-            </View>
+            ))}
           </View>
         </Accordion>
       </View>
@@ -157,6 +187,9 @@ export default function ArtistPage({ navigation }) {
         }}
       >
         <Text style={Style.myProductsText}>Meus produtos</Text>
+        <View style={{ flex: 1, width: '100%' }}>
+          <PhotosGrid products={products} refreshing={refreshing} navigation={navigation} />
+        </View>
       </View>
     </ScrollView>
   );

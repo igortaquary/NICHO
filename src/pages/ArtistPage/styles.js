@@ -178,7 +178,7 @@ export default StyleSheet.create({
 
   locationName: {
     fontFamily: "Raleway_700Bold",
-    fontSize: cw(11),
+    fontSize: 11,
     color: "#707070",
   },
 
