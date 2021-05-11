@@ -357,10 +357,4 @@ export default StyleSheet.create({
     right: cw(8),
     backgroundColor: "rgba(0,0,0,0.67)",
   },
-
-  additionalEventSaveIcon: {
-    alignSelf: "center",
-    marginLeft: cw(19.26),
-    top: cw(10.88),
-  },
 });

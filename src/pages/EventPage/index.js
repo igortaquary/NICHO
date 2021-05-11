@@ -1,43 +1,25 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import React, { Fragment, useEffect, useState } from "react";
 import { ScrollView, Text, View, Image, TouchableOpacity } from "react-native";
 import Style from "./styles";
-import RoundedButton from "../../components/RoundedButton/RoundedButton";
 import Accordion from "../../components/Accordion";
 import Icon from "./../../components/Icon/index";
 import ShowLocation from "./../../components/ShowLocation";
-import SkeletonContent from "react-native-skeleton-content";
 import moment from "moment";
 import * as Calendar from "expo-calendar";
-import * as Permissions from "expo-permissions";
 import * as Localization from "expo-localization";
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
 } from "./../../components/Converter";
-import { event } from "react-native-reanimated";
 
 export default function EventPage({ navigation, route }) {
   const event = route.params.event;
-  const [seguindoBrio, setSeguindoBrio] = useState(true);
-  const [seguindoBicuda, setSeguindoBicuda] = useState(true);
-
+  const recommendations = route.params.recommendations
+  
   const mockedDate = moment().local().format();
   const finishDate = moment(mockedDate).add(1, "hour").format();
   const latitudeDelta = 0.00023;
   const longitudeDelta = 0.03;
-
-  const BrioPicture = {
-    uri:
-      "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/64702081_653936445081182_6307125986315993088_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=lnK4VDmcCNMAX8L7XVu&_nc_ht=scontent.fbsb3-1.fna&oh=1a1e5f5d2e14b84c6873e6710937a922&oe=60785EAB",
-  };
-  const BicudaPicture = {
-    uri:
-      "https://www.google.com/maps/uv?pb=!1s0x935a3361d53f3871%3A0xba9242c3671143ed!3m1!7e115!4shttps%3A%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS%3Dw347-h160-k-no!5sest%C3%BAdio%20bicuda%20-%20Google%20Search!15sCgIgAQ&imagekey=!1e10!2sAF1QipMH4h581WznvICWud18cDg2qd8CbMdpIYPApxjS&hl=en&sa=X&ved=2ahUKEwjFgMeAhbbvAhWlJrkGHR4qD0sQoiowE3oECCMQAw",
-  };
-  const eventBrio = {
-    uri:
-      "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/79779044_775918186216340_2266589207151509504_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=0debeb&_nc_ohc=AlVD0iskulcAX8WmLCi&_nc_ht=scontent.fbsb3-1.fna&oh=1ca3bb0a03534f4cec1b9f6c516df41e&oe=60789F3A",
-  };
 
   const isToday = (date) => {
     return (
@@ -47,6 +29,20 @@ export default function EventPage({ navigation, route }) {
     );
   };
 
+  const month = [
+    "JAN",
+    "FEV",
+    "MAR",
+    "ABR",
+    "MAI",
+    "JUN",
+    "JUL",
+    "AGO",
+    "SET",
+    "OUT",
+    "NOV",
+    "DEZ",
+  ];
   // const latitudeSource = "-15.833891";
   // const longitudeSource = "-48.051603";
   const latitudeDestination = event.local.geometry.location.lat;
@@ -196,47 +192,6 @@ export default function EventPage({ navigation, route }) {
         </View>
       </Accordion>
 
-      <View style={Style.sectionContainer}>
-        <Text
-          style={{
-            ...Style.title,
-            marginTop: cw(14),
-            marginBottom: cw(23),
-            marginLeft: cw(6),
-          }}
-        >
-          Organizado por
-        </Text>
-
-        <View style={Style.organizerContainer}>
-          <Image style={Style.organizerPicture} source={BrioPicture} />
-          <View style={Style.nameAndButtonContainer}>
-            <Text style={Style.organizerTitle}>Brio Espaço Colaborativo</Text>
-            <RoundedButton
-              active={seguindoBrio}
-              text="seguindo"
-              style={Style.followingButton}
-              textStyle={Style.followingButtonText}
-              onPress={() => setSeguindoBrio(!seguindoBrio)}
-            />
-          </View>
-        </View>
-
-        <View style={Style.organizerContainer}>
-          <Image style={Style.organizerPicture} source={BicudaPicture} />
-          <View style={Style.nameAndButtonContainer}>
-            <Text style={Style.organizerTitle}>Estúdio Bicuda</Text>
-            <RoundedButton
-              active={seguindoBicuda}
-              text="seguindo"
-              style={Style.followingButton}
-              textStyle={Style.followingButtonText}
-              onPress={() => setSeguindoBicuda(!seguindoBicuda)}
-            />
-          </View>
-        </View>
-      </View>
-
       <View
         style={{
           ...Style.sectionContainer,
@@ -245,43 +200,41 @@ export default function EventPage({ navigation, route }) {
         }}
       >
         <Text style={Style.greenTitleText}>Mais eventos para você</Text>
-        <Text style={Style.eventName}>Encontro dos Brechós</Text>
-
-        <View>
-          <Image style={Style.additionalEventImage} source={eventBrio} />
-          <TouchableOpacity style={Style.additionalEventShareIcon}>
-            <Icon
-              name="compartilhar"
-              size={16.9}
-              color="#FFFFFF"
-              style={{ right: cw(1) }}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={Style.additionalEventInfo}>
-          <View style={Style.additionalEventLeftContainer}>
-            <Text style={Style.dayText}>18</Text>
-            <Text style={Style.monthText}>DEZ</Text>
+        {recommendations.map((item, index) => (
+          <Fragment key={item.id}>
+          {index > 0 && <View style={Style.stripe} />}
+          <Text style={Style.eventName}>{item.titulo}</Text>
+          <TouchableOpacity activeOpacity={0.7}>
+          <View>
+            <Image style={Style.additionalEventImage} source={item.image} />
+            <TouchableOpacity style={Style.additionalEventShareIcon}>
+              <Icon
+                name="compartilhar"
+                size={16.9}
+                color="#FFFFFF"
+                style={{ right: cw(1) }}
+              />
+            </TouchableOpacity>
           </View>
-          <View style={Style.additionalEventRightContainer}>
-            <Text style={Style.additionalEventLocationName}>
-              Brio Espaço Colaborativo - DF - Taguatinga Sul
-            </Text>
-
-            <Text style={Style.additionalEventLocationAddress}>
-              Taguatinga sul - St. B Sul QSB 13
-            </Text>
-
-            <Text style={Style.additionalEventLocationTime}>
-              Sexta à partir de 11:00h
-            </Text>
-          </View>
-
-          <TouchableOpacity style={Style.additionalEventSaveIcon}>
-            <Icon name="salvar" size={17.32} color="#707070" />
           </TouchableOpacity>
-        </View>
+
+          <View style={Style.additionalEventInfo}>
+            <View style={Style.additionalEventLeftContainer}>
+              <Text style={Style.dayText}>{item.datas[0].from.toDate().getDate()}</Text>
+              <Text style={Style.monthText}>{month[item.datas[0].from.toDate().getMonth()]}</Text>
+            </View>
+            <View style={Style.additionalEventRightContainer}>
+              <Text style={Style.additionalEventLocationName}>{item.localName}</Text>
+
+              <Text style={Style.additionalEventLocationAddress}>{item.region}</Text>
+
+              <Text style={Style.additionalEventLocationTime}>
+              {"Dia " + item.datas[0].from.toDate().getDate() + " à partir de " + event.datas[0].from.toDate().getHours() + "h"}
+              </Text>
+            </View>
+          </View>
+        </Fragment>
+        ))}
       </View>
     </ScrollView>
   );
