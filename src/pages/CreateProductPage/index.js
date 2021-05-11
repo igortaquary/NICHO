@@ -44,11 +44,11 @@ const CreateProductPage = ({navigation}) => {
     const [productTitle, setProductTitle] = useState('');
     const [productDescription, setProductDescription] = useState('');
     //Price vars
-    const [priceType, setPriceType] = useState('unique');
+    //const [priceType, setPriceType] = useState('unique');
     const [productPrice, setProductPrice] = useState('');
-    const [productPrice2, setProductPrice2] = useState('');
+    //const [productPrice2, setProductPrice2] = useState('');
     //Options vars
-    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState();
     const [selectedSubCategories, setSelectedSubCategories] = useState([]);
     const [selectedRegions, setSelectedRegions] = useState([]);
     const [selectedPrimas, setSelectedPrimas] = useState([]);
@@ -60,7 +60,7 @@ const CreateProductPage = ({navigation}) => {
         const auxProduct = {
           titulo: productTitle,
           descricao: productDescription,
-          categorias: selectedCategories,
+          categoria: selectedCategories,
           subcategorias: selectedSubCategories,
           regioes: selectedRegions,
           materias: selectedPrimas,
@@ -80,8 +80,8 @@ const CreateProductPage = ({navigation}) => {
         Alert.alert('A descrição do seu produto deve ter pelo menos 10 caracteres');
         return false;
       }
-      if(selectedCategories.length < 1){
-        Alert.alert('Escolha pelo menos uma categoria para seu produto');
+      if(!selectedCategories){
+        Alert.alert('Escolha uma categoria para seu produto');
         return false;
       }
       if(selectedRegions.length < 1){
@@ -92,16 +92,17 @@ const CreateProductPage = ({navigation}) => {
         Alert.alert('Escolha pelo menos uma matéria prima para seu produto');
         return false;
       }
-      if(productPrice){
-
+      if(productPrice.match('^[1-9]\d*(\.\d+)?$')){
+        Alert.alert('Digite um preço valido (apenas numeros)');
+        return false;
       }
-      if(priceType !== 'unique'){
+      /* if(priceType !== 'unique'){
         if(productPrice2 === ''){
           Alert.alert('Digite o valor final do seu produto', 
           'Um produto com faixa de preço deve ter um preço mínimo e um máximo');
           return false
         }
-      }
+      } */
       return true;
     }
 
@@ -137,19 +138,19 @@ const CreateProductPage = ({navigation}) => {
                 <InputLabel>Escolha a categoria do seu produto</InputLabel>
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
                   { Object.keys(categories).map( (item) => 
-                    <OptionButton key={item} title={item} selected={selectedCategories.includes(item)}
+                    <OptionButton key={item} title={item} selected={selectedCategories === item}
                       /* onPress={ () => setSelectedCategories( prev => prev.includes(item) ? 
                         prev.filter(e => e !== item) : [...prev, item] ) } */
-                      onPress={ () => {setSelectedCategories([item]); setSelectedSubCategories([]); }}
+                      onPress={ () => {setSelectedCategories(item); setSelectedSubCategories([]); }}
                        /> 
                   )}
                 </View>
             </Input>
-            { selectedCategories[0] && categories[selectedCategories[0]].length > 0 &&
+            { (selectedCategories && categories[selectedCategories].length > 0) &&
             <Input>
                 <InputLabel>Escolha a sub-categoria do seu produto</InputLabel>
                 <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>
-                  {  categories[selectedCategories[0]].map( (item) => 
+                  {  categories[selectedCategories].map( (item) => 
                     <OptionButton key={item} title={item} selected={selectedSubCategories.includes(item)}
                     onPress={ () => setSelectedSubCategories([item])}
                     /> 
@@ -204,7 +205,16 @@ const CreateProductPage = ({navigation}) => {
             </Input>
             <Input>
                 <InputLabel>Preço</InputLabel>
-                <Description>Você pode determinar um preço fixo ou uma faixa de preço!</Description>
+                <InputContainer>
+                  <InputLabel style={{fontSize: 16, marginTop: 3, marginRight: 5}}>R$</InputLabel>
+                  <TextInput 
+                      textAlign="left"
+                      keyboardType="number-pad"
+                      placeholder={"Preço único"}
+                      value={productPrice}
+                      onChangeText={(price) => setProductPrice(price)} />
+                </InputContainer>
+                {/* <Description>Você pode determinar um preço fixo ou uma faixa de preço!</Description>
                 { priceType === 'unique' ?
                   <>
                     <Text style={{fontSize: 14, padding: 3, color: '#019B92', textAlign: 'right'}}
@@ -242,7 +252,7 @@ const CreateProductPage = ({navigation}) => {
                           onChangeText={(price) => setProductPrice2(price)} />
                     </InputContainer>
                   </>
-                }
+                } */}
             </Input>
             <PublishButton onPress={handlePress}>
                 <PublishButtonText>

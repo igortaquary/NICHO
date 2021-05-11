@@ -8,8 +8,8 @@ export const Container = styled.View`
 
 export const LabelsContainer = styled.View`
     position: absolute;
-    bottom: 8px;
-    left: 8px;
+    bottom: 12px;
+    left: 12px;
     width: 12px;
     display: flex;
     flex-direction: column;
