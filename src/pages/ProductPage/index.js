@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useUserContext } from '../../contexts/userContext';
 import * as firebase from "firebase";
 import "firebase/firestore";
+import openChat from '../../api/chat';
 import {
   Container,
   Description,
@@ -36,11 +37,13 @@ const ProductPage = ({ navigation, route }) => {
   const product = route.params.product;
   
   const [images, setImages] = useState([]);
-  const { user } = useUserContext();
+  const { user, threads } = useUserContext();
+  const [anunciante, setAnunciante] = useState();
   const modalizeRef = useRef(null);
 
   React.useEffect( () => {
     navigation.setOptions({ title: product.titulo });
+    getAnuncianteData();
     getImages();
   }, [])
 
@@ -54,6 +57,16 @@ const ProductPage = ({ navigation, route }) => {
       //console.log(err);
     }
     setImages(auxImages);
+  }
+
+  const getAnuncianteData = async () => {
+    const userDocument = await firebase.firestore()
+        .collection('usuario')
+        .doc(product.anunciante)
+        .get()
+        .then((doc) => {
+            setAnunciante(doc.data());
+        })
   }
 
   const handleSavePress = async () => {
@@ -92,7 +105,7 @@ const ProductPage = ({ navigation, route }) => {
         <ProductCarousel data={images} onSavePress={handleSavePress} />
         <MainInfo>
           <Artist onPress={() => navigation.navigate('Página do Artista')}>
-            <ArtistText>Por {product.nome}</ArtistText>
+            <ArtistText>Por {anunciante?.nome}</ArtistText>
           </Artist>
           <ProductName>{product.titulo}</ProductName>
           <Labels>
@@ -121,7 +134,7 @@ const ProductPage = ({ navigation, route }) => {
             </OptionDetails>
           </Option>
           <ContactButton>
-            <ContactButtonText>
+            <ContactButtonText onPress={() => {openChat(navigation, user.id, product.anunciante, user.nome, anunciante.nome, threads)}}>
               Fale com o artista!
           </ContactButtonText>
           </ContactButton>

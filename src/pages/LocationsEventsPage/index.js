@@ -1,29 +1,14 @@
-﻿import React, { Fragment } from "react";
+﻿import React, { Fragment, useEffect, useState, useRef } from "react";
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
-import Icon from "./../../components/Icon/index";
 import EventBlock from "./../../components/EventBlock";
 import Style from "./style";
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
 } from "./../../components/Converter";
-import { FlatList } from "react-native-gesture-handler";
+import * as firebase from "firebase";
 
 export default function LocationsEventsPage({ navigation }) {
-  const TodayData = [
-    {
-      id: "CSSA1232455CCSYJHY",
-      name: "Feira Liga Pontos",
-      image: {
-        uri:
-          "https://payload.cargocollective.com/1/12/412724/8528630/07_900.jpg",
-      },
-      date: "2020-12-08",
-      location: "DF - Asa sul",
-      address: "SQN 311/312, no gramado entrequadras",
-      schedule: "Sexta à partir de 14:00h",
-    },
-  ];
   const CloserToYou = [
     {
       id: "RH245465YRTGFD3",
@@ -65,11 +50,37 @@ export default function LocationsEventsPage({ navigation }) {
     },
   ];
 
-  const eventBrio = {
-    uri:
-      "https://scontent.fbsb3-1.fna.fbcdn.net/v/t1.0-9/79779044_775918186216340_2266589207151509504_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=0debeb&_nc_ohc=AlVD0iskulcAX8WmLCi&_nc_ht=scontent.fbsb3-1.fna&oh=1ca3bb0a03534f4cec1b9f6c516df41e&oe=60789F3A",
+  const [eventList, setEvents] = useState([]);
+
+  const fetchEvents = async (events) => {
+    const Documents = await firebase.firestore()
+      .collection('evento')
+      .get()
+      .then((querrySnapshot) => {
+        querrySnapshot.forEach((documentSnapshot) => {
+          const doc = documentSnapshot.data()
+          doc.id = documentSnapshot.id
+          events.push(doc);
+        });
+      });
   };
 
+  const fetchImagem = async (events) => {
+    for (const item of events){
+      item.image = {uri: await firebase.storage().ref('events/' + item.anunciante + '/' + item.titulo + '/' + 0).getDownloadURL()}
+    }
+
+  };
+
+  useEffect(() => {
+    const events = [];
+    fetchEvents(events).then(() => {
+      fetchImagem(events).then(() => {
+        setEvents(events);
+      });
+    });
+  }, []);
+  
   const ItemSeparator = () => <View style={Style.stripe} />;
 
   const RenderItem = ({ data }) => {
@@ -77,12 +88,14 @@ export default function LocationsEventsPage({ navigation }) {
       <Fragment key={item.id}>
         {index > 0 && <ItemSeparator />}
         <EventBlock
-          name={item.name}
-          date={new Date(item.date)}
-          location={item.location}
+          name={item.titulo}
+          date={new Date("2020-12-08")}
+          location={"Taguatinga sul - St. B Sul QSB 13"}
           image={item.image}
-          address={item.address}
-          schedule={item.schedule}
+          address={"DF - Asa sul"}
+          schedule={"2020-12-08"}
+          navigation={navigation}
+          event={item}
         />
       </Fragment>
     ));
@@ -97,7 +110,7 @@ export default function LocationsEventsPage({ navigation }) {
         ]}
       >
         <Text style={[Style.titleText, { marginTop: cw(27) }]}>Hoje!</Text>
-        <RenderItem data={TodayData} />
+        <RenderItem data={eventList} />
       </View>
       <View style={Style.sectionContainer}>
         <Text style={Style.titleText}>Mais próximo de você</Text>

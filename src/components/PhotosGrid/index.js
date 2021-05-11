@@ -7,7 +7,6 @@ import Label from '../Label';
 const PhotosGrid = ({navigation, refreshing, products, addMore}) => {
 
     const goToProductPage = (product) => {
-        console.log(product);
         navigation.navigate('ProductPage', {product});
     }
 

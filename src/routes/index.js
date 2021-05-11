@@ -11,7 +11,8 @@ import ProductPage from '../pages/ProductPage';
 import { Feather } from '@expo/vector-icons';
 import Filters from '../pages/HomePage/Filter/filters';
 import CollectionPage from '../pages/CollectionPage';
-
+import CreateExpositorPage from '../pages/CreateExpositorPage';
+import MensagemPage from '../pages/MensagemPage';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,8 @@ const Routes = () => {
                 <Stack.Screen options={{title: 'Nova publicação', ...headerStyle}} name="NewProduct" component={CreateProductPage} /> 
                 <Stack.Screen options={{title: 'Filtros', ...headerStyle}} name='Filters' component={Filters} /> 
                 <Stack.Screen options={{title: 'Coleção', ...headerStyle, headerStyle:{elevation: 0}}} name="Collection" component={CollectionPage} /> 
+                <Stack.Screen options={{title: 'Expositor', ...headerStyle}} name="Expositor" component={CreateExpositorPage} />
+                <Stack.Screen options={{title: 'Chat', ...headerStyle}} name='MensagemPage' component={MensagemPage} />
                 <Stack.Screen options={headerStyle} name='NotFound' component={NotFoundPage} />
             </Stack.Navigator>
         </NavigationContainer>
