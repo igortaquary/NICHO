@@ -16,13 +16,12 @@ export default function SpacePage({ navigation, route }) {
   const space = route.params.space;
   const locations = [
     {
-      placeName: "Brio - Espaço Colaborativo",
-      placeAddress: "Taguatinga norte - QNL 12, conjunto G",
-      placeGeometry: { location: { lat: "-15.835981", lng: "-48.050079" } },
+      placeName: space.localName,
+      placeAddress: space.location,
+      placeGeometry: { location: space.local[0].placeGeometry.location },
     },
     {
-      locationText:
-        "Brio - Espaço Colaborativo, Taguatinga norte - QNL 12, conjunto G",
+      locationText:space.localName,
     },
   ];
   const mockedDate = moment().local().format();
@@ -42,10 +41,7 @@ export default function SpacePage({ navigation, route }) {
       },
     },
   ];
-  const details = `O mercado das pulgas (português brasileiro) ou feira da ladra (português europeu) é um local onde diversos vendedores se reúnem para comercializar bens antigos, usados e outras mercadorias, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore`;
-
+  
   const events = [
     {
       id: "AWHUEIHAWUI23980234E45TEO",
@@ -394,7 +390,7 @@ export default function SpacePage({ navigation, route }) {
         iconSize={cw(26)}
         contentContainerStyle={Style.contentContainerStyle}
       >
-        <Text style={Style.text}>{details}</Text>
+        <Text style={Style.text}>{space.descricao}</Text>
 
         <View style={Style.tagsContainer}>
           {space.categorias.map((category) => {
