@@ -1,5 +1,5 @@
 ﻿import React, { Fragment, useEffect, useState, useRef } from "react";
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import Icon from "../../components/Icon";
 import Style from "./styles";
 import {
@@ -11,6 +11,7 @@ import * as firebase from "firebase";
 export default function LocationsSpacesPage({ navigation }) {
 
   const [spaceList, setSpaces] = useState([]);
+  const [refreshing, setRefreshing] = useState();
 
   const fetchSpaces = async (spaces) => {
     const Documents = await firebase.firestore()
@@ -48,10 +49,11 @@ export default function LocationsSpacesPage({ navigation }) {
 
   useEffect(() => {
     const spaces = [];
+    setRefreshing(0);
     fetchSpaces(spaces).then(() => {
       fetchImages(spaces).then(() => {
         setSpaces(spaces);
-        console.log(spaces);
+        setRefreshing(1);
       });
     });
   }, []);
@@ -158,11 +160,7 @@ export default function LocationsSpacesPage({ navigation }) {
         </TouchableOpacity>
 
         <View style={Style.addressRatingContainer}>
-          <Text style={Style.addressText}>{address + " -"}</Text>
-          {stars.map((starColor, index) => (
-            <Icon key={index} name="star" size={8.51} color={starColor} />
-          ))}
-          <Text style={Style.ratingVotesText}>{`(${rating.votes})`}</Text>
+          <Text style={Style.addressText}>{address}</Text>
         </View>
 
         <Text style={Style.businessHoursText}>
@@ -173,6 +171,7 @@ export default function LocationsSpacesPage({ navigation }) {
   };
 
   return (
+    refreshing ?
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View
         style={[
@@ -244,5 +243,7 @@ export default function LocationsSpacesPage({ navigation }) {
         ))}
       </View>
     </ScrollView>
+    :
+    <ActivityIndicator style={{marginTop: 50}} color='green' />
   );
 }

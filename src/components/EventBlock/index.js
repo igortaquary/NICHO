@@ -19,6 +19,7 @@ export default function EventBlock({
   navigation,
   event,
   isList,
+  events,
 }) {
   const month = [
     "JAN",
@@ -36,7 +37,14 @@ export default function EventBlock({
   ];
   const onEventClick = async () => {
     const images = [];
-
+    const recommendations = [];
+    for (let i = 0; i < 3; i++) {
+      if (events[i].id != event.id) {
+        recommendations.push(events[i]);
+      } else {
+        recommendations.push(events[3]);
+      }
+    }
     images.push(event.image.uri);
     try {
       for (let i = 1; i < 4; i++) {
@@ -50,8 +58,7 @@ export default function EventBlock({
       console.log(fail);
     }
     event.images = images;
-    console.log(event);
-    navigation.navigate("Página de Evento", { event });
+    navigation.navigate("Página de Evento", { event, recommendations });
   };
   return (
     <>

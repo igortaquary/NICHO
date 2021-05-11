@@ -42,10 +42,10 @@ const FilterProvider = ({ children }) => {
         if(subCategoriesFilter?.length > 0){
             console.log("subcategorias");
             productsRef = productsRef.where('subcategorias', 'array-contains-any', subCategoriesFilter);
-        }else
+        } 
         if(filters.category){
-            console.log("categorias");
-            productsRef = productsRef.where('categorias', 'array-contains', filters.category);
+            console.log("categoria");
+            productsRef = productsRef.where('categoria', '==', filters.category);
         } else
         if(filters.region){
             console.log("regioes");
@@ -62,7 +62,8 @@ const FilterProvider = ({ children }) => {
         const querySnapshot = await productsRef.get();
         querySnapshot.forEach( documentSnapshot => {
             const data = documentSnapshot.data();
-            auxProducts.push(data);
+            const id = documentSnapshot.id;
+            auxProducts.push({...data, id });
         });
         console.log('meio');
         for(const product of auxProducts){

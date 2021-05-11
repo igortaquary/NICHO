@@ -1,6 +1,5 @@
 import React from 'react';
 import { HeaderContainer, FilterContainer, Filters, FilterButton, SearchContainer, CategoryContainer, CategoryText } from './styles';
-import OptionButton from '../../components/OptionButton';
 import PhotosGrid from '../../components/PhotosGrid';
 import { ActivityIndicator, View, TextInput } from 'react-native';
 import { useFilterContext } from '../../contexts/filterContext';
@@ -10,7 +9,7 @@ const categories = [ "Adesivos", "Para vestir", "Para sua casa", "Papelaria", "C
 
 const HomePage = ({navigation, route}) => {
 
-    const { products, loading, filters, setFilters, search } = useFilterContext();
+    const { products, loading, filters, setFilters, search, setPage } = useFilterContext();
 
     return(
         <View style={{flex: 1, backgroundColor: '#FFF'}}>
@@ -25,7 +24,7 @@ const HomePage = ({navigation, route}) => {
                         </CategoryContainer>}
                         {
                             categories.map( (item, i) => 
-                                <CategoryContainer key={i} onPress={ () => setFilters(prev => { return {...prev, category: item}} )}>
+                                <CategoryContainer key={i} onPress={ () => setFilters({category: item})}>
                                     <CategoryText selected={filters.category === item || !filters.category}>
                                         {item}
                                     </CategoryText>
@@ -46,7 +45,7 @@ const HomePage = ({navigation, route}) => {
             { loading ?
             <ActivityIndicator color="#019B92" style={{marginTop: "50%"}}/>
             :
-            <PhotosGrid products={products} refreshing={loading} navigation={navigation} />
+            <PhotosGrid products={products} refreshing={loading} navigation={navigation} /* addMore={ () => setPage(prev => prev++) }  *//>
             }
         </View>
         

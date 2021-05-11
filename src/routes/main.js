@@ -16,6 +16,7 @@ import ChatPage from "../pages/ChatPage";
 import Icon from "../components/Icon";
 import CustomDrawer from "../components/CustomDrawer";
 import DrawerHeader from "../components/DrawerHeader";
+import {useUserContext} from '../contexts/userContext';
 import { StatusBar } from "react-native";
 import FollowingPage from "../pages/FollowingPage";
 
@@ -23,6 +24,7 @@ const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 const HomePages = () => {
+  const {user} = useUserContext();
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -62,7 +64,7 @@ const HomePages = () => {
         name="Locais"
         component={Locations}
       />
-      <Tab.Screen
+      {user ? <Tab.Screen
         options={{
           tabBarIcon: ({ focused, color }) => (
             <Icon name="salvos" size={21} color={color} />
@@ -70,8 +72,8 @@ const HomePages = () => {
         }}
         name="Salvos"
         component={SavedPage}
-      />
-      <Tab.Screen
+      /> : null}
+      {user ? <Tab.Screen
         options={{
           tabBarIcon: ({ focused, color }) => (
             <Icon name="seguindo" size={21} color={color} />
@@ -79,8 +81,9 @@ const HomePages = () => {
         }}
         name="Seguindo"
         component={FollowingPage}
-      />
-      <Tab.Screen
+      /> : null}
+      
+      {user ? <Tab.Screen
         options={{
           tabBarIcon: ({ focused, color }) => (
             <Icon name="chat" size={21} color={color} />
@@ -88,7 +91,7 @@ const HomePages = () => {
         }}
         name="Chat"
         component={ChatPage}
-      />
+      /> : null}
     </Tab.Navigator>
   );
 };

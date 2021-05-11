@@ -18,13 +18,13 @@ const PhotosGrid = ({navigation, refreshing, products, addMore}) => {
             refreshing={refreshing}
             onEndReached={addMore ? addMore : () => {}} //addMore = function
             onEndReachedThreshold={5}
-            initialNumInColsToRender={10}
+            initialNumInColsToRender={20}
             onPressImage={ (item) => {goToProductPage(item)}}
             renderIndividualFooter={
                 (item) => 
                 <LabelsContainer>
-                    { item.available && <Label icon='check' />}
-                    { item.sheduling && <Label icon='ampulheta'/> }
+                    { item.entrega?.includes("Pronta-entrega") && <Label icon='check' />}
+                    { item.entrega?.includes("Encomendas") && <Label icon='ampulheta'/> }
                     { item.green && <Label icon='vegano' /> }
                 </LabelsContainer>
             }

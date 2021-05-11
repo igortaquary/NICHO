@@ -42,56 +42,6 @@ export default function SpacePage({ navigation, route }) {
     },
   ];
 
-  const events = [
-    {
-      id: "AWHUEIHAWUI23980234E45TEO",
-      cover: [
-        "https://payload.cargocollective.com/1/12/412724/8528630/LigaPontos-16dez18-141_900.jpg",
-      ],
-
-      name: "Feira Liga Pontos",
-      dates: [
-        {
-          from: "2021-05-08T13:00:31.840Z",
-          to: "2021-06-08T23:00:31.840Z",
-        },
-
-        {
-          from: "2021-07-08T13:00:31.840Z",
-          to: "2021-08-08T23:00:31.840Z",
-        },
-      ],
-    },
-    {
-      id: "dskfjsdfj398rjwe89458ewdsgi",
-      cover: [
-        "https://www.artesanatopassoapassoja.com.br/wp-content/uploads/2018/10/feiras-de-artesanato.jpg",
-      ],
-
-      name: "Feira Artesanal",
-      dates: [
-        {
-          from: "2021-10-08T13:00:31.840Z",
-          to: "2021-11-08T23:00:31.840Z",
-        },
-      ],
-    },
-    {
-      id: "ofigdjoj4reoijz390g0df0c",
-      cover: [
-        "http://www.saocaetanodigital.com.br/wp-content/uploads/2019/04/feirinha.jpg",
-      ],
-
-      name: "Feira de Artes",
-      dates: [
-        {
-          from: "2021-11-08T13:00:31.840Z",
-          to: "2021-12-08T23:00:31.840Z",
-        },
-      ],
-    },
-  ];
-
   locationPermission();
 
   function handlePressContact(url) {
@@ -418,78 +368,6 @@ export default function SpacePage({ navigation, route }) {
         {space.images.map((image, index) => {
           return <Image key={index} source={image} style={Style.image} />;
         })}
-      </Accordion>
-
-      <Accordion
-        title="Próximos eventos"
-        containerStyle={[
-          Style.accordionContainer,
-          { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 },
-        ]}
-        toggleButtonStyle={{
-          ...Style.toggleButtonStyle,
-          paddingLeft: cw(29),
-        }}
-        textStyle={{ ...Style.title }}
-        iconContainerStyle={{ left: cw(-15.65) }}
-        iconSize={cw(26)}
-        contentContainerStyle={Style.eventImagesContainer}
-      >
-        <ScrollView
-          horizontal
-          snapToInterval={cw(295)}
-          decelerationRate={"fast"}
-          showsHorizontalScrollIndicator={false}
-        >
-          {events.map((event, index) => {
-            let earlierDates = [...event.dates];
-
-            earlierDates.sort((A, B) => {
-              let auxDateA = moment(A.from);
-              let auxDateB = moment(B.from);
-
-              let diffA = moment().diff(auxDateA);
-              let diffB = moment().diff(auxDateB);
-
-              if (moment(A.to).isBefore(moment()) || diffA < diffB) {
-                console.log("primeiro retorno");
-                return 1;
-              }
-              if (moment(B.to).isBefore(moment()) || diffA > diffB) {
-                console.log("segundo retorno");
-                return -1;
-              }
-              console.log("ultimo retorno");
-              return 0;
-            });
-
-            let date = moment(earlierDates[0].from).format(
-              "ddd, DD [de] MMM [às] HH:mm"
-            );
-            let isToday = moment().isBetween(
-              moment(earlierDates[0].from),
-              moment(earlierDates[0].to),
-              "days"
-            );
-            return (
-              <View key={event.id} style={{ marginLeft: cw(11) }}>
-                <View style={Style.eventHeader}>
-                  <View style={Style.eventDateContainer}>
-                    <Text style={Style.eventDateText}>{date}</Text>
-                    {isToday && <Text style={Style.today}>Hoje!</Text>}
-                  </View>
-                  <Text style={Style.eventName}>{event.name}</Text>
-                </View>
-                <TouchableOpacity onPress={() => {}}>
-                  <Image
-                    source={{ uri: event.cover[0] }}
-                    style={Style.eventCover}
-                  />
-                </TouchableOpacity>
-              </View>
-            );
-          })}
-        </ScrollView>
       </Accordion>
     </ScrollView>
   );

@@ -8,6 +8,7 @@ import {
   getFocusedRouteNameFromRoute,
   useRoute,
 } from "@react-navigation/native";
+import AccessController from "../AccessController";
 
 const DrawerHeader = ({ scene }) => {
   const currentPage = getFocusedRouteNameFromRoute(scene.route);
@@ -43,19 +44,23 @@ const DrawerHeader = ({ scene }) => {
         </CustomText>
       </Container>
       <Container>
-        <IconContainer
-          onPress={() => scene.descriptor.navigation.navigate("Messages")}
-        >
-          <Icon name="busca" size={18} color={"#AEAEAE"} />
-        </IconContainer>
-        <IconContainer
-          onPress={() => scene.descriptor.navigation.navigate("Chat")}
-        >
-          <Icon name="chat" size={18} color={"#AEAEAE"} />
-        </IconContainer>
-        <IconContainer onPress={handlePlus}>
-          <Icon name="plus" size={18} color={"#AEAEAE"} />
-        </IconContainer>
+          <IconContainer
+            onPress={() => scene.descriptor.navigation.navigate("Messages")}
+          >
+            <Icon name="busca" size={18} color={"#AEAEAE"} />
+          </IconContainer>
+        <AccessController profile="logado">
+          <IconContainer
+            onPress={() => scene.descriptor.navigation.navigate("Chat")}
+          >
+            <Icon name="chat" size={18} color={"#AEAEAE"} />
+          </IconContainer>
+        </AccessController>
+        <AccessController profile="expositor">
+          <IconContainer onPress={handlePlus}>
+            <Icon name="plus" size={18} color={"#AEAEAE"} />
+          </IconContainer>
+        </AccessController>
       </Container>
     </MainContainer>
   );
