@@ -211,7 +211,7 @@ export default function EventPage({ navigation, route }) {
         </Text>
 
         {event.organizador.map((organizer) => (
-          <View style={Style.organizerContainer}>
+          <View key={organizer} style={Style.organizerContainer}>
             {/* <Image style={Style.organizerPicture} source={BrioPicture} /> */}
             <View style={Style.nameAndButtonContainer}>
               <Text style={Style.organizerTitle}>{organizer}</Text>

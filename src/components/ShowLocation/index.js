@@ -61,7 +61,7 @@ export default function ShowLocation({
       .catch(async (error) => {
         count++;
         console.log(count);
-        console.error(error);
+
         setEta("indisponivel");
         if (count < maxTries) {
           await getEta(

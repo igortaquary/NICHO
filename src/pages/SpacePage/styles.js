@@ -167,6 +167,7 @@ export default StyleSheet.create({
     width: cw(315),
     height: cw(130),
     marginBottom: cw(1),
+    // left: cw(-39),
   },
 
   map: {
