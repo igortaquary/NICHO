@@ -175,7 +175,7 @@ export default function EventPage({ navigation, route }) {
           destinationLongitude={parseFloat(longitudeDestination)}
           latitudeDelta={latitudeDelta}
           longitudeDelta={longitudeDelta}
-          destinationName={event.organizador}
+          destinationName={event.local.name}
           style={Style.map}
         />
 

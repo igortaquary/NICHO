@@ -16,7 +16,7 @@ import ChatPage from "../pages/ChatPage";
 import Icon from "../components/Icon";
 import CustomDrawer from "../components/CustomDrawer";
 import DrawerHeader from "../components/DrawerHeader";
-import {useUserContext} from '../contexts/userContext';
+import { useUserContext } from "../contexts/userContext";
 import { StatusBar } from "react-native";
 import FollowingPage from "../pages/FollowingPage";
 
@@ -24,7 +24,7 @@ const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 const HomePages = () => {
-  const {user} = useUserContext();
+  const { user } = useUserContext();
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -64,34 +64,40 @@ const HomePages = () => {
         name="Locais"
         component={Locations}
       />
-      {user ? <Tab.Screen
-        options={{
-          tabBarIcon: ({ focused, color }) => (
-            <Icon name="salvos" size={21} color={color} />
-          ),
-        }}
-        name="Salvos"
-        component={SavedPage}
-      /> : null}
-      {user ? <Tab.Screen
-        options={{
-          tabBarIcon: ({ focused, color }) => (
-            <Icon name="seguindo" size={21} color={color} />
-          ),
-        }}
-        name="Seguindo"
-        component={FollowingPage}
-      /> : null}
-      
-      {user ? <Tab.Screen
-        options={{
-          tabBarIcon: ({ focused, color }) => (
-            <Icon name="chat" size={21} color={color} />
-          ),
-        }}
-        name="Chat"
-        component={ChatPage}
-      /> : null}
+      {user ? (
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({ focused, color }) => (
+              <Icon name="salvos" size={21} color={color} />
+            ),
+          }}
+          name="Salvos"
+          component={SavedPage}
+        />
+      ) : null}
+      {user ? (
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({ focused, color }) => (
+              <Icon name="seguindo" size={21} color={color} />
+            ),
+          }}
+          name="Seguindo"
+          component={FollowingPage}
+        />
+      ) : null}
+
+      {user ? (
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({ focused, color }) => (
+              <Icon name="chat" size={21} color={color} />
+            ),
+          }}
+          name="Chat"
+          component={ChatPage}
+        />
+      ) : null}
     </Tab.Navigator>
   );
 };

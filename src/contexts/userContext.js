@@ -1,185 +1,266 @@
-import React, { useContext, createContext, useEffect, useState } from 'react';
-import { signIn } from '../api/auth';
-import fetchUser from '../api/fetchUser';
-import { signUp } from '../api/signup';
+import React, {
+  useContext,
+  createContext,
+  useEffect,
+  useState,
+  useLayoutEffect,
+} from "react";
+import { signIn } from "../api/auth";
+import fetchUser from "../api/fetchUser";
+import { signUp } from "../api/signup";
 import * as firebase from "firebase";
 import "firebase/firestore";
-import { Alert } from 'react-native';
+import { Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const UserContext = createContext({});
 
 const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [initializing, setInitializing] = useState(true);
+  const [collections, setCollections] = useState([]);
+  const [threads, setThreads] = useState([]);
+  const [threads1, setThreads1] = useState([]);
+  const [threads2, setThreads2] = useState([]);
 
-    const [user, setUser] = useState(null);
-    const [collections, setCollections] = useState([])
-    const [threads, setThreads] = useState([]);
-    const [threads1, setThreads1] = useState([]);
-    const [threads2, setThreads2] = useState([]);
+  useEffect(() => {
+    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
-    useEffect(() => {
-        console.log('context effect')
-        if(user){
-            loadCollections();
-        }
-    }, [user])
+  useEffect(() => {
+    console.log("context effect");
 
-    useEffect(() => {
-        if(user){
-            const unsubscribe1 = firebase.firestore()
-            .collection('MESSAGE_THREADS')
-            .where("uid1", "==", user.id)
-            .onSnapshot(querySnapshot => {
-                const threads = querySnapshot.docs.map(documentSnapshot => {
-                    return {
-                        _id: documentSnapshot.id,
-                        name: '',
-                        latestMessage: { text: '' },
-                        ...documentSnapshot.data()
-                    }
-                })
-                setThreads1(threads);
-            })
+    if (user) {
+      loadCollections();
+    }
+  }, [user]);
 
-            const unsubscribe2 = firebase.firestore()
-            .collection('MESSAGE_THREADS')
-            .where("uid2", "==", user.id)
-            .onSnapshot(querySnapshot => {
-                const threads = querySnapshot.docs.map(documentSnapshot => {
-                    return {
-                        _id: documentSnapshot.id,
-                        name: '',
-                        latestMessage: { text: '' },
-                        ...documentSnapshot.data()
-                    }
-                })
-                setThreads2(threads);
-            })
-            
+  useEffect(() => {
+    if (user) {
+      const unsubscribe1 = firebase
+        .firestore()
+        .collection("MESSAGE_THREADS")
+        .where("uid1", "==", user.id)
+        .onSnapshot((querySnapshot) => {
+          const threads = querySnapshot.docs.map((documentSnapshot) => {
+            return {
+              _id: documentSnapshot.id,
+              name: "",
+              latestMessage: { text: "" },
+              ...documentSnapshot.data(),
+            };
+          });
+          setThreads1(threads);
+        });
 
-            return () => (unsubscribe1(), unsubscribe2());
-        }
-    }, [user])
+      const unsubscribe2 = firebase
+        .firestore()
+        .collection("MESSAGE_THREADS")
+        .where("uid2", "==", user.id)
+        .onSnapshot((querySnapshot) => {
+          const threads = querySnapshot.docs.map((documentSnapshot) => {
+            return {
+              _id: documentSnapshot.id,
+              name: "",
+              latestMessage: { text: "" },
+              ...documentSnapshot.data(),
+            };
+          });
+          setThreads2(threads);
+        });
 
-    useEffect(() => {
-        setThreads([...threads1, ...threads2].sort((x, y) => (y.createdAt - x.createdAt)));
-    }, [threads1, threads2]);
+      return () => (unsubscribe1(), unsubscribe2());
+    }
+  }, [user]);
 
-    const loadCollections = async () => {
-        console.log('loadCollections');
-        const auxCollections = []
-        const res = await firebase
-            .firestore()
-            .collection('usuario')
-            .doc(user.id)
-            .collection('colecoes')
-            .get();
-        for(const doc of res.docs) {
-            let auxProdutos = []
-            for(const product of doc.data().produtos){
-                const produto = await firebase.firestore().collection('produto').doc(product.id).get();
-                const firstImage = await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/0').getDownloadURL();
-                auxProdutos.push({...produto.data(), uri: firstImage, id: produto.id});
-            }
-            auxCollections.push({titulo: doc.data().titulo, produtos: auxProdutos, ref: doc.ref})
-        }
-        setCollections(auxCollections);
+  useEffect(() => {
+    setThreads(
+      [...threads1, ...threads2].sort((x, y) => y.createdAt - x.createdAt)
+    );
+  }, [threads1, threads2]);
+
+  async function onAuthStateChanged(user_firebase) {
+    console.log("entrou no auth", user_firebase);
+    if (user_firebase) {
+      await fetchUser(user_firebase.uid).then((res) => {
+        setUser({ ...res, username: user_firebase.email });
+      });
+    } else {
+      setUser(null);
     }
 
-    const addProductToCollection = async (doc, product) => {
-        await doc.ref.update({
-            produtos: firebase.firestore.FieldValue.arrayUnion({
-                id: product.id,
-                anunciante: product.anunciante,
-                titulo: product.titulo
-            })
-        })
-        Alert.alert('Produto adicionado!')
-        loadCollections();
-    }
+    if (initializing) setInitializing(false);
+  }
 
-    const addProductToNewCollection = async (product, newCollectionTitle) => {
-        console.log('test');
-        console.log(product)
-        await firebase
-            .firestore()
-            .collection('usuario')
-            .doc(user.id)
-            .collection('colecoes')
-            .add({
-                titulo: newCollectionTitle,
-                produtos: [{
-                    id: product.id,
-                    anunciante: product.anunciante,
-                    titulo: product.titulo
-                }]
-            });
-        loadCollections();
-        Alert.alert('Produto adicionado!')
+  const loadCollections = async () => {
+    console.log("loadCollections");
+    const auxCollections = [];
+    const res = await firebase
+      .firestore()
+      .collection("usuario")
+      .doc(user.id)
+      .collection("colecoes")
+      .get();
+    for (const doc of res.docs) {
+      let auxProdutos = [];
+      for (const product of doc.data().produtos) {
+        const produto = await firebase
+          .firestore()
+          .collection("produto")
+          .doc(product.id)
+          .get();
+        const firstImage = await firebase
+          .storage()
+          .ref(
+            "user_products/" + product.anunciante + "/" + product.titulo + "/0"
+          )
+          .getDownloadURL();
+        auxProdutos.push({
+          ...produto.data(),
+          uri: firstImage,
+          id: produto.id,
+        });
+      }
+      auxCollections.push({
+        titulo: doc.data().titulo,
+        produtos: auxProdutos,
+        ref: doc.ref,
+      });
     }
+    setCollections(auxCollections);
+  };
 
-    const updateUserToExpositor = async (expositorData, profileUrl, bannerUrl) => {
-        if(profileUrl != user.foto){
-            const profileReference = firebase.storage().ref('user_photo/' + user.id);
-            const response = await fetch(profileUrl);
-            const blob = await response.blob();
-            await profileReference.put(blob);      
-        }
-        const reference = firebase.storage().ref('expositor_banners/' + user.id);
-        const response = await fetch(bannerUrl);
-        const blob = await response.blob();
-        await reference.put(blob);        
-        await firebase
-            .firestore()
-            .collection('usuario')
-            .doc(user.id)
-            .update(expositorData);
-        const currentUser = await fetchUser(user.id);
-        setUser(currentUser);
+  const addProductToCollection = async (doc, product) => {
+    await doc.ref.update({
+      produtos: firebase.firestore.FieldValue.arrayUnion({
+        id: product.id,
+        anunciante: product.anunciante,
+        titulo: product.titulo,
+      }),
+    });
+    Alert.alert("Produto adicionado!");
+    loadCollections();
+  };
+
+  const addProductToNewCollection = async (product, newCollectionTitle) => {
+    console.log("test");
+    console.log(product);
+    await firebase
+      .firestore()
+      .collection("usuario")
+      .doc(user.id)
+      .collection("colecoes")
+      .add({
+        titulo: newCollectionTitle,
+        produtos: [
+          {
+            id: product.id,
+            anunciante: product.anunciante,
+            titulo: product.titulo,
+          },
+        ],
+      });
+    loadCollections();
+    Alert.alert("Produto adicionado!");
+  };
+
+  const updateUserToExpositor = async (
+    expositorData,
+    profileUrl,
+    bannerUrl
+  ) => {
+    if (profileUrl != user.foto) {
+      const profileReference = firebase.storage().ref("user_photo/" + user.id);
+      const response = await fetch(profileUrl);
+      const blob = await response.blob();
+      await profileReference.put(blob);
     }
+    const reference = firebase.storage().ref("expositor_banners/" + user.id);
+    const response = await fetch(bannerUrl);
+    const blob = await response.blob();
+    await reference.put(blob);
+    await firebase
+      .firestore()
+      .collection("usuario")
+      .doc(user.id)
+      .update(expositorData);
+    const currentUser = await fetchUser(user.id);
+    setUser(currentUser);
+  };
 
-    const followArtist = async (artistId) => {
-        await firebase
-            .firestore()
-            .collection('usuario')
-            .doc(user.id)
-            .update({
-                seguindo: firebase.firestore.FieldValue.arrayUnion(artistId)
-            });
-        const currentUser = await fetchUser(user.id);
-        setUser(currentUser);
-    }
+  const followArtist = async (artistId) => {
+    await firebase
+      .firestore()
+      .collection("usuario")
+      .doc(user.id)
+      .update({
+        seguindo: firebase.firestore.FieldValue.arrayUnion(artistId),
+      });
+    const currentUser = await fetchUser(user.id);
+    setUser(currentUser);
+  };
 
-    const SignIn = async (email, password, navigation) => {
-        const loggedUid = await signIn(email, password);
-        const currentUser = await fetchUser(loggedUid);
-        setUser(currentUser);
-        navigation.navigate('Main');
-    }
+  const SignIn = async (email, password, navigation) => {
+    const loggedUid = await signIn(email, password);
+    const currentUser = await fetchUser(loggedUid);
+    setUser(currentUser);
+    navigation.navigate("Main");
+  };
 
-    const SignUp = async (name, email, user, password, gender, region, newsletter, navigation, image) => {
-        await signUp(name, email, user, password, gender, region, newsletter, image);
-        await SignIn(email, password, navigation);
-    }
+  const SignUp = async (
+    name,
+    email,
+    user,
+    password,
+    gender,
+    region,
+    newsletter,
+    navigation,
+    image
+  ) => {
+    await signUp(
+      name,
+      email,
+      user,
+      password,
+      gender,
+      region,
+      newsletter,
+      image
+    );
+    await SignIn(email, password, navigation);
+  };
 
+  if (initializing) {
+    return null;
+  } else
     return (
-
-        <UserContext.Provider 
-            value={{ user, collections, 
-                  SignIn, loadCollections, SignUp, 
-                  addProductToCollection, addProductToNewCollection, 
-                  updateUserToExpositor, threads,followArtist
-        }}>
-            {children}
-        </UserContext.Provider>
-    )
-}
+      <UserContext.Provider
+        value={{
+          user,
+          collections,
+          SignIn,
+          loadCollections,
+          SignUp,
+          addProductToCollection,
+          addProductToNewCollection,
+          updateUserToExpositor,
+          threads,
+          followArtist,
+        }}
+      >
+        {children}
+      </UserContext.Provider>
+    );
+};
 
 const useUserContext = () => {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
-}
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
 
-export { UserProvider, useUserContext }
+export { UserProvider, useUserContext };

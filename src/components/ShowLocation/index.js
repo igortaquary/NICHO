@@ -192,6 +192,7 @@ export default function ShowLocation({
                   : "tempo de viagem indisponivel"}
               </Text>
 
+              {console.log(destinationName)}
               {console.log(eta)}
             </View>
           </Callout>

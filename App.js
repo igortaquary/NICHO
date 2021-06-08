@@ -1,20 +1,27 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import {
   StyleSheet,
   Text,
   View,
   ActivityIndicator,
-  SafeAreaView,
   LogBox,
+  SafeAreaView,
 } from "react-native";
+// import { SafeAreaView } from "react-native-safe-area-context";
+import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./src/routes";
-import {UserProvider} from "./src/contexts/userContext";
-import {FilterProvider} from "./src/contexts/filterContext";
+import { UserProvider } from "./src/contexts/userContext";
+import { FilterProvider } from "./src/contexts/filterContext";
 import fetchUser from "./src/api/fetchUser";
 
-import * as firebase from 'firebase';
+import * as firebase from "firebase";
 
 import {
   useFonts,
@@ -36,13 +43,13 @@ import {
   Raleway_800ExtraBold_Italic,
   Raleway_900Black,
   Raleway_900Black_Italic,
-} from '@expo-google-fonts/raleway';
-import apiKeys from './config/keys';
+} from "@expo-google-fonts/raleway";
+import apiKeys from "./config/keys";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
-    fontello: require('./assets/custom-font/font/fontello.ttf'),
-    Rousseau_Deco: require('./assets/RousseauDeco.ttf'),
+    fontello: require("./assets/custom-font/font/fontello.ttf"),
+    Rousseau_Deco: require("./assets/RousseauDeco.ttf"),
     Raleway_100Thin,
     Raleway_100Thin_Italic,
     Raleway_200ExtraLight,
@@ -63,39 +70,45 @@ export default function App() {
     Raleway_900Black_Italic,
   });
 
-  const [state, setState] = useState({});
+  const [appIsReady, setAppIsReady] = useState(false);
 
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
 
   if (!firebase.apps.length) {
-    console.log('Connected with Firebase')
+    console.log("Connected with Firebase");
     firebase.initializeApp(apiKeys.firebaseConfig);
   }
 
-  async function onAuthStateChanged(user) {
-    if (user) {
-      fetchUser(user.uid).then((res) => {
-        setState({ ...res, username: user.email });
-      });
-    } else {
-      setState({});
-    }
-  }
+  LogBox.ignoreLogs(["Setting a timer"]);
 
-  LogBox.ignoreLogs(['Setting a timer']);
-
-  useEffect(() => {
-    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  if (!fontsLoaded) {
-    return <ActivityIndicator />
-
+  if (!fontsLoaded || !appIsReady) {
+    return null;
+    // <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    //   <ActivityIndicator size={50} color="#019B92" />
+    // </View>
   } else {
     return (
       <UserProvider>
         <FilterProvider>
-          <SafeAreaView style={{ flex: 1 }}>
+          <SafeAreaView style={{ flex: 1 }} onLayout={onLayoutRootView}>
             <Routes />
           </SafeAreaView>
         </FilterProvider>
