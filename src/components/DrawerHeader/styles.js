@@ -7,7 +7,7 @@ export const MainContainer = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding-top: ${StatusBar.currentHeight ? StatusBar.currentHeight : 15}px;
+  padding-top: ${StatusBar.currentHeight ? 25 : StatusBar.currentHeight}px;
   padding-bottom: 5px;
   elevation: 10;
 `;

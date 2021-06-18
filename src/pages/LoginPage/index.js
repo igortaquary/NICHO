@@ -89,7 +89,6 @@ const LoginPage = ({ navigation }) => {
       enabled
       style={{ flex: 1 }}
     >
-      <StatusBar translucent />
       <ImageBackground source={LoginBg} style={{ flex: 1 }}>
         <ScrollContainer
           onScroll={({ nativeEvent }) => handleScroll(nativeEvent)}

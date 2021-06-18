@@ -108,6 +108,7 @@ export default function App() {
     return (
       <UserProvider>
         <FilterProvider>
+          <StatusBar translucent />
           <SafeAreaView style={{ flex: 1 }} onLayout={onLayoutRootView}>
             <Routes />
           </SafeAreaView>
