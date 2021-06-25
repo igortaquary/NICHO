@@ -17,7 +17,7 @@ export default StyleSheet.create({
   sectionContainer: {
     borderRadius: cw(15),
     marginBottom: cw(3),
-    paddingLeft: cw(52),
+    paddingLeft: cw(34),
     paddingRight: cw(16),
 
     backgroundColor: "#FFFFFF",
@@ -25,10 +25,11 @@ export default StyleSheet.create({
 
   eventInfo: {
     flexDirection: "row",
+    justifyContent: "space-between",
   },
 
   eventLeftContainer: {
-    marginRight: cw(58),
+    // marginRight: cw(58),
     alignItems: "flex-start",
   },
 
@@ -102,11 +103,11 @@ export default StyleSheet.create({
 
   stripe: {
     backgroundColor: "#F1F1F1",
+    alignSelf: "flex-start",
     width: cw(382),
     height: cw(1),
-
     marginBottom: cw(23),
-    left: cw(-36),
+    left: cw(-15),
   },
 
   iconAndInfoContainer: {
@@ -119,7 +120,7 @@ export default StyleSheet.create({
   map: {
     width: cw(339),
     height: cw(97),
-
+    alignSelf: "flex-start",
     marginTop: cw(5),
     marginBottom: cw(5),
   },
@@ -221,7 +222,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
 
-    marginBottom: cw(22),
+    marginBottom: cw(15),
     marginLeft: cw(6),
   },
 
@@ -356,11 +357,5 @@ export default StyleSheet.create({
     bottom: cw(8),
     right: cw(8),
     backgroundColor: "rgba(0,0,0,0.67)",
-  },
-
-  additionalEventSaveIcon: {
-    alignSelf: "center",
-    marginLeft: cw(19.26),
-    top: cw(10.88),
   },
 });

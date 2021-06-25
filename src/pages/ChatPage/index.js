@@ -21,7 +21,7 @@ export default function ChatPage({ navigation }) {
                 data={threads}
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => alert('Open a message thread')}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('MensagemPage', { thread: item })}}>
                         <View style={styles.row}>
                             <View style={styles.content}>
                                 <View style={styles.header}>

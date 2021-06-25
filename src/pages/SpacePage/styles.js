@@ -29,7 +29,8 @@ export default StyleSheet.create({
 
   spaceHeader: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    alignItems: "center",
     marginTop: cw(18),
     marginBottom: cw(15),
   },
@@ -41,6 +42,7 @@ export default StyleSheet.create({
   },
 
   spaceHeaderTextContainer: {
+    flexShrink: 1,
     justifyContent: "center",
     alignItems: "flex-start",
     marginLeft: cw(13),
@@ -54,7 +56,7 @@ export default StyleSheet.create({
 
   spaceCaption: {
     fontFamily: "Raleway_400Regular",
-    fontSize: cw(9),
+    fontSize: 9,
     color: "#707070",
     marginLeft: cw(1),
   },
@@ -76,7 +78,7 @@ export default StyleSheet.create({
 
   dateText: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(14),
+    fontSize: 14,
     color: "#019B92",
 
     marginRight: cw(9),
@@ -84,7 +86,7 @@ export default StyleSheet.create({
 
   localName: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(22),
+    fontSize: 22,
     color: "#707070",
 
     marginVertical: cw(7),
@@ -92,7 +94,7 @@ export default StyleSheet.create({
 
   localNeighborhood: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(14),
+    fontSize: 14,
     color: "#707070",
 
     marginBottom: cw(1),
@@ -100,7 +102,7 @@ export default StyleSheet.create({
 
   localAddress: {
     fontFamily: "Raleway_400Regular",
-    fontSize: cw(10),
+    fontSize: 10,
     color: "#707070",
 
     marginBottom: cw(21),
@@ -124,7 +126,7 @@ export default StyleSheet.create({
 
   addToCalendarText: {
     fontFamily: "Raleway_700Bold",
-    fontSize: cw(9),
+    fontSize: 9,
     color: "#707070",
     flexWrap: "wrap",
     textAlign: "center",
@@ -134,9 +136,9 @@ export default StyleSheet.create({
     backgroundColor: "#F1F1F1",
     width: cw(382),
     height: cw(1),
-    alignSelf: "center",
+    alignSelf: "flex-start",
     marginBottom: cw(10),
-    // left: cw(-36),
+    left: cw(-15),
   },
 
   iconAndInfoContainer: {
@@ -165,6 +167,7 @@ export default StyleSheet.create({
     width: cw(315),
     height: cw(130),
     marginBottom: cw(1),
+    // left: cw(-39),
   },
 
   map: {
@@ -205,7 +208,7 @@ export default StyleSheet.create({
 
   infoText: {
     fontFamily: "Raleway_400Regular",
-    fontSize: cw(10),
+    fontSize: 10,
     color: "#707070",
 
     marginLeft: cw(17),
@@ -214,7 +217,7 @@ export default StyleSheet.create({
 
   organizerName: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(10),
+    fontSize: 10,
     color: "#707070",
   },
 
@@ -232,13 +235,13 @@ export default StyleSheet.create({
 
   title: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(15),
+    fontSize: 15,
     color: "#707070",
   },
 
   text: {
     fontFamily: "Raleway_400Regular",
-    fontSize: cw(10),
+    fontSize: 10,
     color: "#707070",
     width: cw(340),
 
@@ -270,7 +273,7 @@ export default StyleSheet.create({
 
   tagText: {
     fontFamily: "Raleway_400Regular",
-    fontSize: cw(10),
+    fontSize: 10,
     color: "#707070",
     marginHorizontal: cw(11),
   },
@@ -309,7 +312,7 @@ export default StyleSheet.create({
 
   eventDateText: {
     fontFamily: "Raleway_400Regular",
-    fontSize: cw(8),
+    fontSize: 8,
     color: "#019B92",
   },
 
@@ -322,7 +325,7 @@ export default StyleSheet.create({
 
   eventName: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(12),
+    fontSize: 12,
     color: "#707070",
   },
 
@@ -368,13 +371,13 @@ export default StyleSheet.create({
 
   dayText: {
     fontFamily: "Raleway_300Light",
-    fontSize: cw(39),
+    fontSize: 39,
     color: "#019B92",
   },
 
   monthText: {
     fontFamily: "Raleway_700Bold",
-    fontSize: cw(12),
+    fontSize: 12,
     color: "#019B92",
   },
 
@@ -385,7 +388,7 @@ export default StyleSheet.create({
 
   additionalEventLocationName: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(12),
+    fontSize: 12,
     color: "#707070",
 
     marginBottom: cw(1),
@@ -393,7 +396,7 @@ export default StyleSheet.create({
 
   additionalEventLocationAddress: {
     fontFamily: "Raleway_400Regular",
-    fontSize: cw(10),
+    fontSize: 10,
     color: "#C4C4C4",
 
     marginBottom: cw(7),
@@ -401,7 +404,7 @@ export default StyleSheet.create({
 
   additionalEventLocationTime: {
     fontFamily: "Raleway_400Regular",
-    fontSize: cw(12),
+    fontSize: 12,
     color: "#707070",
   },
 

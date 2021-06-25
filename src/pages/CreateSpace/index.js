@@ -22,7 +22,7 @@ import Constants from "expo-constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AutocompleteWithMaps from "../../components/AutocompleteWithMaps";
 import { AddSpacePhotos } from "../../components/AddSpacePhotos";
-import {addSpace} from '../../api/addSpace';
+import { addSpace } from "../../api/addSpace";
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
@@ -39,17 +39,14 @@ export default function CreateSpace({ navigation }) {
 
   const [profilePicture, setProfilePicture] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [profilePictureErrorMessage, setProfilePictureErrorMessage] = useState(
-    ""
-  );
+  const [profilePictureErrorMessage, setProfilePictureErrorMessage] =
+    useState("");
 
   // ---------------------- Establishment Name ----------------------
 
   const [establishmentName, setEstablishmentName] = useState("");
-  const [
-    establishmentNameErrorMessage,
-    setEstablishmentNameErrorMessage,
-  ] = useState("");
+  const [establishmentNameErrorMessage, setEstablishmentNameErrorMessage] =
+    useState("");
 
   // ---------------------- Location Counter ----------------------
 
@@ -62,9 +59,8 @@ export default function CreateSpace({ navigation }) {
   const [placeName1, setPlaceName1] = useState("");
   const [placeAddress1, setPlaceAddress1] = useState("");
   const [placeGeometry1, setPlaceGeometry1] = useState("");
-  const [locationTextErrorMessage1, setLocationTextErrorMessage1] = useState(
-    ""
-  );
+  const [locationTextErrorMessage1, setLocationTextErrorMessage1] =
+    useState("");
 
   // ---------------------- Location 2 ----------------------
 
@@ -73,9 +69,8 @@ export default function CreateSpace({ navigation }) {
   const [placeGeometry2, setPlaceGeometry2] = useState();
   const [placeAddress2, setPlaceAddress2] = useState("");
   const [useMaps2, setUseMaps2] = useState(true);
-  const [locationTextErrorMessage2, setLocationTextErrorMessage2] = useState(
-    ""
-  );
+  const [locationTextErrorMessage2, setLocationTextErrorMessage2] =
+    useState("");
 
   // ---------------------- Location 3 ----------------------
 
@@ -84,9 +79,8 @@ export default function CreateSpace({ navigation }) {
   const [placeGeometry3, setPlaceGeometry3] = useState();
   const [placeAddress3, setPlaceAddress3] = useState("");
   const [useMaps3, setUseMaps3] = useState(true);
-  const [locationTextErrorMessage3, setLocationTextErrorMessage3] = useState(
-    ""
-  );
+  const [locationTextErrorMessage3, setLocationTextErrorMessage3] =
+    useState("");
 
   // ---------------------- Location 4 ----------------------
 
@@ -95,9 +89,8 @@ export default function CreateSpace({ navigation }) {
   const [placeGeometry4, setPlaceGeometry4] = useState();
   const [placeAddress4, setPlaceAddress4] = useState("");
   const [useMaps4, setUseMaps4] = useState(true);
-  const [locationTextErrorMessage4, setLocationTextErrorMessage4] = useState(
-    ""
-  );
+  const [locationTextErrorMessage4, setLocationTextErrorMessage4] =
+    useState("");
 
   // ---------------------- Business Hours ----------------------
 
@@ -123,9 +116,8 @@ export default function CreateSpace({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState();
   const [field, setField] = useState("");
   const [incorrectBusinessHours, setIncorrectBusinessHours] = useState([]);
-  const [businessHoursErrorMessage, setBusinessHoursErrorMessage] = useState(
-    ""
-  );
+  const [businessHoursErrorMessage, setBusinessHoursErrorMessage] =
+    useState("");
 
   // ---------------------- Contacts  ----------------------
 
@@ -171,14 +163,11 @@ export default function CreateSpace({ navigation }) {
     );
   };
 
-  const [
-    permission,
-    askForPermission,
-    getPermission,
-  ] = Permissions.usePermissions(Permissions.LOCATION, {
-    get: true,
-    ask: true,
-  });
+  const [permission, askForPermission, getPermission] =
+    Permissions.usePermissions(Permissions.LOCATION, {
+      get: true,
+      ask: true,
+    });
 
   if (permission && permission.status !== "granted") {
     Alert.alert(
@@ -398,7 +387,7 @@ export default function CreateSpace({ navigation }) {
         categories: selected,
         images: coverImage.concat(profilePicture).concat(images),
       };
-      addSpace(establishment, navigation)
+      addSpace(establishment, navigation);
       clearPage();
       console.log(establishment);
     } else {
@@ -554,8 +543,8 @@ export default function CreateSpace({ navigation }) {
 
     function handleSetDays(index, dayIndex) {
       let auxArray = [...businessHours];
-      auxArray[index].days[dayIndex].selected = !auxArray[index].days[dayIndex]
-        .selected;
+      auxArray[index].days[dayIndex].selected =
+        !auxArray[index].days[dayIndex].selected;
       setBusinessHours(auxArray);
     }
 
