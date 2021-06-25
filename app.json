@@ -17,13 +17,25 @@
       "supportsTablet": true
     },
     "android": {
+      "config": {
+        "googleMaps": {
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      },
+      "package": "com.NICHO",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "CAMERA",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "WRITE_SETTINGS",
+        "VIBRATE"
+      ]
     }
   }
 }

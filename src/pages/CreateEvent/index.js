@@ -255,16 +255,32 @@ export default function CreateEvent({ navigation }) {
 
     if (!error) {
       console.warn("Enviou!!!!");
-      let savingDatetimes = datetimes.map((datetime) => {
-        let dateFrom = moment(datetime.date.from)
-          .hours(moment(datetime.time.from).hours())
-          .minutes(moment(datetime.time.from).minutes());
-        let dateTo = moment(datetime.date.to)
-          .hours(moment(datetime.time.to).hours())
-          .minutes(moment(datetime.time.to).minutes());
+      let savingDatetimes = datetimes
+        .map((datetime) => {
+          let date_from = moment(datetime.date.from);
+          let date_to = moment(datetime.date.to);
+          let time_from = moment(datetime.time.from);
+          let time_to = moment(datetime.time.to);
+          let dateFrom = date_from
+            .hours(time_from.hours())
+            .minutes(time_from.minutes());
+          let dateTo = date_to
+            .hours(time_to.hours())
+            .minutes(time_to.minutes());
 
-        return { from: dateFrom, to: dateTo };
-      });
+          return { from: dateFrom, to: dateTo };
+        })
+        .sort((a, b) => {
+          let A = moment(a.from);
+          let B = moment(b.from);
+          if (A.isBefore(B)) {
+            return -1;
+          }
+          if (A.isAfter(B)) {
+            return 1;
+          }
+          return 0;
+        });
 
       let event = {
         cover: coverImage,

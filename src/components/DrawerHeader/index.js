@@ -32,6 +32,7 @@ const DrawerHeader = ({ scene }) => {
   return (
     <MainContainer>
       <Container>
+        {console.log(StatusBar.currentHeight)}
         <IconContainer
           onPress={() => scene.descriptor.navigation.toggleDrawer()}
         >
@@ -44,11 +45,11 @@ const DrawerHeader = ({ scene }) => {
         </CustomText>
       </Container>
       <Container>
-          <IconContainer
-            onPress={() => scene.descriptor.navigation.navigate("Messages")}
-          >
-            <Icon name="busca" size={18} color={"#AEAEAE"} />
-          </IconContainer>
+        {/* <IconContainer
+          onPress={() => scene.descriptor.navigation.navigate("Messages")}
+        >
+          <Icon name="busca" size={18} color={"#AEAEAE"} />
+        </IconContainer> */}
         <AccessController profile="logado">
           <IconContainer
             onPress={() => scene.descriptor.navigation.navigate("Chat")}
