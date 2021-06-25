@@ -10,6 +10,9 @@ const SavedPage = ({navigation}) => {
     const {collections} = useUserContext();
     const [searchText, setSeachText] = useState('');
 
+    console.log('--------------------------------------------------')
+    console.log(collections)
+
     const renderItem = (item, index) => {
     return (
         <SavedCard

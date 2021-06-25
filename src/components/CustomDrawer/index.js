@@ -82,7 +82,15 @@ const CustomDrawer = ({ navigation, descriptors }) => {
           text="Mensagens"
           icon="chat"
           isSelected={selected === "chat"}
-          onPress={() => setSelected("chat")}
+          onPress={() => {setSelected("chat"); navigation.navigate('Chat')}}
+        />
+      </AccessController>
+      <AccessController profile="expositor">
+        <DrawerOption
+          text="Dicas para artistas!"
+          icon="info"
+          isSelected={selected === "tips"}
+          onPress={() => {setSelected("tips"); navigation.navigate('Tips')}}
         />
       </AccessController>
       <AccessController profile="not-expositor">
