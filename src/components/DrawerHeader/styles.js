@@ -39,3 +39,9 @@ export const IconContainer = styled.TouchableOpacity`
   padding-right: 15px;
   padding-left: 10px;
 `;
+
+export const UserMiniAvatar = styled.Image`
+  height: 20px;
+  aspect-ratio: 1;
+  border-radius: 10px;
+`;

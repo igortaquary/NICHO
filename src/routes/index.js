@@ -13,6 +13,7 @@ import CollectionPage from "../pages/CollectionPage";
 import CreateExpositorPage from "../pages/CreateExpositorPage";
 import MensagemPage from "../pages/MensagemPage";
 import { useUserContext } from "../contexts/userContext";
+import TipsPage from "../pages/TipsPage";
 
 const Stack = createStackNavigator();
 
@@ -83,6 +84,11 @@ const Routes = () => {
           options={headerStyle}
           name="NotFound"
           component={NotFoundPage}
+        />
+        <Stack.Screen 
+          options={{title: 'Dicas Para Artistas', ...headerStyle}}
+          name="Tips"
+          component={TipsPage}
         />
       </Stack.Navigator>
     </NavigationContainer>
