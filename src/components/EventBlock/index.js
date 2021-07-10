@@ -70,7 +70,7 @@ export default function EventBlock({
       <View>
         <TouchableOpacity
           activeOpacity={0.7}
-          style={{ ...Style.iconContainer, top: cw(173) }}
+          style={{ ...Style.iconContainer }}
         >
           <Icon
             name="compartilhar"
