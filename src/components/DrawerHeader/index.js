@@ -1,6 +1,6 @@
 import React from "react";
 import { StatusBar, Text, View } from "react-native";
-import { MainContainer, Container, CustomText, IconContainer } from "./styles";
+import { MainContainer, Container, CustomText, IconContainer, UserMiniAvatar } from "./styles";
 import Icon from "../Icon";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -10,9 +10,11 @@ import {
 } from "@react-navigation/native";
 import AccessController from "../AccessController";
 import { useFilterContext } from '../../contexts/filterContext';
+import { useUserContext } from "../../contexts/userContext";
 
 const DrawerHeader = ({ scene }) => {
   const currentPage = getFocusedRouteNameFromRoute(scene.route);
+  const {user} = useUserContext();
 
   const { clearAllFilters } = useFilterContext();
 
@@ -53,17 +55,26 @@ const DrawerHeader = ({ scene }) => {
         >
           <Icon name="busca" size={18} color={"#AEAEAE"} />
         </IconContainer> */}
-        <AccessController profile="logado">
+        {/* <AccessController profile="logado">
           <IconContainer
             onPress={() => scene.descriptor.navigation.navigate("Chat")}
           >
             <Icon name="chat" size={18} color={"#AEAEAE"} />
           </IconContainer>
-        </AccessController>
+        </AccessController> */}
         <AccessController profile="expositor">
           <IconContainer onPress={handlePlus}>
             <Icon name="plus" size={18} color={"#AEAEAE"} />
           </IconContainer>
+        </AccessController>
+        <AccessController profile="logado">
+          <UserMiniAvatar 
+            source={
+              { uri: user?.foto } || {
+                uri: "https://source.unsplash.com/featured/412x115/?craft",
+              }
+            }
+          />
         </AccessController>
       </Container>
     </MainContainer>

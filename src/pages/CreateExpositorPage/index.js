@@ -159,7 +159,7 @@ const CreateExpositorPage = ({navigation}) => {
     return (
         <Container contentContainerStyle={{ alignItems: 'center' }} keyboardShouldPersistTaps={"handled"}>
             <Banner onPress={() => pickImage(setSelectedBannerImage)}>
-                <BannerImage source={{ uri: selectedBannerImage }} />
+                {selectedBannerImage !== '' && <BannerImage source={{ uri: selectedBannerImage }} />}
                 <ActionText>
                     <Icon name='lapis' size={15} color='#FFFFFF' />
                     <ActionDescription>Adicionar foto de fundo</ActionDescription>

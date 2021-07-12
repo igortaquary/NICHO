@@ -164,8 +164,33 @@ const SignUpPage = ({navigation}) => {
                   setRegion(itemValue)
                 }>
                 <Pickerr.Item label="selecionar..." value={null} />
-                <Pickerr.Item label="Distrito Federal" value="DF" />
+                <Pickerr.Item label="Acre" value="AC" />
+                <Pickerr.Item label="Alagoas" value="AL" />
+                <Pickerr.Item label="Amapá" value="AP" />
+                <Pickerr.Item label="Amazonas" value="AM" />
                 <Pickerr.Item label="Bahia" value="BA" />
+                <Pickerr.Item label="Ceará" value="CE" />
+                <Pickerr.Item label="Espírito Santo" value="ES" />
+                <Pickerr.Item label="Goiás" value="GO" />
+                <Pickerr.Item label="Maranhão" value="MA" />
+                <Pickerr.Item label="Mato Grosso" value="MT" />
+                <Pickerr.Item label="Mato Grosso do Sul" value="MS" />
+                <Pickerr.Item label="Minas Gerais" value="MG" />
+                <Pickerr.Item label="Pará" value="PA" />
+                <Pickerr.Item label="Paraíba" value="PB" />
+                <Pickerr.Item label="Paraná" value="PR" />
+                <Pickerr.Item label="Pernambuco" value="PE" />
+                <Pickerr.Item label="Piauí" value="PI" />
+                <Pickerr.Item label="Rio de Janeiro" value="RJ" />
+                <Pickerr.Item label="Rio Grande do Norte" value="RN" />
+                <Pickerr.Item label="Rio Grande do Sul" value="RS" />
+                <Pickerr.Item label="Rondônia" value="RO" />
+                <Pickerr.Item label="Roraima" value="RR" />
+                <Pickerr.Item label="Santa Catarina" value="SC" />
+                <Pickerr.Item label="São Paulo" value="SP" />
+                <Pickerr.Item label="Sergipe" value="SE" />
+                <Pickerr.Item label="Tocantins" value="TO" />
+                <Pickerr.Item label="Distrito Federal" value="DF" />
               </Pickerr>
             </Option>
             <Option>

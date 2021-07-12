@@ -100,32 +100,36 @@ const ProductPage = ({ navigation, route }) => {
         })
   }
 
+  const emitAlert = () => {
+    Alert.alert(
+      "Usuário não conectado",
+      "É necessário estar logado para realizar esta ação.",
+      [
+        {
+          text: "Entrar depois",
+          onPress: () => console.log('Depois')
+        },
+        {
+          text: "Não possuo conta",
+          onPress: () => navigation.navigate('SignUp'),
+        },
+        {
+          text: "Ir para login",
+          onPress: () => navigation.navigate('Login'),
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  }
+
   const handleSavePress = async () => {
     console.log('clicou')
     if (user) {
       modalizeRef.current.open();      
     } else {
-      Alert.alert(
-        "Usuário não conectado",
-        "É necessário estar logado para salvar um produto.",
-        [
-          {
-            text: "Entrar depois",
-            onPress: () => console.log('Depois')
-          },
-          {
-            text: "Não possuo conta",
-            onPress: () => navigation.navigate('SignUp'),
-          },
-          {
-            text: "Ir para login",
-            onPress: () => navigation.navigate('Login'),
-          },
-        ],
-        {
-          cancelable: true,
-        }
-      );
+      emitAlert();
     }
   }
 
@@ -133,7 +137,12 @@ const ProductPage = ({ navigation, route }) => {
     <>
       <SaveProductModal modalizeRef={modalizeRef} product={product} />
       <Container>
-        <ProductCarousel preco={product?.preco} data={images} onSavePress={handleSavePress} />
+        <ProductCarousel
+          preco={product?.preco} 
+          data={images} 
+          onSavePress={handleSavePress} 
+          onChatPress={() => {openChat(navigation, user?.id, product.anunciante, user?.nome, anunciante.nome, threads)}}
+        />
         <MainInfo>
           <Artist onPress={() => navigation.navigate('Página do Artista', {anunciante: {...anunciante, id: idAnunciante}})}>
             <ArtistText>Por {anunciante?.nome}</ArtistText>
