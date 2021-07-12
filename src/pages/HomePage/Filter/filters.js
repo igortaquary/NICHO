@@ -3,7 +3,7 @@ import { View, Text, ScrollView } from "react-native";
 import Style from "./styles";
 import RoundedButton from "../../../components/RoundedButton/RoundedButton";
 import RoundIconButton from "../../../components/RoundIconButton/RoundIconButton";
-import Slider from "../../../components/Slider/Slider";
+/* import Slider from "../../../components/Slider/Slider"; */
 import {
   ConvertWidth as cw,
   ConvertHeight as ch,
@@ -28,14 +28,14 @@ export default function Filters({navigation}) {
   //Filter vars
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedRegion, setSelectedRegion] = useState();
-  const [selectedPrima, setSelectedPrima] = useState();
+  /* const [selectedPrima, setSelectedPrima] = useState(); */
   const [selectedDelivery, setSelectedDelivery] = useState();
 
   useEffect(() => {
     if(filters.category){ setSelectedCategory(filters.category); }
     if(filters.delivery){ setSelectedDelivery(filters.delivery); }
     if(filters.region){ setSelectedRegion(filters.regions); }
-    if(filters.prima){ setSelectedPrima(filters.prima); }
+    /* if(filters.prima){ setSelectedPrima(filters.prima); } */
   }, [filters]);
 
   const handleFilters = () => {
@@ -47,9 +47,9 @@ export default function Filters({navigation}) {
     if(selectedRegion){
       auxFilters.region = selectedRegion;
     }
-    if( selectedPrima){
+    /* if( selectedPrima){
       auxFilters.prima = selectedPrima;
-    }
+    } */
     if( selectedDelivery ){
       auxFilters.delivery = selectedDelivery;
     }
@@ -88,7 +88,6 @@ export default function Filters({navigation}) {
       </View>
 
       <Text style={Style.label}>Categorias</Text>
-      {/* <CategoriaFilters /> */}
       <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap",
        alignItems: "center", justifyContent: "center"}}>
          <RoundedButton text={"Todas"} active={!selectedCategory}
@@ -116,7 +115,7 @@ export default function Filters({navigation}) {
         }
       </View>
 
-      <Text style={Style.label}>Matéria prima</Text>
+      {/* <Text style={Style.label}>Matéria prima</Text>
       <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap",
        alignItems: "center", justifyContent: "center"}}>
          <RoundedButton text={"Todas"} active={!selectedPrima}
@@ -129,10 +128,10 @@ export default function Filters({navigation}) {
             }/>
           )
         }
-      </View>
+      </View> */}
 
-      <Text style={Style.label}>Peso</Text>
-      <Slider />
+      {/* <Text style={Style.label}>Preço</Text>
+      <Slider /> */}
 
       <View style={Style.stripe} />
       <View style={Style.greenButtonContainer}>

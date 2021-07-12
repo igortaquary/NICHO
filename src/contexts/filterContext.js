@@ -105,6 +105,13 @@ const FilterProvider = ({ children }) => {
         setSubCategoriesFilter(auxSubCategories);
         setLoading(false);
     }
+
+    const clearAllFilters = () => {
+        setLoading(true);
+        setSubCategoriesFilter([]);
+        setFilters([]);
+        setLoading(false);
+    }
     
     return (
         <FilterContext.Provider 
@@ -113,7 +120,9 @@ const FilterProvider = ({ children }) => {
                 loading,
                 filters,
                 setFilters,
-                search
+                subCategoriesFilter,
+                search,
+                clearAllFilters
              }}>
             {children}
         </FilterContext.Provider>

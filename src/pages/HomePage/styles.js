@@ -38,6 +38,7 @@ export const SearchContainer = styled.View`
     border-radius: 16px;
     background-color: #F1F1F1;
     align-items: center;
+    width: 95%;
 `;
 
 export const CategoryContainer = styled.TouchableOpacity`
