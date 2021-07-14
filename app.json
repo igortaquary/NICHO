@@ -19,6 +19,7 @@
     "android": {
       "config": {
         "googleMaps": {
+          "apiKey": "MAPS_KEY"
         }
       },
       "adaptiveIcon": {
