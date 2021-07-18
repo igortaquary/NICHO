@@ -1,5 +1,12 @@
 ﻿import React, { Fragment, useEffect, useState } from "react";
-import { ScrollView, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import Style from "./styles";
 import Accordion from "../../components/Accordion";
 import Icon from "./../../components/Icon/index";
@@ -97,8 +104,24 @@ export default function EventPage({ navigation, route }) {
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View>
+        <TouchableOpacity
+          style={Style.backArrowContainer}
+          activeOpacity={0.5}
+          onPress={() => navigation.goBack()}
+        >
+          <Icon
+            name="back"
+            size={cw(16.9)}
+            color="#FFFFFF"
+            style={{ left: cw(-1) }}
+          />
+        </TouchableOpacity>
         <View>
-          <TouchableOpacity style={{ ...Style.iconContainer, top: cw(189) }}>
+          <TouchableOpacity
+            style={{ ...Style.iconContainer, top: cw(189) }}
+            activeOpacity={0.5}
+            onPress={() => console.log("apertado")}
+          >
             <Icon
               name="compartilhar"
               size={cw(16.9)}
@@ -106,7 +129,7 @@ export default function EventPage({ navigation, route }) {
               style={{ left: cw(-1) }}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={Style.iconContainer}>
+          <TouchableOpacity style={Style.iconContainer} activeOpacity={0.5}>
             <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
