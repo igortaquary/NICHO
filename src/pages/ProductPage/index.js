@@ -125,7 +125,6 @@ const ProductPage = ({ navigation, route }) => {
   }
 
   const handleSavePress = async () => {
-    console.log('clicou')
     if (user) {
       modalizeRef.current.open();      
     } else {

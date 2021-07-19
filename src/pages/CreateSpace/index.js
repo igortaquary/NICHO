@@ -311,8 +311,6 @@ export default function CreateSpace({ navigation }) {
         ];
       }
       if (!element.time.from) {
-        console.log("element time from ");
-        console.log(element.time.from);
         auxIncorrectBusinessHours = [
           ...auxIncorrectBusinessHours,
           [index, "from"],
@@ -375,9 +373,7 @@ export default function CreateSpace({ navigation }) {
       setImagesErrorMessage("Adicione ao menos uma imagem do estabelecimento!");
     }
 
-    console.log("APERTOU");
     if (!error) {
-      console.warn("ENVIOOOU!!!");
       let establishment = {
         name: establishmentName,
         locations: savingLocations,
@@ -389,7 +385,6 @@ export default function CreateSpace({ navigation }) {
       };
       addSpace(establishment, navigation);
       clearPage();
-      console.log(establishment);
     } else {
       Keyboard.dismiss();
       setTimeout(scrollToTop, 10);
@@ -515,7 +510,6 @@ export default function CreateSpace({ navigation }) {
       setShowPicker(true);
       setCurrentIndex(index);
       setField(field);
-      console.log("aquii");
       currentTime.pop();
       setTime(moment(currentTime).toDate());
     }
@@ -558,11 +552,9 @@ export default function CreateSpace({ navigation }) {
           }
         }
       });
-      console.log("segue");
       console.log(businessHoursErrorMessage);
       console.log(includesError);
       console.log(incorrectBusinessHours);
-      console.log("fim");
 
       return !!businessHoursErrorMessage && includesError;
     }

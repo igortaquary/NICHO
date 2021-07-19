@@ -19,6 +19,7 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [initializing, setInitializing] = useState(true);
   const [collections, setCollections] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [threads, setThreads] = useState([]);
   const [threads1, setThreads1] = useState([]);
   const [threads2, setThreads2] = useState([]);
@@ -29,7 +30,6 @@ const UserProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    console.log("context effect");
 
     if (user) {
       loadCollections();
@@ -47,6 +47,7 @@ const UserProvider = ({ children }) => {
             return {
               _id: documentSnapshot.id,
               name: "",
+              img1: "https://source.unsplash.com/featured/412x115/?craft",
               latestMessage: { text: "" },
               ...documentSnapshot.data(),
             };
@@ -63,6 +64,7 @@ const UserProvider = ({ children }) => {
             return {
               _id: documentSnapshot.id,
               name: "",
+              img1: "https://source.unsplash.com/featured/412x115/?craft",
               latestMessage: { text: "" },
               ...documentSnapshot.data(),
             };
@@ -75,13 +77,29 @@ const UserProvider = ({ children }) => {
   }, [user]);
 
   useEffect(() => {
+    async function fetchImages() {
+      for (var thread of threads2) {
+        try{
+          thread.img = await firebase.storage().ref("user_photo/" + thread.uid1).getDownloadURL()
+        }catch(err){
+          // console.log(err)
+        }
+      }
+      for (var thread of threads1) {
+        try{
+          thread.img = await firebase.storage().ref("user_photo/" + thread.uid1).getDownloadURL()
+        }catch(err){
+          // console.log(err)
+        }
+      }
+    }
+    fetchImages();
     setThreads(
       [...threads1, ...threads2].sort((x, y) => y.createdAt - x.createdAt)
     );
   }, [threads1, threads2]);
 
   async function onAuthStateChanged(user_firebase) {
-    console.log("entrou no auth", user_firebase);
     if (user_firebase) {
       await fetchUser(user_firebase.uid).then((res) => {
         setUser({ ...res, username: user_firebase.email });
@@ -94,7 +112,6 @@ const UserProvider = ({ children }) => {
   }
 
   const loadCollections = async () => {
-    console.log("loadCollections");
     const auxCollections = [];
     const res = await firebase
       .firestore()
@@ -112,9 +129,7 @@ const UserProvider = ({ children }) => {
           .get();
         const firstImage = await firebase
           .storage()
-          .ref(
-            "user_products/" + product.anunciante + "/" + product.titulo + "/0"
-          )
+          .ref("user_products/" + product.anunciante + "/" + product.titulo + "/0")
           .getDownloadURL();
         auxProdutos.push({
           ...produto.data(),
@@ -131,6 +146,16 @@ const UserProvider = ({ children }) => {
     setCollections(auxCollections);
   };
 
+  const loadCategories = async () => {
+    await firebase
+      .firestore()
+      .collection("categorias")
+      .get()
+      .then((doc) => {
+        setCategories(doc.data())
+      });
+  };
+
   const addProductToCollection = async (doc, product) => {
     await doc.ref.update({
       produtos: firebase.firestore.FieldValue.arrayUnion({
@@ -144,8 +169,6 @@ const UserProvider = ({ children }) => {
   };
 
   const addProductToNewCollection = async (product, newCollectionTitle) => {
-    console.log("test");
-    console.log(product);
     await firebase
       .firestore()
       .collection("usuario")
@@ -240,8 +263,10 @@ const UserProvider = ({ children }) => {
         value={{
           user,
           collections,
+          categories,
           SignIn,
           loadCollections,
+          loadCategories,
           SignUp,
           addProductToCollection,
           addProductToNewCollection,

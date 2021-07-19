@@ -27,8 +27,6 @@ export default function CoverPlaceholder({
     setModalVisible(false);
     if (image) {
       if (!image[0]) {
-        console.log("handleAddCoverImage");
-
         pickImage(0, image, setImage);
       } else if (image[0]) {
         setModalVisible(true);

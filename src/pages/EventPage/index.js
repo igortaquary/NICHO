@@ -74,9 +74,6 @@ export default function EventPage({ navigation, route }) {
         (element) => element.isPrimary == true
       );
       defaultCalendar ? {} : (defaultCalendar = calendars[0]);
-      console.log("datas");
-
-      console.log("asdadsa");
       let eventCreated = await Calendar.createEventAsync(defaultCalendar.id, {
         title: event.titulo,
         startDate: startDate,
