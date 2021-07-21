@@ -74,7 +74,6 @@ const FilterProvider = ({ children }) => {
                 console.log(err);
             }
         }
-        console.log(auxImages.length);
         setProducts(auxImages);
         setSubCategoriesFilter([]);
         setLoading(false);
@@ -97,8 +96,6 @@ const FilterProvider = ({ children }) => {
                         }
                     })
                 })
-                console.log("busquei: " + word);
-                console.log("entendeu: " + maxName);
                 auxSubCategories.push(maxName);
             }
         });

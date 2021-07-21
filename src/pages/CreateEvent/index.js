@@ -184,8 +184,6 @@ export default function CreateEvent({ navigation }) {
 
     auxArray = [];
     const incorrectDatetimes = datetimes.filter((datetime, index) => {
-      // console.log("oiii");
-      // console.log(datetime);
       let include = false;
       if (
         // moment(datetime.date.from).isBefore(new Date(), "day") ||
@@ -228,7 +226,6 @@ export default function CreateEvent({ navigation }) {
       setIncorrectDatetimes(auxArray);
     } else setIncorrectDatetimeMessage("");
 
-    console.log(details);
     if (/^\s*$/.test(details)) {
       error = true;
       setDetailsErrorMessage("Insira uma descrição do evento!");
@@ -301,7 +298,6 @@ export default function CreateEvent({ navigation }) {
       addEvent(event, navigation);
       clearPage();
     } else {
-      // console.log(incorrectDatetimes);
       Keyboard.dismiss();
       setTimeout(scrollToTop, 10);
     }

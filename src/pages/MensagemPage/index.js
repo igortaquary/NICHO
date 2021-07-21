@@ -29,7 +29,7 @@ export default function Messages({ route }) {
           if (!firebaseData.system) {
             data.user = {
               ...firebaseData.user,
-              name: firebaseData.user.displayName
+              name: firebaseData.user.displayName,
             }
           }
   
@@ -44,7 +44,6 @@ export default function Messages({ route }) {
 
   async function handleSend(messages) {
     const text = messages[0].text;
-    console.log(text)
     await firebase.firestore()
       .collection('MESSAGE_THREADS')
       .doc(thread._id)
@@ -54,7 +53,8 @@ export default function Messages({ route }) {
         createdAt: new Date().getTime(),
         user: {
           _id: user.id,
-          displayName: user.nome
+          displayName: user.nome,
+          avatar: user.foto,
         }
       })
     await firebase.firestore()

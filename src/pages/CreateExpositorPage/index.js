@@ -130,7 +130,6 @@ const CreateExpositorPage = ({navigation}) => {
             if (!result.cancelled) {
                 //setCurrentImage(4);
                 set(result.uri)
-                console.log(result.uri)
             }
         }
     }

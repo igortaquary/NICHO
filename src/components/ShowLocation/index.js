@@ -55,12 +55,9 @@ export default function ShowLocation({
           setLongitudeSource(longitudeSource);
           setLatitudeSource(latitudeSource);
         }
-        console.log("oiee");
-        console.log(moment.duration(duration, "minutes").humanize());
       })
       .catch(async (error) => {
         count++;
-        console.log(count);
 
         setEta("indisponivel");
         if (count < maxTries) {
@@ -84,8 +81,6 @@ export default function ShowLocation({
         },
 
         async (position) => {
-          console.log("listener de localizacao");
-
           await getEta(
             position.coords.longitude,
             position.coords.latitude,
@@ -191,9 +186,6 @@ export default function ShowLocation({
                   ? eta + " carro - local atual"
                   : "tempo de viagem indisponivel"}
               </Text>
-
-              {console.log(destinationName)}
-              {console.log(eta)}
             </View>
           </Callout>
         </Marker>
