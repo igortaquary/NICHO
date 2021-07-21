@@ -156,6 +156,7 @@ export default function CreateSpace({ navigation }) {
   const pkg = Constants.manifest.releaseChannel
     ? Constants.manifest.android.package
     : "host.exp.exponent";
+
   const openAppSettings = () => {
     IntentLauncher.startActivityAsync(
       IntentLauncher.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -345,11 +346,18 @@ export default function CreateSpace({ navigation }) {
       setIncorrectBusinessHours([]);
       setBusinessHoursErrorMessage("");
       savingBusinessHours = businessHours.map((element) => {
+        let daysArray = [];
+
+        element.days.forEach(
+          (day, index) => day.selected && (daysArray = [...daysArray, index])
+        );
+
         return {
-          days: [
-            ...element.days.filter((day) => day.selected).map((e) => e.text),
-          ],
-          time: { ...element.time },
+          days: daysArray,
+          time: {
+            from: moment(element.time.from).toDate(),
+            to: moment(element.time.to).toDate(),
+          },
         };
       });
     }

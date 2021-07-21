@@ -1,5 +1,12 @@
 ﻿import React, { Fragment, useEffect, useState, useRef } from "react";
-import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import Icon from "../../components/Icon";
 import Style from "./styles";
 import {
@@ -9,41 +16,47 @@ import {
 import * as firebase from "firebase";
 
 export default function LocationsSpacesPage({ navigation }) {
-
   const [spaceList, setSpaces] = useState([]);
   const [refreshing, setRefreshing] = useState();
 
   const fetchSpaces = async (spaces) => {
-    const Documents = await firebase.firestore()
-      .collection('local')
+    const Documents = await firebase
+      .firestore()
+      .collection("local")
       .get()
-      .then((querrySnapshot) => {
-        querrySnapshot.forEach((documentSnapshot) => {
-          const doc = documentSnapshot.data()
-          doc.id = documentSnapshot.id
-          const fullAddress = doc.local[0].placeAddress
-          const splitAddress = fullAddress.split("-")
-          doc.region = splitAddress[1]
-          doc.location = splitAddress[0]
-          doc.localName = doc.local[0].placeName
-          doc.id = documentSnapshot.id
+      .then((querySnapshot) => {
+        querySnapshot.forEach((documentSnapshot) => {
+          const doc = documentSnapshot.data();
+          doc.id = documentSnapshot.id;
+          const fullAddress =
+            doc.local[0].placeAddress || doc.local[0].locationText;
+          const splitAddress = fullAddress.split("-");
+          doc.region = splitAddress[1];
+          doc.location = splitAddress[0];
+          doc.localName = doc.local[0].placeName || doc.local[0].locationText;
+          doc.id = documentSnapshot.id;
           spaces.push(doc);
         });
       });
   };
 
   const fetchImages = async (spaces) => {
-    for (const item of spaces){
-      const images = []
-      try{
-        for (let i = 0; i < 3; i++){
-          const url = {uri: await firebase.storage().ref('spaces/' + item.anunciante + '/' + item.titulo + '/' + i).getDownloadURL()}
-          images.push(url)
+    for (const item of spaces) {
+      const images = [];
+      try {
+        for (let i = 0; i < 3; i++) {
+          const url = {
+            uri: await firebase
+              .storage()
+              .ref("spaces/" + item.anunciante + "/" + item.titulo + "/" + i)
+              .getDownloadURL(),
+          };
+          images.push(url);
         }
-      }catch(fail){
-        console.log(fail)
+      } catch (fail) {
+        console.log(fail);
       }
-      item.images = images
+      item.images = images;
     }
   };
 
@@ -72,56 +85,114 @@ export default function LocationsSpacesPage({ navigation }) {
     const businessHoursHandler = (businessHours) => {
       let diaInicial = null;
       let diaFinal = null;
-      let businessHoursText = "Aberto";
+      let businessHoursText = [];
+      let text = [];
 
-      for (let i = 0; i < businessHours.length; i++) {
-        if (businessHours[i] != "Fechado") {
-          if (diaInicial == null) {
-            diaInicial = i;
-          }
-          for (let j = i + 1; j < businessHours.length; j++) {
-            if (businessHours[j] == "Fechado") {
-              i++;
-              break;
-            } else if (businessHours[i] == businessHours[j]) {
-              diaFinal = j;
-            }
-          }
-        }
+      for (schedule of businessHours) {
+        // itera pelos horarios de funcionamento
+        let fromHours = schedule.time.from.toDate().getHours();
+        let fromMinutes = schedule.time.from.toDate().getMinutes();
+        let toHours = schedule.time.to.toDate().getHours();
+        let toMinutes = schedule.time.to.toDate().getMinutes();
+        fromMinutes = fromMinutes < 10 ? "0" + fromMinutes : fromMinutes;
+        toMinutes = toMinutes < 10 ? "0" + toMinutes : toMinutes;
+        let time = ` - de ${fromHours}:${fromMinutes}h à ${toHours}:${toMinutes}h `;
+        text = [];
+        diaInicial = null; // reseta o dia inicial e final pra null
+        diaFinal = null;
 
-        if (diaInicial != null) {
+        if (schedule.days.length == 1) {
+          // se tiver apenas 1 dia o texto já pode ser escrito
+
           businessHoursText = [
-            businessHoursText,
-            businessHoursText != "Aberto" ? `, ` : ` `,
+            ...businessHoursText,
+            <Text key={businessHoursText}>
+              {businessHoursText.length ? ", " : "Aberto "}
+              <Text style={Style.businessHoursTextDay}>
+                {" "}
+                {days[schedule.days[0]]}
+              </Text>
+            </Text>,
           ];
 
-          if (diaFinal != null) {
-            businessHoursText = [
-              businessHoursText,
-              diaFinal - diaInicial != 1 && "de ",
-              <Text key={diaFinal} style={Style.businessHoursTextDay}>
-                {`${days[diaInicial]}`}
-                {diaFinal - diaInicial != 1 ? " à " : " e "}
-                {`${days[diaFinal]} - `}
-              </Text>,
-              `de ${businessHours[diaInicial].replace("-", " às ")}`,
-            ];
-          } else {
-            businessHoursText = [
-              businessHoursText,
-              <Text
-                key={diaFinal}
-                style={Style.businessHoursTextDay}
-              >{`${days[diaInicial]} - `}</Text>,
-              `de ${businessHours[diaInicial].replace("-", " às ")}`,
-            ];
-          }
-        }
+          // businessHoursText += `${businessHoursText ? ", " : "Aberto"} ${
+          //   days[schedule.days[0]]
+          // } ${schedule.days.length == 2 ? ", " + days[schedule.days[1]] : ""}`;
+        } else {
+          // se tiver dois ou mais dias de funcionamento, checa se eles sao seguidos
 
-        diaFinal && (i = diaFinal);
-        diaInicial = null;
-        diaFinal = null;
+          for (let j = 0; j < schedule.days.length - 1; j++) {
+            diaInicial == null && (diaInicial = schedule.days[j]); // se ainda nao foi definido uma data inicial, define-se
+
+            if (Math.abs(schedule.days[j] - schedule.days[j + 1]) == 1) {
+              // olhamos se o dia e o proximo tem uma diferenca absoluta de 1
+
+              diaFinal = schedule.days[j + 1]; // se tiver o diaFinal eh atualizado
+            }
+            if (
+              (Math.abs(schedule.days[j] - schedule.days[j + 1]) != 1 || // se nao houver diferenca de um dia, quer dizer que os dias nao sao seguidos (temos que escrever o texto 'diaInicial a diaFinal')
+                j == schedule.days.length - 2) && // ou j eh o penultimo dia (ultimo do loop)
+              diaFinal // e o diaFinal eh diferente de null ou undefined
+            ) {
+              text = [
+                ...text,
+                <Text key={businessHoursText + text}>
+                  {businessHoursText.length || text.length ? ", " : "Aberto "}
+                  {/* se ja tiver texto antes, coloca virgula ao inves de 'Aberto'*/}
+                  <Text style={Style.businessHoursTextDay}>
+                    {days[diaInicial]}
+                  </Text>
+                  {diaFinal - diaInicial != 1 ? " à " : ", "}
+                  {/* se a diferenca nao for de um dia coloca-se virgula ao inves de 'à'*/}
+                  <Text style={Style.businessHoursTextDay}>
+                    {days[diaFinal]}
+                  </Text>
+                  {diaFinal != schedule.days[j + 1] && (
+                    <Text>
+                      {/*  diaFinal != proximo dia, entao temos que escrever o dia pois ele nao sera repetido*/}
+                      {`, `}
+                      <Text style={Style.businessHoursTextDay}>
+                        {days[schedule.days[j + 1]]}
+                      </Text>
+                    </Text>
+                  )}
+                </Text>,
+              ];
+              // text +=
+
+              // `${businessHoursText || text ? "," : "Aberto"} ${
+              //   days[diaInicial]
+              // }${diaFinal - diaInicial != 1 ? " à" : ","} ${days[diaFinal]}${
+              //   Math.abs(schedule.days[j] - schedule.days[j + 1]) != 1
+              //     ? ", " + days[schedule.days[j + 1]]
+              //     : ""
+              // }`;
+
+              diaInicial = null; // reseta o dia inicial e final pois podemos iniciar uma nova sequencia de dias
+              diaFinal = null;
+            } else if (!diaFinal) {
+              // se nao tiver dia final eh porque nao existe uma sequencia de dias para mostrar
+              text = [
+                ...text,
+                <Text key={businessHoursText + text}>
+                  {businessHoursText.length || text.length ? `, ` : "Aberto "}
+                  <Text style={Style.businessHoursTextDay}>
+                    {days[diaInicial]}
+                  </Text>
+                </Text>,
+              ];
+
+              // text += `${businessHoursText || text ? "," : "Aberto"} ${
+              //   days[diaInicial]
+              // }`;
+              diaInicial = null;
+            }
+          }
+          businessHoursText = [...businessHoursText, text];
+        }
+        businessHoursText = [...businessHoursText, time];
       }
+
       return businessHoursText;
     };
 
@@ -152,7 +223,12 @@ export default function LocationsSpacesPage({ navigation }) {
           activeOpacity={0.7}
           style={{ ...Style.iconContainer, top: cw(230.7) }}
         >
-          <Icon name="compartilhar" size={cw(18.18)} color="#FFFFFF" />
+          <Icon
+            name="compartilhar"
+            size={cw(15)}
+            color="#FFFFFF"
+            style={{ left: cw(-1) }}
+          />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.7} style={Style.iconContainer}>
           <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
@@ -169,8 +245,7 @@ export default function LocationsSpacesPage({ navigation }) {
     );
   };
 
-  return (
-    refreshing ?
+  return refreshing ? (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View
         style={[
@@ -191,15 +266,7 @@ export default function LocationsSpacesPage({ navigation }) {
                 value: 5,
                 votes: 12,
               }}
-              businessHours={[
-                "09:00h-20:00h",
-                "09:00h-20:00h",
-                "09:00h-20:00h",
-                "09:00h-20:00h",
-                "09:00h-20:00h",
-                "09:00h-20:00h",
-                "Fechado",
-              ]}
+              businessHours={local.funcionamento}
             />
           </Fragment>
         ))}
@@ -223,26 +290,18 @@ export default function LocationsSpacesPage({ navigation }) {
               space={local}
               name={local.titulo}
               photos={local.images}
-              address={"Taguatinga sul - QSC 03 Conj F loja 23"}
+              address={local.localName}
               rating={{
                 value: 5,
                 votes: 12,
               }}
-              businessHours={[
-                "09:00h-20:00h",
-                "09:00h-20:00h",
-                "09:00h-20:00h",
-                "09:00h-20:00h",
-                "09:00h-20:00h",
-                "09:00h-20:00h",
-                "Fechado",
-              ]}
+              businessHours={local.funcionamento}
             />
           </Fragment>
         ))}
       </View>
     </ScrollView>
-    :
-    <ActivityIndicator style={{marginTop: 50}} color='green' />
+  ) : (
+    <ActivityIndicator style={{ marginTop: 50 }} color="green" />
   );
 }
