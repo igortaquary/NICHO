@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HeaderContainer, FilterContainer, Filters, FilterButton, SearchContainer, CategoryContainer, CategoryText } from './styles';
 import PhotosGrid from '../../components/PhotosGrid';
 import { ActivityIndicator, View, TextInput } from 'react-native';
 import { useFilterContext } from '../../contexts/filterContext';
 import Icon from '../../components/Icon';
 
-const categories = [ "Adesivos", "Para vestir", "Para sua casa", "Papelaria", "Cosméticos", "Impressões", "Esculturas", "Desenhos", "Acessórios", "Pinturas" ];
+// const categories = [ "Adesivos", "Para vestir", "Para sua casa", "Papelaria", "Cosméticos", "Impressões", "Esculturas", "Desenhos", "Acessórios", "Pinturas" ];
 
 const HomePage = ({navigation, route}) => {
 
-    const { products, loading, filters, setFilters, search, setPage } = useFilterContext();
+    const { products, loading, filters, setFilters, search, setPage, categorias } = useFilterContext();
 
     return(
         <View style={{flex: 1, backgroundColor: '#FFF'}}>
@@ -23,7 +23,7 @@ const HomePage = ({navigation, route}) => {
                             </CategoryText>
                         </CategoryContainer>}
                         {
-                            categories.map( (item, i) => 
+                            categorias.map( (item, i) => 
                                 <CategoryContainer key={i} onPress={ () => setFilters({category: item})}>
                                     <CategoryText selected={filters.category === item || !filters.category}>
                                         {item}
