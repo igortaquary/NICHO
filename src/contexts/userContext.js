@@ -29,6 +29,18 @@ const UserProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    const cat = []
+    firebase
+      .firestore()
+      .collection("usuario")
+      .get()
+      .then(querySnapshot => {
+        console.log(querySnapshot)
+      });
+      setCategories(cat)
+  }, []);
+
+  useEffect(() => {
 
     if (user) {
       loadCollections();
@@ -147,7 +159,6 @@ const UserProvider = ({ children }) => {
     }
     setCollections(auxCollections);
   };
-
 
   const addProductToCollection = async (doc, product) => {
     await doc.ref.update({

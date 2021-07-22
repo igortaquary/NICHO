@@ -3,7 +3,9 @@ import { HeaderContainer, FilterContainer, Filters, FilterButton, SearchContaine
 import PhotosGrid from '../../components/PhotosGrid';
 import { ActivityIndicator, View, TextInput } from 'react-native';
 import { useFilterContext } from '../../contexts/filterContext';
+import {useUserContext} from '../../contexts/userContext';
 import Icon from '../../components/Icon';
+
 
 // const categories = [ "Adesivos", "Para vestir", "Para sua casa", "Papelaria", "Cosméticos", "Impressões", "Esculturas", "Desenhos", "Acessórios", "Pinturas" ];
 

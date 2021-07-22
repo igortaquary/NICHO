@@ -9,6 +9,8 @@ import NotFoundPage from "../pages/NotFoundPage";
 import ProductPage from "../pages/ProductPage";
 import { Feather } from "@expo/vector-icons";
 import Filters from "../pages/HomePage/Filter/filters";
+import FiltersEvent from "../pages/LocationsEventsPage/Filter/filters";
+import FiltersSpace from "../pages/LocationsSpacesPage/Filter/filters";
 import CollectionPage from "../pages/CollectionPage";
 import CreateExpositorPage from "../pages/CreateExpositorPage";
 import MensagemPage from "../pages/MensagemPage";
@@ -56,6 +58,16 @@ const Routes = () => {
           options={{ title: "Nova publicação", ...headerStyle }}
           name="NewProduct"
           component={CreateProductPage}
+        />
+        <Stack.Screen
+          options={{ title: "Filtros de Eventos", ...headerStyle }}
+          name="FiltersEvent"
+          component={FiltersEvent}
+        />
+        <Stack.Screen
+          options={{ title: "Filtros de Espaços", ...headerStyle }}
+          name="FiltersSpace"
+          component={FiltersSpace}
         />
         <Stack.Screen
           options={{ title: "Filtros", ...headerStyle }}
