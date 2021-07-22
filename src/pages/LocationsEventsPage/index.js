@@ -1,7 +1,10 @@
 ﻿import React, { Fragment, useEffect, useState, useRef } from "react";
-import { View, Text, ScrollView, Image, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, Image, ActivityIndicator, TextInput } from "react-native";
 import EventBlock from "./../../components/EventBlock";
 import Style from "./style";
+import { HeaderContainer, FilterContainer, Filters, FilterButton, SearchContainer, CategoryContainer, CategoryText } from '../HomePage/styles';
+import { useFilterContext } from '../../contexts/filterContext';
+import Icon from '../../components/Icon';
 import moment from "moment";
 import {
   ConvertWidth as cw,
@@ -99,8 +102,40 @@ export default function LocationsEventsPage({ navigation }) {
     }
   };
 
+  const { filters, setFilters, search } = useFilterContext();
+  const categories = [ "Esta semana", "Este mês", "Este ano" ];
+
   return refreshing ? (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
+      <HeaderContainer>
+        <FilterContainer>
+          <Filters showsHorizontalScrollIndicator={false} horizontal={true}>
+            { filters.category && 
+            <CategoryContainer onPress={ () => setFilters({})}>
+              <CategoryText selected={false}>
+                Todos
+              </CategoryText>
+            </CategoryContainer>}
+            {
+            categories.map( (item, i) => 
+            <CategoryContainer key={i} onPress={ () => setFilters({category: item})}>
+              <CategoryText selected={filters.category === item || !filters.category}>
+                {item}
+              </CategoryText>
+            </CategoryContainer>
+            )
+            }
+          </Filters>
+            <FilterButton onPress={() => navigation.navigate("FiltersEvent")}>
+              <Icon name='filtros' size={20} color={"#FFF"} />
+            </FilterButton>
+        </FilterContainer>
+        <SearchContainer>
+          <Icon name='busca' size={16} color={"#707070"}/>
+          <TextInput placeholder="Pesquise por itens" style={{marginLeft: 8, width: '100%'}} 
+            returnKeyType="search" onSubmitEditing={ e => search(e.nativeEvent.text)} />
+          </SearchContainer>
+      </HeaderContainer>
       <View
         style={[
           Style.sectionContainer,

@@ -68,7 +68,6 @@ export default StyleSheet.create({
     marginBottom: cw(10),
 
     justifyContent: "center",
-    alignItems: "center",
 
     zIndex: 1,
     width: cw(28),

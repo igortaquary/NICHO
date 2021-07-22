@@ -21,14 +21,17 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import PhotosGrid from "../../components/PhotosGrid";
 import { useUserContext } from "../../contexts/userContext";
+import ImageView from "react-native-image-viewing";
 
 export default function ArtistPage({ navigation, route }) {
 
   const anunciante = route.params.anunciante;
   const [profileImage, setProfileImage] = useState('https://source.unsplash.com/featured/?woman,photo');
   const [bannerImage, setBannerImage] = useState("https://source.unsplash.com/featured/412x115/?craft");
+  const [images, setImages] = useState('https://source.unsplash.com/featured/?woman,photo');
   const [products, setProducts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [visible, setIsVisible] = useState(false);
 
   const {user, followArtist} = useUserContext();
 
@@ -37,6 +40,8 @@ export default function ArtistPage({ navigation, route }) {
     setProfileImage(profile);
     const banner = await firebase.storage().ref('expositor_banners/' + anunciante.id).getDownloadURL();
     setBannerImage(banner);
+    const imgs = {uri: profile, uri: banner}
+    setImages(imgs);
   }
 
   useEffect(() => {
@@ -78,13 +83,22 @@ export default function ArtistPage({ navigation, route }) {
   }
 
   return (
+    <>
+      <ImageView
+        images={[{ uri: profileImage }, { uri: bannerImage }]}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+      />
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View style={Style.coverContainer}>
         <Image source={{ uri: bannerImage }} style={Style.coverImage} />
       </View>
 
       <View style={Style.profilePicContainer}>
+      <TouchableOpacity onPress={()=>setIsVisible(true)}>
         <Image source={{ uri: profileImage }} style={Style.profilePic} />
+      </TouchableOpacity>
       </View>
 
       <View
@@ -206,5 +220,6 @@ export default function ArtistPage({ navigation, route }) {
         </View>
       </View>
     </ScrollView>
+    </>
   );
 }

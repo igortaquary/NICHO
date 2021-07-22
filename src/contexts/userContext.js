@@ -30,6 +30,18 @@ const UserProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    const cat = []
+    firebase
+      .firestore()
+      .collection("usuario")
+      .get()
+      .then(querySnapshot => {
+        console.log(querySnapshot)
+      });
+      setCategories(cat)
+  }, []);
+
+  useEffect(() => {
 
     if (user) {
       loadCollections();
@@ -146,16 +158,6 @@ const UserProvider = ({ children }) => {
     setCollections(auxCollections);
   };
 
-  const loadCategories = async () => {
-    await firebase
-      .firestore()
-      .collection("categorias")
-      .get()
-      .then((doc) => {
-        setCategories(doc.data())
-      });
-  };
-
   const addProductToCollection = async (doc, product) => {
     await doc.ref.update({
       produtos: firebase.firestore.FieldValue.arrayUnion({
@@ -266,7 +268,6 @@ const UserProvider = ({ children }) => {
           categories,
           SignIn,
           loadCollections,
-          loadCategories,
           SignUp,
           addProductToCollection,
           addProductToNewCollection,
