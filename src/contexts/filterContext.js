@@ -42,7 +42,11 @@ const FilterProvider = ({ children }) => {
         if(subCategoriesFilter?.length > 0){
             console.log("subcategorias");
             productsRef = productsRef.where('subcategorias', 'array-contains-any', subCategoriesFilter);
-        } 
+        } else 
+        if (filters.subcategory){
+            console.log("subcategorias");
+            productsRef = productsRef.where('subcategorias', 'array-contains', filters.subcategory);
+        }
         if(filters.category){
             console.log("categoria");
             productsRef = productsRef.where('categoria', '==', filters.category);

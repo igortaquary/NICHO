@@ -10,10 +10,10 @@ import {
 } from "../../../components/Converter";
 import { useFilterContext } from "../../../contexts/filterContext";
 
-const categories = [
+/* const categories = [
   "Adesivos", "Para vestir", "Para sua casa", 
   "Papelaria", "Cosméticos", "Impressões", "Esculturas", 
-  "Desenhos", "Acessórios", "Pinturas" ]
+  "Desenhos", "Acessórios", "Pinturas" ] */
 
 const regions = [ "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO" ]
 
@@ -22,11 +22,26 @@ const primas = [
   "Tecido", "Barro e argila", "Madeira", "Vidro", "Cristais e pedras",
   "Plástico", "Cimento", "Linhas e cordas", "Resina" ]
 
+const categories = {
+  "Adesivos": [],
+  "Para vestir": ["Blusas", "Calças", "Roupas", "Calçados", "Saias", "Vestidos", "Blusões", "Tops", "Casacos", "Shorts"], 
+  "Para sua casa": ["Quadros", "Vasos de plantas", "Móveis", "Luminárias", "Cadeiras", "Mesas", "Puff", "Cabeceira", "Estantes",
+    "Prateleiras", "Armários", "Bancos", "Terrários", "Madeira de demolição", "Pallets", "Mesa de Cabeceira"], 
+  "Papelaria": ["Cadernos", "Canetas", "Zines"],
+  "Cosméticos": ["Desodorantes", "Sabonetes", "Maquiagem" ],
+  "Impressões": ["Prints", "Arte digital", "Xilogravura", "Serigrafia", "Adesivos" ],
+  "Esculturas": ["Argila", "Pedras", "Cristais", "Metais", "Madeira", "Vidro", "Resina"],
+  "Desenhos": ["Lápis", "Digital", "Esboços" ],
+  "Acessórios": ["Bolsas", "Brincos", "Piercings", "Aneis", "Pulseiras", "Colares", "Alianças"],
+  "Pinturas": ["Aquarela", "Acrílica", "Óleo", "Técnicas mistas", "Colagens", "Carvão"]
+} 
+
 export default function Filters({navigation}) {
 
   const { filters, setFilters } = useFilterContext();
   //Filter vars
   const [selectedCategory, setSelectedCategory] = useState();
+  const [selectedSubCategory, setSelectedSubCategory] = useState();
   const [selectedRegion, setSelectedRegion] = useState();
   /* const [selectedPrima, setSelectedPrima] = useState(); */
   const [selectedDelivery, setSelectedDelivery] = useState();
@@ -50,6 +65,9 @@ export default function Filters({navigation}) {
     /* if( selectedPrima){
       auxFilters.prima = selectedPrima;
     } */
+    if(selectedSubCategory){
+      auxFilters.subcategory = selectedSubCategory;
+    }
     if( selectedDelivery ){
       auxFilters.delivery = selectedDelivery;
     }
@@ -61,8 +79,6 @@ export default function Filters({navigation}) {
   const ampulhetaSelecionada = require("./../../../../assets/ampulhetaSelecionada.png");
   const check = require("./../../../../assets/check.png");
   const checkSelecionado = require("./../../../../assets/checkSelecionado.png");
-/*   const folha = require("./../../../../assets/folha.png");
-  const folhaSelecionada = require("./../../../../assets/folhaSelecionada.png"); */
 
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
@@ -88,17 +104,36 @@ export default function Filters({navigation}) {
       </View>
 
       <Text style={Style.label}>Categorias</Text>
-      <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap",
-       alignItems: "center", justifyContent: "center"}}>
-         <RoundedButton text={"Todas"} active={!selectedCategory}
-              onPress={ () => setSelectedCategory() } /> 
-         { categories.map( (item) => 
+      <ScrollView style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap",
+        padding: 5, width: "100%"}} horizontal={true}>
+          <RoundedButton text={"Todas"} active={!selectedCategory}
+              onPress={ () => {setSelectedCategory(); setSelectedSubCategory();}} /> 
+         { Object.keys(categories).map( (item) => 
             <RoundedButton key={item} text={item} active={selectedCategory === item}
               onPress={ 
-                () => setSelectedCategory(item) 
+                () => {setSelectedCategory(item); setSelectedSubCategory();}
               } /> 
           )}
-       </View>
+      </ScrollView>
+
+      { selectedCategory && categories[selectedCategory].length > 0 && 
+      <>
+        <Text style={Style.label}>Subcategoria</Text>
+        <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap",
+         alignItems: "center", justifyContent: "center"}}>
+           <RoundedButton text={"Todas"} active={!selectedSubCategory}
+                onPress={ () => setSelectedSubCategory() } /> 
+          {
+            categories[selectedCategory].map( (item) => 
+              <RoundedButton key={item} text={item} active={selectedSubCategory === item}
+              onPress={ 
+                () => setSelectedSubCategory(item) 
+              }/>
+            )
+          }
+        </View>
+      </>
+      }
      
       <Text style={Style.label}>Regiões</Text>
       <View style={{ display: "flex", flexDirection: "row", flexWrap: "wrap",
