@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { signIn } from "../api/auth";
 import fetchUser from "../api/fetchUser";
-import { signUp } from "../api/signup";
+import { signUp, updateUser } from "../api/signup";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import { Alert } from "react-native";
@@ -248,6 +248,31 @@ const UserProvider = ({ children }) => {
     await SignIn(email, password, navigation);
   };
 
+  const UpdateUser = async (
+    id,
+    name,
+    email,
+    user,
+    password,
+    gender,
+    region,
+    newsletter,
+    navigation,
+    image
+  ) => {
+    await updateUser(
+      id,
+      name,
+      email,
+      user,
+      password,
+      gender,
+      region,
+      newsletter,
+      image
+    );
+  };
+
   if (initializing) {
     return null;
   } else
@@ -264,6 +289,7 @@ const UserProvider = ({ children }) => {
           updateUserToExpositor,
           threads,
           followArtist,
+          UpdateUser
         }}
       >
         {children}
