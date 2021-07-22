@@ -23,8 +23,10 @@ const FilterProvider = ({ children }) => {
     //const [displayProducts, setDisplayProducts] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [loadingCategories, setLoadingCategories] = useState(false);
     const [filters, setFilters] = useState({});
     const [subCategoriesFilter, setSubCategoriesFilter] = useState([]);
+    const [categorias, setCategorias] = useState([]);
 
     useEffect(()=>{
         if(loading === false){
@@ -33,6 +35,21 @@ const FilterProvider = ({ children }) => {
             fetchProducts();
         }
     }, [filters, subCategoriesFilter]);
+
+    useEffect(() => {
+        loadCategories();
+    }, []);
+    
+    const loadCategories = async () => {
+        const categorias = await firebase
+            .firestore()
+            .collection("categorias")
+            .get()
+            .then((docs) => {
+                return docs.docs.map(item => item.data().texto)
+            });
+    setCategorias(categorias);
+    };
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -110,7 +127,8 @@ const FilterProvider = ({ children }) => {
                 loading,
                 filters,
                 setFilters,
-                search
+                search,
+                categorias
              }}>
             {children}
         </FilterContext.Provider>
