@@ -110,6 +110,5 @@ export default StyleSheet.create({
 
   businessHoursTextDay: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(10),
   },
 });

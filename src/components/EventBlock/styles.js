@@ -21,8 +21,8 @@ export default StyleSheet.create({
 
   iconContainer: {
     position: "absolute",
-    top: cw(222),
-    left: cw(344),
+    top: cw(175),
+    left: cw(338),
 
     justifyContent: "center",
     alignItems: "center",
@@ -36,8 +36,8 @@ export default StyleSheet.create({
 
   saveIcon: {
     position: "absolute",
-    top: cw(248.88),
-    left: cw(352),
+    top: cw(251.88),
+    left: cw(348),
     justifyContent: "center",
     alignItems: "center",
     zIndex: 1,

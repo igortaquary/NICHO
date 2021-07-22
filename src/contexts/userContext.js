@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { signIn } from "../api/auth";
 import fetchUser from "../api/fetchUser";
-import { signUp } from "../api/signup";
+import { signUp, updateUser } from "../api/signup";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import { Alert } from "react-native";
@@ -19,7 +19,6 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [initializing, setInitializing] = useState(true);
   const [collections, setCollections] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [threads, setThreads] = useState([]);
   const [threads1, setThreads1] = useState([]);
   const [threads2, setThreads2] = useState([]);
@@ -89,26 +88,29 @@ const UserProvider = ({ children }) => {
   }, [user]);
 
   useEffect(() => {
-    async function fetchImages() {
-      for (var thread of threads2) {
-        try{
-          thread.img = await firebase.storage().ref("user_photo/" + thread.uid1).getDownloadURL()
-        }catch(err){
-          // console.log(err)
+    const tempThreads = async () => {
+      const tempThreads1 = await Promise.all(threads1.map(async item => {
+        const img = await firebase.storage().ref("user_photo/" + item.uid2).getDownloadURL();
+        return {
+          ...item,
+          img: img,
         }
-      }
-      for (var thread of threads1) {
-        try{
-          thread.img = await firebase.storage().ref("user_photo/" + thread.uid1).getDownloadURL()
-        }catch(err){
-          // console.log(err)
-        }
-      }
+      }));
+      const tempThreads2 = await Promise.all(threads2.map(async (item) => {
+        const img = await firebase.storage().ref("user_photo/" + item.uid1).getDownloadURL();
+        return {
+          ...item,
+          img: img,
+        };
+      }));
+      return [...tempThreads1, ...tempThreads2].sort((x, y) => y.createdAt - x.createdAt);
     }
-    fetchImages();
-    setThreads(
-      [...threads1, ...threads2].sort((x, y) => y.createdAt - x.createdAt)
-    );
+    tempThreads().then(result => {
+      setThreads(
+        result
+      );
+    });
+
   }, [threads1, threads2]);
 
   async function onAuthStateChanged(user_firebase) {
@@ -257,6 +259,31 @@ const UserProvider = ({ children }) => {
     await SignIn(email, password, navigation);
   };
 
+  const UpdateUser = async (
+    id,
+    name,
+    email,
+    user,
+    password,
+    gender,
+    region,
+    newsletter,
+    navigation,
+    image
+  ) => {
+    await updateUser(
+      id,
+      name,
+      email,
+      user,
+      password,
+      gender,
+      region,
+      newsletter,
+      image
+    );
+  };
+
   if (initializing) {
     return null;
   } else
@@ -265,7 +292,6 @@ const UserProvider = ({ children }) => {
         value={{
           user,
           collections,
-          categories,
           SignIn,
           loadCollections,
           SignUp,
@@ -274,6 +300,7 @@ const UserProvider = ({ children }) => {
           updateUserToExpositor,
           threads,
           followArtist,
+          UpdateUser
         }}
       >
         {children}

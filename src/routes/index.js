@@ -16,6 +16,7 @@ import CreateExpositorPage from "../pages/CreateExpositorPage";
 import MensagemPage from "../pages/MensagemPage";
 import { useUserContext } from "../contexts/userContext";
 import TipsPage from "../pages/TipsPage";
+import SignUpPage from "../pages/SignUpPage";
 
 const Stack = createStackNavigator();
 
@@ -96,6 +97,11 @@ const Routes = () => {
           options={headerStyle}
           name="NotFound"
           component={NotFoundPage}
+        />
+        <Stack.Screen
+          options={{title: 'Configurações', ...headerStyle}}
+          name="Configuracoes"
+          component={SignUpPage}
         />
         <Stack.Screen 
           options={{title: 'Dicas Para Artistas', ...headerStyle}}

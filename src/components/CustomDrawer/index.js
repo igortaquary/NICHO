@@ -18,6 +18,7 @@ import {
 import { loggingOut } from "../../api/auth";
 
 import { CommonActions } from "@react-navigation/native";
+import { Pressable } from "react-native";
 
 const CustomDrawer = ({ navigation, descriptors }) => {
   const [selected, setSelected] = useState();
@@ -56,20 +57,22 @@ const CustomDrawer = ({ navigation, descriptors }) => {
 
   return (
     <Container>
-      <Avatar
-        source={
-          { uri: user?.foto } || {
-            uri: "https://source.unsplash.com/featured/412x115/?craft",
+      <Pressable onPress={() => {setSelected("config"); navigation.navigate("Configuracoes")}}>
+        <Avatar
+          source={
+            { uri: user?.foto } || {
+              uri: "https://source.unsplash.com/featured/412x115/?craft",
+            }
           }
-        }
-      />
+        />
+      </Pressable>
       <Welcome>Olá, {user?.nome} :)</Welcome>
       <WelcomeSubTitle>{getUserPronoun()}</WelcomeSubTitle>
       <DrawerOption
         text="Configurações"
         icon="config"
         isSelected={selected === "config"}
-        onPress={() => setSelected("config")}
+        onPress={() => {setSelected("config"); navigation.navigate("Configuracoes")}}
       />
       <DrawerOption
         text="Fale conosco"
