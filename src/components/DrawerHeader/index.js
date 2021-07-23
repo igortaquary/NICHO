@@ -9,11 +9,14 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import AccessController from "../AccessController";
+import { useFilterContext } from '../../contexts/filterContext';
 import { useUserContext } from "../../contexts/userContext";
 
 const DrawerHeader = ({ scene }) => {
   const currentPage = getFocusedRouteNameFromRoute(scene.route);
   const {user} = useUserContext();
+
+  const { clearAllFilters } = useFilterContext();
 
   function handlePlus() {
     let locaisRoute = scene.route?.state?.routes[1]?.state;
@@ -39,7 +42,7 @@ const DrawerHeader = ({ scene }) => {
           <Ionicons name="menu" size={25} color={"#707070"} />
         </IconContainer>
         <CustomText
-          onPress={() => scene.descriptor.navigation.navigate("Home")}
+          onPress={() => {scene.descriptor.navigation.navigate("Home"); clearAllFilters()}}
         >
           nicho
         </CustomText>
