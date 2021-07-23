@@ -21,7 +21,6 @@ const DrawerHeader = ({ scene }) => {
   function handlePlus() {
     let locaisRoute = scene.route?.state?.routes[1]?.state;
 
-    console.log(locaisRoute);
     if (currentPage == "Locais") {
       if (
         !locaisRoute?.index ||
@@ -37,7 +36,6 @@ const DrawerHeader = ({ scene }) => {
   return (
     <MainContainer>
       <Container>
-        {console.log(StatusBar.currentHeight)}
         <IconContainer
           onPress={() => scene.descriptor.navigation.toggleDrawer()}
         >

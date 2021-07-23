@@ -11,38 +11,14 @@ import {
   ConvertHeight as ch,
 } from "./../../components/Converter";
 import { locationPermission } from "../../components/Permissions";
+import ImageView from "react-native-image-viewing";
 
 export default function SpacePage({ navigation, route }) {
+  const [visible, setIsVisible] = useState(false);
   const space = route.params.space;
-  const locations = [
-    {
-      placeName: space.localName,
-      placeAddress: space.location,
-      placeGeometry: { location: space.local[0].placeGeometry.location },
-    },
-    {
-      locationText: space.localName,
-    },
-  ];
+  const locations = space.local;
   const mockedDate = moment().local().format();
-  const businessHours = [
-    {
-      days: ["Segunda", "Terça", "Quarta"],
-      time: {
-        from: "2021-05-08T13:00:31.840Z",
-        to: "2021-05-08T20:30:31.840Z",
-      },
-    },
-    {
-      days: ["Domingo"],
-      time: {
-        from: "2021-05-08T03:00:31.840Z",
-        to: "2021-05-08T23:30:31.840Z",
-      },
-    },
-  ];
-
-  locationPermission();
+  const businessHours = space.funcionamento;
 
   function handlePressContact(url) {
     Linking.openURL(url);
@@ -61,31 +37,7 @@ export default function SpacePage({ navigation, route }) {
 
     businessHours.forEach((businessHour) => {
       businessHour.days.forEach((day) => {
-        let indexDay = null;
-        switch (day) {
-          case "Segunda":
-            indexDay = 0;
-            break;
-          case "Terça":
-            indexDay = 1;
-            break;
-          case "Quarta":
-            indexDay = 2;
-            break;
-          case "Quinta":
-            indexDay = 3;
-            break;
-          case "Sexta":
-            indexDay = 4;
-            break;
-          case "Sábado":
-            indexDay = 5;
-            break;
-          case "Domingo":
-            indexDay = 6;
-            break;
-        }
-        indexDay != null && (auxBusinessHours[indexDay][1] = businessHour.time);
+        auxBusinessHours[day][1] = businessHour.time;
       });
     });
 
@@ -140,9 +92,9 @@ export default function SpacePage({ navigation, route }) {
         >
           {auxBusinessHours.map((businessHour, index) => {
             let text = businessHour[1].from
-              ? `${moment(businessHour[1].from).format("HH:mm")}-${moment(
-                  businessHour[1].to
-                ).format("HH:mm")}`
+              ? `${moment(businessHour[1].from.toDate()).format(
+                  "HH:mm"
+                )}-${moment(businessHour[1].to.toDate()).format("HH:mm")}`
               : businessHour[1];
 
             return (
@@ -172,6 +124,13 @@ export default function SpacePage({ navigation, route }) {
   }
 
   return (
+    <>
+    <ImageView
+        images={space.images}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+      />
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View>
         <View>
@@ -187,7 +146,9 @@ export default function SpacePage({ navigation, route }) {
             <Icon name="salvar" size={cw(15)} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-        <Image style={Style.coverImage} source={space.images[0]} />
+        <TouchableOpacity onPress={()=>setIsVisible(true)}>
+          <Image style={Style.coverImage} source={space.images[0]} />
+        </TouchableOpacity>
       </View>
 
       <View
@@ -370,5 +331,6 @@ export default function SpacePage({ navigation, route }) {
         })}
       </Accordion>
     </ScrollView>
+    </>
   );
 }

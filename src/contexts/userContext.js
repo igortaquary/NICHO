@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { signIn } from "../api/auth";
 import fetchUser from "../api/fetchUser";
-import { signUp } from "../api/signup";
+import { signUp, updateUser } from "../api/signup";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import { Alert } from "react-native";
@@ -29,7 +29,18 @@ const UserProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    console.log("context effect");
+    const cat = []
+    firebase
+      .firestore()
+      .collection("usuario")
+      .get()
+      .then(querySnapshot => {
+        // console.log(querySnapshot)
+      });
+      // setCategories(cat)
+  }, []);
+
+  useEffect(() => {
 
     if (user) {
       loadCollections();
@@ -47,6 +58,7 @@ const UserProvider = ({ children }) => {
             return {
               _id: documentSnapshot.id,
               name: "",
+              img1: "https://source.unsplash.com/featured/412x115/?craft",
               latestMessage: { text: "" },
               ...documentSnapshot.data(),
             };
@@ -63,6 +75,7 @@ const UserProvider = ({ children }) => {
             return {
               _id: documentSnapshot.id,
               name: "",
+              img1: "https://source.unsplash.com/featured/412x115/?craft",
               latestMessage: { text: "" },
               ...documentSnapshot.data(),
             };
@@ -75,13 +88,32 @@ const UserProvider = ({ children }) => {
   }, [user]);
 
   useEffect(() => {
-    setThreads(
-      [...threads1, ...threads2].sort((x, y) => y.createdAt - x.createdAt)
-    );
+    const tempThreads = async () => {
+      const tempThreads1 = await Promise.all(threads1.map(async item => {
+        const img = await firebase.storage().ref("user_photo/" + item.uid2).getDownloadURL();
+        return {
+          ...item,
+          img: img,
+        }
+      }));
+      const tempThreads2 = await Promise.all(threads2.map(async (item) => {
+        const img = await firebase.storage().ref("user_photo/" + item.uid1).getDownloadURL();
+        return {
+          ...item,
+          img: img,
+        };
+      }));
+      return [...tempThreads1, ...tempThreads2].sort((x, y) => y.createdAt - x.createdAt);
+    }
+    tempThreads().then(result => {
+      setThreads(
+        result
+      );
+    });
+
   }, [threads1, threads2]);
 
   async function onAuthStateChanged(user_firebase) {
-    console.log("entrou no auth", user_firebase);
     if (user_firebase) {
       await fetchUser(user_firebase.uid).then((res) => {
         setUser({ ...res, username: user_firebase.email });
@@ -94,7 +126,6 @@ const UserProvider = ({ children }) => {
   }
 
   const loadCollections = async () => {
-    console.log("loadCollections");
     const auxCollections = [];
     const res = await firebase
       .firestore()
@@ -112,9 +143,7 @@ const UserProvider = ({ children }) => {
           .get();
         const firstImage = await firebase
           .storage()
-          .ref(
-            "user_products/" + product.anunciante + "/" + product.titulo + "/0"
-          )
+          .ref("user_products/" + product.anunciante + "/" + product.titulo + "/0")
           .getDownloadURL();
         auxProdutos.push({
           ...produto.data(),
@@ -143,9 +172,19 @@ const UserProvider = ({ children }) => {
     loadCollections();
   };
 
+  const removeProductFromCollection = async (id, doc) => {
+    const products = await doc.get();
+    if(products.data().produtos.length === 1){
+      await doc.delete()
+    }else {
+      const res = await doc.update({
+        produtos: products.data().produtos.filter(product => product.id != id)
+      });
+    }
+    loadCollections()
+  }
+
   const addProductToNewCollection = async (product, newCollectionTitle) => {
-    console.log("test");
-    console.log(product);
     await firebase
       .firestore()
       .collection("usuario")
@@ -232,6 +271,31 @@ const UserProvider = ({ children }) => {
     await SignIn(email, password, navigation);
   };
 
+  const UpdateUser = async (
+    id,
+    name,
+    email,
+    user,
+    password,
+    gender,
+    region,
+    newsletter,
+    navigation,
+    image
+  ) => {
+    await updateUser(
+      id,
+      name,
+      email,
+      user,
+      password,
+      gender,
+      region,
+      newsletter,
+      image
+    );
+  };
+
   if (initializing) {
     return null;
   } else
@@ -248,6 +312,8 @@ const UserProvider = ({ children }) => {
           updateUserToExpositor,
           threads,
           followArtist,
+          UpdateUser,
+          removeProductFromCollection
         }}
       >
         {children}

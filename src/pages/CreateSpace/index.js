@@ -156,6 +156,7 @@ export default function CreateSpace({ navigation }) {
   const pkg = Constants.manifest.releaseChannel
     ? Constants.manifest.android.package
     : "host.exp.exponent";
+
   const openAppSettings = () => {
     IntentLauncher.startActivityAsync(
       IntentLauncher.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -311,8 +312,6 @@ export default function CreateSpace({ navigation }) {
         ];
       }
       if (!element.time.from) {
-        console.log("element time from ");
-        console.log(element.time.from);
         auxIncorrectBusinessHours = [
           ...auxIncorrectBusinessHours,
           [index, "from"],
@@ -347,11 +346,18 @@ export default function CreateSpace({ navigation }) {
       setIncorrectBusinessHours([]);
       setBusinessHoursErrorMessage("");
       savingBusinessHours = businessHours.map((element) => {
+        let daysArray = [];
+
+        element.days.forEach(
+          (day, index) => day.selected && (daysArray = [...daysArray, index])
+        );
+
         return {
-          days: [
-            ...element.days.filter((day) => day.selected).map((e) => e.text),
-          ],
-          time: { ...element.time },
+          days: daysArray,
+          time: {
+            from: moment(element.time.from).toDate(),
+            to: moment(element.time.to).toDate(),
+          },
         };
       });
     }
@@ -375,9 +381,7 @@ export default function CreateSpace({ navigation }) {
       setImagesErrorMessage("Adicione ao menos uma imagem do estabelecimento!");
     }
 
-    console.log("APERTOU");
     if (!error) {
-      console.warn("ENVIOOOU!!!");
       let establishment = {
         name: establishmentName,
         locations: savingLocations,
@@ -389,7 +393,6 @@ export default function CreateSpace({ navigation }) {
       };
       addSpace(establishment, navigation);
       clearPage();
-      console.log(establishment);
     } else {
       Keyboard.dismiss();
       setTimeout(scrollToTop, 10);
@@ -515,7 +518,6 @@ export default function CreateSpace({ navigation }) {
       setShowPicker(true);
       setCurrentIndex(index);
       setField(field);
-      console.log("aquii");
       currentTime.pop();
       setTime(moment(currentTime).toDate());
     }
@@ -558,11 +560,9 @@ export default function CreateSpace({ navigation }) {
           }
         }
       });
-      console.log("segue");
       console.log(businessHoursErrorMessage);
       console.log(includesError);
       console.log(incorrectBusinessHours);
-      console.log("fim");
 
       return !!businessHoursErrorMessage && includesError;
     }

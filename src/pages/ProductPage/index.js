@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Modal, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { Alert, Modal, Text, TouchableOpacity, View, ActivityIndicator, TouchableWithoutFeedback, Pressable } from 'react-native';
 
 import Accordion from '../../components/Accordion';
 import Label from '../../components/Label';
@@ -33,6 +33,7 @@ import {
 } from './styles';
 import SaveProductModal from '../../components/SaveProductModal';
 import PhotosGrid from '../../components/PhotosGrid';
+import ImageView from "react-native-image-viewing";
 
 const ProductPage = ({ navigation, route }) => {  
   //const images = route.params.images;
@@ -45,6 +46,7 @@ const ProductPage = ({ navigation, route }) => {
   const [products, setProducts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const modalizeRef = useRef(null);
+  const [visible, setIsVisible] = useState(false);
 
   React.useEffect( () => {
     navigation.setOptions({ title: product.titulo });
@@ -125,7 +127,6 @@ const ProductPage = ({ navigation, route }) => {
   }
 
   const handleSavePress = async () => {
-    console.log('clicou')
     if (user) {
       modalizeRef.current.open();      
     } else {
@@ -135,14 +136,22 @@ const ProductPage = ({ navigation, route }) => {
 
   return (
     <>
+      <ImageView
+        images={images.map(item => ({uri: item}))}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+      />
       <SaveProductModal modalizeRef={modalizeRef} product={product} />
       <Container>
-        <ProductCarousel
-          preco={product?.preco} 
-          data={images} 
-          onSavePress={handleSavePress} 
-          onChatPress={() => {openChat(navigation, user?.id, product.anunciante, user?.nome, anunciante.nome, threads)}}
-        />
+        <Pressable onPress={()=>setIsVisible(true)}>
+          <ProductCarousel
+            preco={product?.preco} 
+            data={images}
+            onSavePress={handleSavePress} 
+            onChatPress={() => {openChat(navigation, user?.id, product.anunciante, user?.nome, anunciante.nome, threads)}}
+          />
+        </Pressable>
         <MainInfo>
           <Artist onPress={() => navigation.navigate('Página do Artista', {anunciante: {...anunciante, id: idAnunciante}})}>
             <ArtistText>Por {anunciante?.nome}</ArtistText>

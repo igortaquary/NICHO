@@ -18,7 +18,6 @@ export function AddSpacePhotos({ images, setImages, errorMessage = "" }) {
 
   async function handleButtonPress(index = 0) {
     setCurrentIndex(index);
-    //   console.log("currentIndex: " + currentIndex);
     if (images && images[index]) {
       setIsVisible(true);
     } else {

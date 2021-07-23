@@ -3,13 +3,15 @@ import { HeaderContainer, FilterContainer, Filters, FilterButton, SearchContaine
 import PhotosGrid from '../../components/PhotosGrid';
 import { ActivityIndicator, View, TextInput, TouchableOpacity } from 'react-native';
 import { useFilterContext } from '../../contexts/filterContext';
+import {useUserContext} from '../../contexts/userContext';
 import Icon from '../../components/Icon';
 
-const categories = [ "Adesivos", "Para vestir", "Para sua casa", "Papelaria", "Cosméticos", "Impressões", "Esculturas", "Desenhos", "Acessórios", "Pinturas" ];
+
+// const categories = [ "Adesivos", "Para vestir", "Para sua casa", "Papelaria", "Cosméticos", "Impressões", "Esculturas", "Desenhos", "Acessórios", "Pinturas" ];
 
 const HomePage = ({navigation, route}) => {
 
-    const { products, loading, filters, setFilters, search, clearAllFilters, subCategoriesFilter } = useFilterContext();
+    const { products, loading, filters, setFilters, search, clearAllFilters, subCategoriesFilter, categorias } = useFilterContext();
     const [ searchTerm, setSearchTerm ] = useState();
 
     return(
@@ -24,7 +26,7 @@ const HomePage = ({navigation, route}) => {
                             </CategoryText>
                         </CategoryContainer>}
                         {
-                            categories.map( (item, i) => 
+                            categorias.map( (item, i) => 
                                 <CategoryContainer key={i} onPress={ () => setFilters({category: item})}>
                                     <CategoryText selected={filters.category === item || !filters.category}>
                                         {item}

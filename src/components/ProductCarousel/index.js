@@ -9,10 +9,11 @@ import {
   CurrentIndicator,
   LeftFixedIcons,
   RightFixedIcons,
-  IconContainer
+  IconContainer,
+  IconContainer2
 } from './styles';
 
-const ProductCarousel = ({ data, onSavePress, preco, onChatPress }) => {
+const ProductCarousel = ({ data, onSavePress, preco, onChatPress, onImagePress }) => {
 
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -45,9 +46,9 @@ const ProductCarousel = ({ data, onSavePress, preco, onChatPress }) => {
           </IconContainer>
         </LeftFixedIcons>
         <RightFixedIcons>
-          <IconContainer style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
+          <IconContainer2 style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
            <Icon name="compartilhar" size={16} color="white" />
-          </IconContainer>
+          </IconContainer2>
           <IconContainer onPress={onSavePress} style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
             <Icon name="salvar" size={16} color="white" />
           </IconContainer>

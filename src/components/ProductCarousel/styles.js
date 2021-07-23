@@ -31,6 +31,16 @@ export const IconContainer = styled.TouchableOpacity`
   height: 28px;
 `;
 
+export const IconContainer2 = styled.TouchableOpacity`
+  padding: 5px;
+  justify-content: center;
+  border-radius: 50px;
+  margin-bottom: 10px;
+  background-color: white;
+  width: 28px;
+  height: 28px;
+`;
+
 export const Indicator = styled.View`
   flex-direction: row;
   justify-content: center;

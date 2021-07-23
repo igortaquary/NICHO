@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Feather } from '@expo/vector-icons';
 import { KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import {
@@ -31,7 +31,7 @@ const SignUpPage = ({navigation}) => {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [user, setUser] = useState('');
+  const [usuario, setUsuario] = useState('');
   const [password, setPassword] = useState('');
   const [confirmation, setConfirmation] = useState('');
   const [gender, setGender] = useState('');
@@ -39,7 +39,20 @@ const SignUpPage = ({navigation}) => {
   const [newsletter, setNewsletter] = useState(false);
   const [image, setImage] = useState('');
 
-  const {SignUp} = useUserContext()
+  const {SignUp, user, UpdateUser} = useUserContext();
+
+  useEffect(() => {
+    if(user) {
+      setName(user.nome);
+      setEmail(user.email);
+      setGender(user.genero);
+      setRegion(user.regiao);
+      setUsuario(user.usuario);
+      setImage(user.foto);
+      setPassword('placeholder');
+      setConfirmation('placeholder');
+    }
+  }, []);
 
   const handlePress = async () => {
     if (!email) {
@@ -49,11 +62,28 @@ const SignUpPage = ({navigation}) => {
     } else if (password != confirmation) {
       Alert.alert('Password and confirmation are not the same.');
     } else{
-      await SignUp(name, email, user, password, gender, region, newsletter, navigation, image);
+      await SignUp(name, email, usuario, password, gender, region, newsletter, navigation, image);
     }
 
     setPassword('');
     setConfirmation('');
+  };
+
+  const handleUpdate = async () => {
+    if (!email) {
+      Alert.alert('Email field is required.');
+    } else if (!password) {
+      Alert.alert('Password field is required.');
+    } else if (password != confirmation) {
+      Alert.alert('Password and confirmation are not the same.');
+    } else{
+      await UpdateUser(user.id, name, email, usuario, password, gender, region, newsletter, navigation, image).then(
+        Alert.alert('Dados attualizados com sucesso!')
+      );
+    }
+
+    setPassword('placeholder');
+    setConfirmation('placeholder');
   };
 
   const pickImage = async () => {
@@ -120,8 +150,8 @@ const SignUpPage = ({navigation}) => {
             <InputContainer>
               <Feather name="at-sign" style={{marginRight: 5}} size={16} color="#707070" />
               <TextInput 
-                value={user}
-                onChangeText={(user) => setUser(user)}/>
+                value={usuario}
+                onChangeText={(user) => setUsuario(user)}/>
             </InputContainer>
           </Input>
 
@@ -217,9 +247,14 @@ const SignUpPage = ({navigation}) => {
             <NewsletterText>quero receber novidades do Nicho no meu email</NewsletterText>
           </Newsletter>
 
+          {user ? 
+          <Button onPress={handleUpdate}>
+            <ButtonText>Atualizar</ButtonText>
+          </Button> 
+          : 
           <Button onPress={handlePress}>
             <ButtonText>Criar conta</ButtonText>
-          </Button>
+          </Button>}
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>

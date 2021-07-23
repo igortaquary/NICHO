@@ -23,16 +23,32 @@ const FilterProvider = ({ children }) => {
     //const [displayProducts, setDisplayProducts] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [loadingCategories, setLoadingCategories] = useState(false);
     const [filters, setFilters] = useState({});
     const [subCategoriesFilter, setSubCategoriesFilter] = useState([]);
+    const [categorias, setCategorias] = useState([]);
 
     useEffect(()=>{
         if(loading === false){
             console.log("fetch products");
-            console.log(filters);
             fetchProducts();
         }
     }, [filters, subCategoriesFilter]);
+
+    useEffect(() => {
+        loadCategories();
+    }, []);
+    
+    const loadCategories = async () => {
+        const categorias = await firebase
+            .firestore()
+            .collection("categorias")
+            .get()
+            .then((docs) => {
+                return docs.docs.map(item => item.data().texto)
+            });
+    setCategorias(categorias);
+    };
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -69,7 +85,6 @@ const FilterProvider = ({ children }) => {
             const id = documentSnapshot.id;
             auxProducts.push({...data, id });
         });
-        console.log('meio');
         for(const product of auxProducts){
             try{
                 const uri = await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/0').getDownloadURL();
@@ -78,7 +93,6 @@ const FilterProvider = ({ children }) => {
                 console.log(err);
             }
         }
-        console.log(auxImages.length);
         setProducts(auxImages);
         setSubCategoriesFilter([]);
         setLoading(false);
@@ -101,8 +115,6 @@ const FilterProvider = ({ children }) => {
                         }
                     })
                 })
-                console.log("busquei: " + word);
-                console.log("entendeu: " + maxName);
                 auxSubCategories.push(maxName);
             }
         });
@@ -126,7 +138,8 @@ const FilterProvider = ({ children }) => {
                 setFilters,
                 subCategoriesFilter,
                 search,
-                clearAllFilters
+                clearAllFilters,
+                categorias
              }}>
             {children}
         </FilterContext.Provider>

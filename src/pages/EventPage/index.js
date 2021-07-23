@@ -1,5 +1,12 @@
 ﻿import React, { Fragment, useEffect, useState } from "react";
-import { ScrollView, Text, View, Image, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import Style from "./styles";
 import Accordion from "../../components/Accordion";
 import Icon from "./../../components/Icon/index";
@@ -11,8 +18,10 @@ import {
   ConvertWidth as cw,
   ConvertHeight as ch,
 } from "./../../components/Converter";
+import ImageView from "react-native-image-viewing";
 
 export default function EventPage({ navigation, route }) {
+  const [visible, setIsVisible] = useState(false);
   const event = route.params.event;
   const eventDate = moment(event.datas[0].from.toDate())
     .format("ddd, DD [DE] MMM [ÀS] HH:mm")
@@ -74,9 +83,6 @@ export default function EventPage({ navigation, route }) {
         (element) => element.isPrimary == true
       );
       defaultCalendar ? {} : (defaultCalendar = calendars[0]);
-      console.log("datas");
-
-      console.log("asdadsa");
       let eventCreated = await Calendar.createEventAsync(defaultCalendar.id, {
         title: event.titulo,
         startDate: startDate,
@@ -95,10 +101,33 @@ export default function EventPage({ navigation, route }) {
   };
 
   return (
+    <>
+    <ImageView
+        images={event.images.map(item => ({uri: item}))}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+      />
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View>
+        <TouchableOpacity
+          style={Style.backArrowContainer}
+          activeOpacity={0.5}
+          onPress={() => navigation.goBack()}
+        >
+          <Icon
+            name="back"
+            size={cw(16.9)}
+            color="#FFFFFF"
+            style={{ left: cw(-1) }}
+          />
+        </TouchableOpacity>
         <View>
-          <TouchableOpacity style={{ ...Style.iconContainer, top: cw(189) }}>
+          <TouchableOpacity
+            style={{ ...Style.iconContainer, top: cw(189) }}
+            activeOpacity={0.5}
+            onPress={() => console.log("apertado")}
+          >
             <Icon
               name="compartilhar"
               size={cw(16.9)}
@@ -106,11 +135,13 @@ export default function EventPage({ navigation, route }) {
               style={{ left: cw(-1) }}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={Style.iconContainer}>
+          <TouchableOpacity style={Style.iconContainer} activeOpacity={0.5}>
             <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-        <Image style={Style.coverImage} source={{ uri: event?.images[0] }} />
+        <TouchableOpacity onPress={()=>setIsVisible(true)}>
+          <Image style={Style.coverImage} source={{ uri: event?.images[0] }} />
+        </TouchableOpacity>
       </View>
 
       <View
@@ -294,5 +325,6 @@ export default function EventPage({ navigation, route }) {
         ))}
       </View>
     </ScrollView>
+    </>
   );
 }
