@@ -35,9 +35,9 @@ const UserProvider = ({ children }) => {
       .collection("usuario")
       .get()
       .then(querySnapshot => {
-        console.log(querySnapshot)
+        // console.log(querySnapshot)
       });
-      setCategories(cat)
+      // setCategories(cat)
   }, []);
 
   useEffect(() => {
@@ -172,6 +172,18 @@ const UserProvider = ({ children }) => {
     loadCollections();
   };
 
+  const removeProductFromCollection = async (id, doc) => {
+    const products = await doc.get();
+    if(products.data().produtos.length === 1){
+      await doc.delete()
+    }else {
+      const res = await doc.update({
+        produtos: products.data().produtos.filter(product => product.id != id)
+      });
+    }
+    loadCollections()
+  }
+
   const addProductToNewCollection = async (product, newCollectionTitle) => {
     await firebase
       .firestore()
@@ -300,7 +312,8 @@ const UserProvider = ({ children }) => {
           updateUserToExpositor,
           threads,
           followArtist,
-          UpdateUser
+          UpdateUser,
+          removeProductFromCollection
         }}
       >
         {children}

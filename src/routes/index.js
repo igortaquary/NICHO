@@ -35,7 +35,6 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
-      {console.log(StatusBar.currentHeight)}
       <Stack.Navigator headerMode="screen">
         {!user && (
           <Stack.Screen
