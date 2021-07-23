@@ -31,7 +31,6 @@ const FilterProvider = ({ children }) => {
     useEffect(()=>{
         if(loading === false){
             console.log("fetch products");
-            console.log(filters);
             fetchProducts();
         }
     }, [filters, subCategoriesFilter]);
@@ -82,7 +81,6 @@ const FilterProvider = ({ children }) => {
             const id = documentSnapshot.id;
             auxProducts.push({...data, id });
         });
-        console.log('meio');
         for(const product of auxProducts){
             try{
                 const uri = await firebase.storage().ref('user_products/' + product.anunciante + '/' + product.titulo + '/0').getDownloadURL();

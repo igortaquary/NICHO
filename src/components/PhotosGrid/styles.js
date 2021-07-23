@@ -14,3 +14,11 @@ export const LabelsContainer = styled.View`
     display: flex;
     flex-direction: column;
 `;
+
+export const LabelsHeader = styled.TouchableOpacity`
+    position: absolute;
+    z-index: 1;
+    top: 12px;
+    right: 12px;
+    display: flex;
+`;

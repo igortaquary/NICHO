@@ -239,7 +239,7 @@ export default function LocationsSpacesPage({ navigation }) {
   const categories = [ "Próximo de você", "Aberto hoje", "Melhores avaliações" ];
 
   return (
-    refreshing ?
+    refreshing ? (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <HeaderContainer>
         <FilterContainer>
@@ -326,5 +326,5 @@ export default function LocationsSpacesPage({ navigation }) {
     </ScrollView>
   ) : (
     <ActivityIndicator style={{ marginTop: 50 }} color="green" />
-  );
+  ))
 }
