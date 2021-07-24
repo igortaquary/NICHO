@@ -77,7 +77,6 @@ export default function LocationsSpacesPage({ navigation }) {
 
     const onSpaceClick = async () => {
       navigation.navigate("Página do Espaço", { space });
-      console.log(space);
     };
 
     stars.fill("#F1F1F1");

@@ -7,27 +7,19 @@ import {
   View,
   Linking,
 } from "react-native";
-import {
-  Feather,
-  Ionicons,
-  Entypo,
-  SimpleLineIcons,
-  Fontisto,
-  EvilIcons,
-} from "@expo/vector-icons";
+import { Feather, EvilIcons } from "@expo/vector-icons";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
 import Style from "./styles";
-import {
-  ConvertWidth as cw,
-  ConvertHeight as ch,
-} from "./../../components/Converter";
+import { ConvertWidth as cw } from "./../../components/Converter";
 import Accordion from "../../components/Accordion";
 import Icon from "../../components/Icon";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useLayoutEffect } from "react";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import PhotosGrid from "../../components/PhotosGrid";
 import { useUserContext } from "../../contexts/userContext";
+
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function ArtistPage({ navigation, route }) {
   const anunciante = route.params.anunciante;
@@ -42,6 +34,18 @@ export default function ArtistPage({ navigation, route }) {
 
   const { user, followArtist } = useUserContext();
 
+  useLayoutEffect(() => {
+    setProfileImage(null);
+    setBannerImage(null);
+    setRefreshing(true);
+  }, [anunciante.id]);
+
+  useEffect(() => {
+    getImages();
+    fetchProducts();
+    console.log("refresh");
+  }, [route.params.anunciante.id]);
+
   const getImages = async () => {
     const profile = await firebase
       .storage()
@@ -54,12 +58,6 @@ export default function ArtistPage({ navigation, route }) {
       .getDownloadURL();
     setBannerImage(banner);
   };
-
-  useEffect(() => {
-    getImages();
-    fetchProducts();
-    console.log("refresh");
-  }, [route.params]);
 
   const fetchProducts = async () => {
     //console.log('fetch products');
@@ -100,11 +98,15 @@ export default function ArtistPage({ navigation, route }) {
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View style={Style.coverContainer}>
-        <Image source={{ uri: bannerImage }} style={Style.coverImage} />
+        {!!bannerImage && (
+          <Image source={{ uri: bannerImage }} style={Style.coverImage} />
+        )}
       </View>
 
       <View style={Style.profilePicContainer}>
-        <Image source={{ uri: profileImage }} style={Style.profilePic} />
+        {!!profileImage && (
+          <Image source={{ uri: profileImage }} style={Style.profilePic} />
+        )}
       </View>
 
       <View
@@ -247,12 +249,16 @@ export default function ArtistPage({ navigation, route }) {
           ...Style.sectionContainer,
           paddingTop: cw(17.11),
           paddingHorizontal: cw(16),
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
+          borderBottomLeftRadius: refreshing ? 15 : 0,
+          borderBottomRightRadius: refreshing ? 15 : 0,
           marginBottom: 0,
         }}
       >
-        <Text style={Style.myProductsText}>Meus produtos</Text>
+        <Text
+          style={[Style.myProductsText, refreshing && { marginBottom: -5 }]}
+        >
+          Meus produtos
+        </Text>
         <View style={{ flex: 1, width: "100%" }}>
           <PhotosGrid
             products={products}
