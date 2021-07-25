@@ -2,7 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
-import Home from "./home";
+import Events from "./locationsStack";
 import Locations from "./locations";
 import NotFoundPage from "../pages/NotFoundPage";
 import ArtistPage from "../pages/ArtistPage";
@@ -19,6 +19,7 @@ import DrawerHeader from "../components/DrawerHeader";
 import { useUserContext } from "../contexts/userContext";
 import { StatusBar } from "react-native";
 import FollowingPage from "../pages/FollowingPage";
+import Products from "./productsStack";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -52,8 +53,8 @@ const HomePages = () => {
             <Icon name="home" size={21} color={color} />
           ),
         }}
-        name="Home"
-        component={HomePage}
+        name="Products"
+        component={Products}
       />
       <Tab.Screen
         options={{
@@ -62,8 +63,9 @@ const HomePages = () => {
           ),
         }}
         name="Locais"
-        component={Locations}
+        component={Events}
       />
+
       {user ? (
         <Tab.Screen
           options={{
@@ -114,10 +116,11 @@ const MainPages = () => {
       <Drawer.Screen name="Inicio" component={HomePages} />
       <Drawer.Screen name="Alone Page" component={NotFoundPage} />
       <Drawer.Screen name="Página do Artista" component={ArtistPage} />
-      <Drawer.Screen name="Página de Evento" component={EventPage} />
-      <Drawer.Screen name="Criar Evento" component={CreateEvent} />
-      <Drawer.Screen name="Criar Espaço" component={CreateSpace} />
-      <Drawer.Screen name="Página do Espaço" component={SpacePage} />
+
+      {/* <Drawer.Screen name="Página de Evento" component={EventPage} /> */}
+      {/* <Drawer.Screen name="Criar Evento" component={CreateEvent} />
+      <Drawer.Screen name="Criar Espaço" component={CreateSpace} /> */}
+      {/* <Drawer.Screen name="Página do Espaço" component={SpacePage} /> */}
       <Drawer.Screen name="Mensagem" component={ChatPage} />
     </Drawer.Navigator>
   );

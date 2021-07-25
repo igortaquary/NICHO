@@ -124,6 +124,18 @@ export default function SpacePage({ navigation, route }) {
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View>
+        <TouchableOpacity
+          style={Style.backArrowContainer}
+          activeOpacity={0.5}
+          onPress={() => navigation.goBack()}
+        >
+          <Icon
+            name="back"
+            size={cw(16.9)}
+            color="#FFFFFF"
+            style={{ left: cw(-1) }}
+          />
+        </TouchableOpacity>
         <View>
           <TouchableOpacity style={{ ...Style.iconContainer, top: cw(175.71) }}>
             <Icon

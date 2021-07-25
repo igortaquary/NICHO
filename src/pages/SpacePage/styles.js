@@ -9,6 +9,20 @@ export default StyleSheet.create({
     backgroundColor: "#F1F1F1",
   },
 
+  backArrowContainer: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    height: cw(30),
+    width: cw(30),
+    borderRadius: 17.5,
+    marginTop: cw(14.63),
+    marginLeft: cw(17),
+
+    backgroundColor: "rgba(0,0,0,0.67)",
+    zIndex: 1,
+  },
+
   sectionContainer: {
     borderRadius: cw(15),
     marginBottom: cw(3),
