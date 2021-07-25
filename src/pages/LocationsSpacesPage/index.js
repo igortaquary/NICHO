@@ -197,7 +197,7 @@ export default function LocationsSpacesPage({ navigation }) {
     };
 
     return (
-      <Fragment>
+      <View>
         <Text style={Style.spaceName}>{name}</Text>
 
         <ScrollView
@@ -219,20 +219,19 @@ export default function LocationsSpacesPage({ navigation }) {
           ))}
         </ScrollView>
 
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={{ ...Style.iconContainer, top: cw(230.7) }}
-        >
-          <Icon
-            name="compartilhar"
-            size={cw(15)}
-            color="#FFFFFF"
-            style={{ left: cw(-1) }}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7} style={Style.iconContainer}>
-          <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
-        </TouchableOpacity>
+        <View style={Style.iconButtonsContainer}>
+          <TouchableOpacity activeOpacity={0.7} style={Style.iconButton}>
+            <Icon
+              name="compartilhar"
+              size={cw(15)}
+              color="#FFFFFF"
+              style={{ left: cw(-1) }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.7} style={Style.iconButton}>
+            <Icon name="salvar" size={cw(13.5)} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
 
         <View style={Style.addressRatingContainer}>
           <Text style={Style.addressText}>{address}</Text>
@@ -241,7 +240,7 @@ export default function LocationsSpacesPage({ navigation }) {
         <Text style={Style.businessHoursText}>
           {businessHoursHandler(businessHours)}
         </Text>
-      </Fragment>
+      </View>
     );
   };
 
