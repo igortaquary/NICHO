@@ -23,7 +23,7 @@ export const Count = styled.Text`
 export const Button = styled.TouchableOpacity`
     border: 1px solid #f1f1f1f1;
     padding: 5px;
-    width: 50%;
+    width: 40%;
     align-items: center;
     border-radius: 10px;
     margin-bottom: 3%;

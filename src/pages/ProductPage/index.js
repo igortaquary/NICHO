@@ -1,12 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Alert,
-  Modal,
-  Text,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-} from "react-native";
+
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Modal, Text, TouchableOpacity, View, ActivityIndicator, TouchableWithoutFeedback, Pressable } from 'react-native';
+
 
 import Accordion from "../../components/Accordion";
 import Label from "../../components/Label";
@@ -37,11 +32,15 @@ import {
   CommentHeader,
   CommentContent,
   CommentResponse,
+
   More,
 } from "./styles";
 import Icon from "../../components/Icon";
 import SaveProductModal from "../../components/SaveProductModal";
 import PhotosGrid from "../../components/PhotosGrid";
+
+import ImageView from "react-native-image-viewing";
+
 
 const ProductPage = ({ navigation, route }) => {
   //const images = route.params.images;
@@ -54,6 +53,7 @@ const ProductPage = ({ navigation, route }) => {
   const [products, setProducts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const modalizeRef = useRef(null);
+  const [visible, setIsVisible] = useState(false);
 
   React.useEffect(() => {
     navigation.setOptions({ title: product.titulo });
@@ -129,47 +129,66 @@ const ProductPage = ({ navigation, route }) => {
       });
   };
 
+  const emitAlert = () => {
+    Alert.alert(
+      "Usuário não conectado",
+      "É necessário estar logado para realizar esta ação.",
+      [
+        {
+          text: "Entrar depois",
+          onPress: () => console.log('Depois')
+        },
+        {
+          text: "Não possuo conta",
+          onPress: () => navigation.navigate('SignUp'),
+        },
+        {
+          text: "Ir para login",
+          onPress: () => navigation.navigate('Login'),
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  }
+
   const handleSavePress = async () => {
-    console.log("clicou");
+
+
     if (user) {
       modalizeRef.current.open();
     } else {
-      Alert.alert(
-        "Usuário não conectado",
-        "É necessário estar logado para salvar um produto.",
-        [
-          {
-            text: "Entrar depois",
-            onPress: () => console.log("Depois"),
-          },
-          {
-            text: "Não possuo conta",
-            onPress: () => navigation.navigate("SignUp"),
-          },
-          {
-            text: "Ir para login",
-            onPress: () => navigation.navigate("Login"),
-          },
-        ],
-        {
-          cancelable: true,
-        }
-      );
+
+      emitAlert();
+
     }
   };
 
   return (
     <>
+      <ImageView
+        images={images.map(item => ({uri: item}))}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+      />
       <SaveProductModal modalizeRef={modalizeRef} product={product} />
       <Container>
+
         <BackButton activeOpacity={0.5} onPress={() => navigation.goBack()}>
           <Icon name="back" size={16.9} color="#FFFFFF" style={{ left: -1 }} />
         </BackButton>
-        <ProductCarousel
-          preco={product?.preco}
-          data={images}
-          onSavePress={handleSavePress}
-        />
+
+        <Pressable onPress={()=>setIsVisible(true)}>
+          <ProductCarousel
+            preco={product?.preco} 
+            data={images}
+            onSavePress={handleSavePress} 
+            onChatPress={() => {openChat(navigation, user?.id, product.anunciante, user?.nome, anunciante.nome, threads)}}
+          />
+        </Pressable>
+
         <MainInfo>
           <Artist
             onPress={() =>

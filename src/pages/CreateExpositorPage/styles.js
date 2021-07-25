@@ -35,9 +35,7 @@ export const UserAvatar = styled.Image`
     background-color: #C4C4C4;
     width: 140px;
     aspect-ratio: 1;
-    border-radius: 70px;
     margin-top: -20%;   
-    border: 2px solid white;
 `;
 
 export const Clickable = styled.TouchableOpacity`

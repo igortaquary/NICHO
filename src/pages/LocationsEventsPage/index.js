@@ -1,7 +1,10 @@
 ﻿import React, { Fragment, useEffect, useState, useRef } from "react";
-import { View, Text, ScrollView, Image, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, Image, ActivityIndicator, TextInput } from "react-native";
 import EventBlock from "./../../components/EventBlock";
 import Style from "./style";
+import { HeaderContainer, FilterContainer, Filters, FilterButton, SearchContainer, CategoryContainer, CategoryText } from '../HomePage/styles';
+import { useFilterContext } from '../../contexts/filterContext';
+import Icon from '../../components/Icon';
 import moment from "moment";
 import {
   ConvertWidth as cw,
@@ -9,10 +12,41 @@ import {
 } from "./../../components/Converter";
 import * as firebase from "firebase";
 
+function measure(lat1, lon1, lat2, lon2){  // generally used geo measurement function
+  const R = 6378.137; // Radius of earth in KM
+  const dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+  const dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+  Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const d = R * c;
+  return d; // kilometers
+}
+
 export default function LocationsEventsPage({ navigation }) {
   const [eventList, setEventList] = useState([]);
   const [refreshing, setRefreshing] = useState();
   const [eventsToday, setEventsToday] = useState([]);
+  const [location, setLocation] = useState();
+  const [nearby, setNearby] = useState([]);
+
+  // useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition(pos => {
+  //     setLocation(pos.coords);
+  //   })
+  // }, []);
+
+  // useEffect(() => {
+  //   if(location && eventList.length) {
+  //     const perto = eventList.filter(item => {
+  //       return (measure(location.latitude,
+  //        location.longitude,
+  //        item.local.geometry.location.lat,
+  //        item.local.geometry.location.lng) < 20.0)
+  //     });
+  //   }
+  // }, [location, eventList])
 
   const fetchEvents = async (events) => {
     const Documents = await firebase
@@ -50,6 +84,16 @@ export default function LocationsEventsPage({ navigation }) {
     fetchEvents(events).then(() => {
       fetchImagem(events).then(() => {
         setEventList(events);
+        navigator.geolocation.getCurrentPosition(pos => {
+          const location = pos.coords;
+          const perto = events.filter(item => {
+            return (measure(location.latitude,
+             location.longitude,
+             item.local.geometry.location.lat,
+             item.local.geometry.location.lng) < 20.0)
+          });
+          setNearby(perto)
+        });
         setRefreshing(1);
       });
     });
@@ -99,8 +143,40 @@ export default function LocationsEventsPage({ navigation }) {
     }
   };
 
+  const { filters, setFilters, search } = useFilterContext();
+  const categories = [ "Esta semana", "Este mês", "Este ano" ];
+
   return refreshing ? (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
+      <HeaderContainer>
+        <FilterContainer>
+          <Filters showsHorizontalScrollIndicator={false} horizontal={true}>
+            { filters.category && 
+            <CategoryContainer onPress={ () => setFilters({})}>
+              <CategoryText selected={false}>
+                Todos
+              </CategoryText>
+            </CategoryContainer>}
+            {
+            categories.map( (item, i) => 
+            <CategoryContainer key={i} onPress={ () => setFilters({category: item})}>
+              <CategoryText selected={filters.category === item || !filters.category}>
+                {item}
+              </CategoryText>
+            </CategoryContainer>
+            )
+            }
+          </Filters>
+            <FilterButton onPress={() => navigation.navigate("FiltersEvent")}>
+              <Icon name='filtros' size={20} color={"#FFF"} />
+            </FilterButton>
+        </FilterContainer>
+        <SearchContainer>
+          <Icon name='busca' size={16} color={"#707070"}/>
+          <TextInput placeholder="Pesquise por itens" style={{marginLeft: 8, width: '100%'}} 
+            returnKeyType="search" onSubmitEditing={ e => search(e.nativeEvent.text)} />
+          </SearchContainer>
+      </HeaderContainer>
       <View
         style={[
           Style.sectionContainer,
@@ -112,7 +188,7 @@ export default function LocationsEventsPage({ navigation }) {
       </View>
       <View style={Style.sectionContainer}>
         <Text style={Style.titleText}>Mais próximo de você</Text>
-        <RenderItem data={eventList} />
+        <RenderItem data={nearby} />
       </View>
       <View
         style={[

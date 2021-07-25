@@ -1,13 +1,8 @@
 ﻿import React, { Fragment, useEffect, useState, useRef } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
-import Icon from "../../components/Icon";
+import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator, TextInput } from "react-native";
+import { HeaderContainer, FilterContainer, Filters, FilterButton, SearchContainer, CategoryContainer, CategoryText } from '../HomePage/styles';
+import { useFilterContext } from '../../contexts/filterContext';
+import Icon from '../../components/Icon';
 import Style from "./styles";
 import {
   ConvertWidth as cw,
@@ -76,8 +71,10 @@ export default function LocationsSpacesPage({ navigation }) {
     let stars = Array(5);
 
     const onSpaceClick = async () => {
+
       navigation.navigate("Página do Espaço", { space });
     };
+
 
     stars.fill("#F1F1F1");
     stars.fill("#E09F2B", 0, rating.value);
@@ -219,6 +216,7 @@ export default function LocationsSpacesPage({ navigation }) {
           ))}
         </ScrollView>
 
+
         <View style={Style.iconButtonsContainer}>
           <TouchableOpacity activeOpacity={0.7} style={Style.iconButton}>
             <Icon
@@ -233,6 +231,7 @@ export default function LocationsSpacesPage({ navigation }) {
           </TouchableOpacity>
         </View>
 
+
         <View style={Style.addressRatingContainer}>
           <Text style={Style.addressText}>{address}</Text>
         </View>
@@ -244,8 +243,41 @@ export default function LocationsSpacesPage({ navigation }) {
     );
   };
 
-  return refreshing ? (
+  const { filters, setFilters, search } = useFilterContext();
+  const categories = [ "Próximo de você", "Aberto hoje", "Melhores avaliações" ];
+
+  return (
+    refreshing ? (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
+      <HeaderContainer>
+        <FilterContainer>
+          <Filters showsHorizontalScrollIndicator={false} horizontal={true}>
+            { filters.category && 
+            <CategoryContainer onPress={ () => setFilters({})}>
+              <CategoryText selected={false}>
+                Todos
+              </CategoryText>
+            </CategoryContainer>}
+            {
+            categories.map( (item, i) => 
+            <CategoryContainer key={i} onPress={ () => setFilters({category: item})}>
+              <CategoryText selected={filters.category === item || !filters.category}>
+                {item}
+              </CategoryText>
+            </CategoryContainer>
+            )
+            }
+          </Filters>
+            <FilterButton onPress={() => navigation.navigate("FiltersSpace")}>
+              <Icon name='filtros' size={20} color={"#FFF"} />
+            </FilterButton>
+        </FilterContainer>
+        <SearchContainer>
+          <Icon name='busca' size={16} color={"#707070"}/>
+          <TextInput placeholder="Pesquise por itens" style={{marginLeft: 8, width: '100%'}} 
+            returnKeyType="search" onSubmitEditing={ e => search(e.nativeEvent.text)} />
+          </SearchContainer>
+      </HeaderContainer>
       <View
         style={[
           Style.sectionContainer,
@@ -302,5 +334,5 @@ export default function LocationsSpacesPage({ navigation }) {
     </ScrollView>
   ) : (
     <ActivityIndicator style={{ marginTop: 50 }} color="green" />
-  );
+  ))
 }

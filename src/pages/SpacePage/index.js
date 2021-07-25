@@ -11,8 +11,10 @@ import {
   ConvertHeight as ch,
 } from "./../../components/Converter";
 import { locationPermission } from "../../components/Permissions";
+import ImageView from "react-native-image-viewing";
 
 export default function SpacePage({ navigation, route }) {
+  const [visible, setIsVisible] = useState(false);
   const space = route.params.space;
   const locations = space.local;
   const mockedDate = moment().local().format();
@@ -122,6 +124,13 @@ export default function SpacePage({ navigation, route }) {
   }
 
   return (
+    <>
+    <ImageView
+        images={space.images}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+      />
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View>
         <TouchableOpacity
@@ -149,7 +158,9 @@ export default function SpacePage({ navigation, route }) {
             <Icon name="salvar" size={cw(15)} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-        <Image style={Style.coverImage} source={space.images[0]} />
+        <TouchableOpacity onPress={()=>setIsVisible(true)}>
+          <Image style={Style.coverImage} source={space.images[0]} />
+        </TouchableOpacity>
       </View>
 
       <View
@@ -332,5 +343,6 @@ export default function SpacePage({ navigation, route }) {
         })}
       </Accordion>
     </ScrollView>
+    </>
   );
 }

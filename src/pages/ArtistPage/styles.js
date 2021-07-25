@@ -87,8 +87,10 @@ export default StyleSheet.create({
   },
 
   networkIcon: {
-    top: cw(-6),
-    left: cw(-1),
+
+    top: cw(-7.5),
+    right: cw(1),
+
   },
 
   dotIcon: {
@@ -109,7 +111,6 @@ export default StyleSheet.create({
   iconButton: {
     width: cw(22),
     height: cw(22),
-
     borderWidth: cw(1),
     borderRadius: cw(11),
     borderColor: "#019B92",

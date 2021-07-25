@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Container, LabelsContainer } from './styles';
+import { Container, LabelsContainer, LabelsHeader } from './styles';
 import { View, Text, ActivityIndicator } from 'react-native';
 import Masonry from 'react-native-masonry-list';
 import Label from '../Label';
 
-const PhotosGrid = ({navigation, refreshing, products, addMore}) => {
+const PhotosGrid = ({navigation, refreshing, products, addMore, editing, deleteItem}) => {
 
     const goToProductPage = (product) => {
         navigation.navigate('ProductPage', {product});
@@ -27,6 +27,12 @@ const PhotosGrid = ({navigation, refreshing, products, addMore}) => {
                     { item.entrega?.includes("Encomendas") && <Label icon='ampulheta'/> }
                     { item.green && <Label icon='vegano' /> }
                 </LabelsContainer>
+            }
+            renderIndividualHeader = {
+                (item) => 
+                <LabelsHeader onPress={() => deleteItem(item.id)}>
+                    {editing && <Label icon='x' />}
+                </LabelsHeader>
             }
             spacing={2}
             imageContainerStyle={{

@@ -6,6 +6,12 @@ import MainPages from "./main";
 import AuthPages from "./auth";
 import CreateProductPage from "../pages/CreateProductPage";
 import ProductPage from "../pages/ProductPage";
+
+import { Feather } from "@expo/vector-icons";
+import Filters from "../pages/HomePage/Filter/filters";
+import FiltersEvent from "../pages/LocationsEventsPage/Filter/filters";
+import FiltersSpace from "../pages/LocationsSpacesPage/Filter/filters";
+
 import CollectionPage from "../pages/CollectionPage";
 import CreateExpositorPage from "../pages/CreateExpositorPage";
 import MensagemPage from "../pages/MensagemPage";
@@ -15,6 +21,8 @@ import NotFoundPage from "../pages/NotFoundPage";
 import Filters from "../pages/HomePage/Filter/filters";
 import { Feather } from "@expo/vector-icons";
 import { useUserContext } from "../contexts/userContext";
+import TipsPage from "../pages/TipsPage";
+import SignUpPage from "../pages/SignUpPage";
 
 const Stack = createStackNavigator();
 
@@ -33,7 +41,6 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" />
-      {console.log(StatusBar.currentHeight)}
       <Stack.Navigator headerMode="screen">
         {!user && (
           <Stack.Screen
@@ -56,6 +63,16 @@ const Routes = () => {
           options={{ title: "Nova publicação", ...headerStyle }}
           name="NewProduct"
           component={CreateProductPage}
+        />
+        <Stack.Screen
+          options={{ title: "Filtros de Eventos", ...headerStyle }}
+          name="FiltersEvent"
+          component={FiltersEvent}
+        />
+        <Stack.Screen
+          options={{ title: "Filtros de Espaços", ...headerStyle }}
+          name="FiltersSpace"
+          component={FiltersSpace}
         />
         <Stack.Screen
           options={{ title: "Filtros", ...headerStyle }}
@@ -95,6 +112,16 @@ const Routes = () => {
           options={headerStyle}
           name="NotFound"
           component={NotFoundPage}
+        />
+        <Stack.Screen
+          options={{title: 'Configurações', ...headerStyle}}
+          name="Configuracoes"
+          component={SignUpPage}
+        />
+        <Stack.Screen 
+          options={{title: 'Dicas Para Artistas', ...headerStyle}}
+          name="Tips"
+          component={TipsPage}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -18,19 +18,19 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import PhotosGrid from "../../components/PhotosGrid";
 import { useUserContext } from "../../contexts/userContext";
+import ImageView from "react-native-image-viewing";
 
 import { useFocusEffect } from "@react-navigation/native";
 
 export default function ArtistPage({ navigation, route }) {
   const anunciante = route.params.anunciante;
-  const [profileImage, setProfileImage] = useState(
-    "https://source.unsplash.com/featured/?woman,photo"
-  );
-  const [bannerImage, setBannerImage] = useState(
-    "https://source.unsplash.com/featured/412x115/?craft"
-  );
+  const [profileImage, setProfileImage] = useState('https://source.unsplash.com/featured/?woman,photo');
+  const [bannerImage, setBannerImage] = useState("https://source.unsplash.com/featured/412x115/?craft");
+  const [images, setImages] = useState('https://source.unsplash.com/featured/?woman,photo');
+
   const [products, setProducts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [visible, setIsVisible] = useState(false);
 
   const { user, followArtist } = useUserContext();
 
@@ -57,7 +57,9 @@ export default function ArtistPage({ navigation, route }) {
       .ref("expositor_banners/" + anunciante.id)
       .getDownloadURL();
     setBannerImage(banner);
-  };
+    const imgs = {uri: profile, uri: banner}
+    setImages(imgs);
+  }
 
   const fetchProducts = async () => {
     //console.log('fetch products');
@@ -96,6 +98,13 @@ export default function ArtistPage({ navigation, route }) {
   };
 
   return (
+    <>
+      <ImageView
+        images={[{ uri: profileImage }, { uri: bannerImage }]}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setIsVisible(false)}
+      />
     <ScrollView style={{ flex: 1 }} contentContainerStyle={Style.page}>
       <View style={Style.coverContainer}>
         {!!bannerImage && (
@@ -104,9 +113,9 @@ export default function ArtistPage({ navigation, route }) {
       </View>
 
       <View style={Style.profilePicContainer}>
-        {!!profileImage && (
-          <Image source={{ uri: profileImage }} style={Style.profilePic} />
-        )}
+      <TouchableOpacity onPress={()=>setIsVisible(true)}>
+        <Image source={{ uri: profileImage }} style={Style.profilePic} />
+      </TouchableOpacity>
       </View>
 
       <View
@@ -268,5 +277,6 @@ export default function ArtistPage({ navigation, route }) {
         </View>
       </View>
     </ScrollView>
+    </>
   );
 }
