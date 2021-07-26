@@ -1,19 +1,25 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { StatusBar, Platform } from "react-native";
 import MainPages from "./main";
 import AuthPages from "./auth";
-import { StatusBar, Platform } from "react-native";
 import CreateProductPage from "../pages/CreateProductPage";
-import NotFoundPage from "../pages/NotFoundPage";
 import ProductPage from "../pages/ProductPage";
+
 import { Feather } from "@expo/vector-icons";
 import Filters from "../pages/HomePage/Filter/filters";
 import FiltersEvent from "../pages/LocationsEventsPage/Filter/filters";
 import FiltersSpace from "../pages/LocationsSpacesPage/Filter/filters";
+
 import CollectionPage from "../pages/CollectionPage";
 import CreateExpositorPage from "../pages/CreateExpositorPage";
 import MensagemPage from "../pages/MensagemPage";
+import CreateEvent from "../pages/CreateEvent";
+import CreateSpace from "../pages/CreateSpace";
+import NotFoundPage from "../pages/NotFoundPage";
+import Filters from "../pages/HomePage/Filter/filters";
+import { Feather } from "@expo/vector-icons";
 import { useUserContext } from "../contexts/userContext";
 import TipsPage from "../pages/TipsPage";
 import SignUpPage from "../pages/SignUpPage";
@@ -48,11 +54,11 @@ const Routes = () => {
           name="Main"
           component={MainPages}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           options={{ title: "Produto", ...headerStyle }}
           name="ProductPage"
           component={ProductPage}
-        />
+        /> */}
         <Stack.Screen
           options={{ title: "Nova publicação", ...headerStyle }}
           name="NewProduct"
@@ -91,6 +97,16 @@ const Routes = () => {
           options={{ title: "Chat", ...headerStyle }}
           name="MensagemPage"
           component={MensagemPage}
+        />
+        <Stack.Screen
+          options={{ title: "Adicionar Evento", ...headerStyle }}
+          name="Criar Evento"
+          component={CreateEvent}
+        />
+        <Stack.Screen
+          options={{ title: "Adicionar Espaço", ...headerStyle }}
+          name="Criar Espaço"
+          component={CreateSpace}
         />
         <Stack.Screen
           options={headerStyle}
