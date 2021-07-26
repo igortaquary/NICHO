@@ -18,8 +18,6 @@ import MensagemPage from "../pages/MensagemPage";
 import CreateEvent from "../pages/CreateEvent";
 import CreateSpace from "../pages/CreateSpace";
 import NotFoundPage from "../pages/NotFoundPage";
-import Filters from "../pages/HomePage/Filter/filters";
-import { Feather } from "@expo/vector-icons";
 import { useUserContext } from "../contexts/userContext";
 import TipsPage from "../pages/TipsPage";
 import SignUpPage from "../pages/SignUpPage";

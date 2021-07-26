@@ -53,7 +53,7 @@ export const ProductName = styled.Text`
 
 export const Labels = styled.View`
   flex-direction: row;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   margin-top: 12px;
   margin-bottom: 15px;
   flex-wrap: wrap;

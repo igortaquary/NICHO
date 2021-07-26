@@ -45,7 +45,6 @@ import ImageView from "react-native-image-viewing";
 const ProductPage = ({ navigation, route }) => {
   //const images = route.params.images;
   const product = route.params.product;
-
   const [images, setImages] = useState([]);
   const { user, threads } = useUserContext();
   const [anunciante, setAnunciante] = useState();
@@ -168,7 +167,7 @@ const ProductPage = ({ navigation, route }) => {
   return (
     <>
       <ImageView
-        images={images.map(item => ({uri: item}))}
+        images={images.map(item => ({ uri: item }))}
         imageIndex={0}
         visible={visible}
         onRequestClose={() => setIsVisible(false)}
@@ -180,12 +179,12 @@ const ProductPage = ({ navigation, route }) => {
           <Icon name="back" size={16.9} color="#FFFFFF" style={{ left: -1 }} />
         </BackButton>
 
-        <Pressable onPress={()=>setIsVisible(true)}>
+        <Pressable onPress={() => setIsVisible(true)}>
           <ProductCarousel
-            preco={product?.preco} 
+            preco={product?.preco}
             data={images}
-            onSavePress={handleSavePress} 
-            onChatPress={() => {openChat(navigation, user?.id, product.anunciante, user?.nome, anunciante.nome, threads)}}
+            onSavePress={handleSavePress}
+            onChatPress={() => { openChat(navigation, user?.id, product.anunciante, user?.nome, anunciante.nome, threads) }}
           />
         </Pressable>
 
@@ -201,11 +200,17 @@ const ProductPage = ({ navigation, route }) => {
           </Artist>
           <ProductName>{product.titulo}</ProductName>
           <Labels>
-            <Label text="Para vestir" />
-            <Label text="GO" />
-            <Label text="Tecido" />
-            <Label icon="ampulheta" text="Encomenda" />
-            <Label icon="vegano" text="Vegano" />
+            {product?.categorias?.map(categoria => <Label key={categoria} text={categoria} />)}
+            {product?.materias?.map(materia => <Label key={materia} text={materia} />)}
+            {product?.regioes?.map(regiao => <Label key={regiao} text={regiao} />)}
+            {product.entrega?.includes("Pronta-entrega") && <Label text="Pronta-entrega" icon='check' />}
+            {product.entrega?.includes("Encomendas") && <Label text="Encomenda" icon='ampulheta' />}
+
+            {/* <Label text="Para vestir" /> */}
+            {/* <Label text="GO" /> */}
+            {/* <Label text="Tecido" /> */}
+            {/* <Label icon="ampulheta" text="Encomenda" />
+            <Label icon="vegano" text="Vegano" /> */}
           </Labels>
         </MainInfo>
         <Accordion title="Descrição" key={1}>
@@ -215,17 +220,34 @@ const ProductPage = ({ navigation, route }) => {
         {/* <Text>fsdlkfjsf</Text> */}
 
         <Accordion title="Opções de Compra" key={2}>
-          <Option>
-            <Label icon="ampulheta" />
-            <OptionDetails>
-              <OptionTitle>SOB ENCOMENDA</OptionTitle>
-              <OptionDescription>
-                Este produto é produzido sob encomenda. Para mais detalhes de
-                produção e pagamento, é preciso entrar em contato com o
-                vendedor.
-              </OptionDescription>
-            </OptionDetails>
-          </Option>
+          {product.entrega?.includes("Encomendas") &&
+            <Option>
+              <Label icon="ampulheta" />
+              <OptionDetails>
+                <OptionTitle>SOB ENCOMENDA</OptionTitle>
+                <OptionDescription>
+                  Este produto é produzido sob encomenda. Para mais detalhes de
+                  produção e pagamento, é preciso entrar em contato com o
+                  vendedor.
+                </OptionDescription>
+              </OptionDetails>
+            </Option>
+          }
+          {product.entrega?.includes("Pronta-entrega") &&
+            <Option>
+              <Label icon="check" />
+              <OptionDetails>
+                <OptionTitle>PRONTA ENTREGA</OptionTitle>
+                <OptionDescription>
+                  Este produto tem disponibilidade para pronta entrega. Para mais detalhes de
+                  pagamento, é preciso entrar em contato com o
+                  vendedor.
+                </OptionDescription>
+              </OptionDetails>
+            </Option>
+          }
+
+
           <AccessController profile="logado">
             <ContactButton>
               <ContactButtonText
