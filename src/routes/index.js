@@ -17,6 +17,7 @@ import CreateExpositorPage from "../pages/CreateExpositorPage";
 import MensagemPage from "../pages/MensagemPage";
 import CreateEvent from "../pages/CreateEvent";
 import CreateSpace from "../pages/CreateSpace";
+import CreditsPage from "../pages/CreditsPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import { useUserContext } from "../contexts/userContext";
 import TipsPage from "../pages/TipsPage";
@@ -97,6 +98,19 @@ const Routes = () => {
           component={MensagemPage}
         />
         <Stack.Screen
+          options={{
+            title: "CRÉDITOS",
+            ...headerStyle,
+            headerTitleStyle: {
+              fontFamily: "Raleway_600SemiBold",
+              fontSize: 18,
+              color: "#707070",
+            },
+          }}
+          name="CreditsPage"
+          component={CreditsPage}
+        />
+        <Stack.Screen
           options={{ title: "Adicionar Evento", ...headerStyle }}
           name="Criar Evento"
           component={CreateEvent}
@@ -112,12 +126,12 @@ const Routes = () => {
           component={NotFoundPage}
         />
         <Stack.Screen
-          options={{title: 'Configurações', ...headerStyle}}
+          options={{ title: "Configurações", ...headerStyle }}
           name="Configuracoes"
           component={SignUpPage}
         />
-        <Stack.Screen 
-          options={{title: 'Dicas Para Artistas', ...headerStyle}}
+        <Stack.Screen
+          options={{ title: "Dicas Para Artistas", ...headerStyle }}
           name="Tips"
           component={TipsPage}
         />

@@ -65,7 +65,6 @@ const HomePages = () => {
         name="Locais"
         component={Events}
       />
-
       {user ? (
         <Tab.Screen
           options={{
