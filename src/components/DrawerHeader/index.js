@@ -11,6 +11,7 @@ import {
 import AccessController from "../AccessController";
 import { useFilterContext } from '../../contexts/filterContext';
 import { useUserContext } from "../../contexts/userContext";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const DrawerHeader = ({ scene }) => {
   const currentPage = getFocusedRouteNameFromRoute(scene.route);
@@ -31,6 +32,12 @@ const DrawerHeader = ({ scene }) => {
         scene.descriptor.navigation.navigate("Criar Espaço");
       }
     } else scene.descriptor.navigation.navigate("NewProduct");
+  }
+
+  const handleAvatar = () => {
+    if(user.isExpositor) {
+      scene.descriptor.navigation.navigate("Página do Artista", {anunciante: user})
+    }
   }
 
   return (
@@ -66,13 +73,15 @@ const DrawerHeader = ({ scene }) => {
           </IconContainer>
         </AccessController>
         <AccessController profile="logado">
-          <UserMiniAvatar 
-            source={
-              { uri: user?.foto } || {
-                uri: "https://source.unsplash.com/featured/412x115/?craft",
+          <TouchableOpacity onPress={handleAvatar}>
+            <UserMiniAvatar 
+              source={
+                { uri: user?.foto } || {
+                  uri: "https://source.unsplash.com/featured/412x115/?craft",
+                }
               }
-            }
-          />
+            />
+          </TouchableOpacity>
         </AccessController>
       </Container>
     </MainContainer>

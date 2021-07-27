@@ -4,7 +4,7 @@ import { View, Text, ActivityIndicator } from 'react-native';
 import Masonry from 'react-native-masonry-list';
 import Label from '../Label';
 
-const PhotosGrid = ({navigation, refreshing, products, addMore, editing, deleteItem}) => {
+const PhotosGrid = ({navigation, refreshFunction, refreshing, products, addMore, editing, deleteItem}) => {
 
     const goToProductPage = (product) => {
         navigation.navigate('ProductPage', {product});
@@ -14,6 +14,7 @@ const PhotosGrid = ({navigation, refreshing, products, addMore, editing, deleteI
         !refreshing ? 
         products.length > 0 ?
         <Masonry
+            onRefresh={refreshFunction ? refreshFunction : null}
             images={products}
             refreshing={refreshing}
             onEndReached={addMore ? addMore : () => {}} //addMore = function

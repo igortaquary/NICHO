@@ -54,7 +54,7 @@ const HomePage = ({navigation, route}) => {
             { loading ?
             <ActivityIndicator color="#019B92" style={{marginTop: "50%"}}/>
             :
-            <PhotosGrid products={products} refreshing={loading} navigation={navigation} /* addMore={ () => setPage(prev => prev++) }  *//>
+            <PhotosGrid refreshFunction={clearAllFilters} products={products} refreshing={loading} navigation={navigation} /* addMore={ () => setPage(prev => prev++) }  *//>
             }
         </View>
         
