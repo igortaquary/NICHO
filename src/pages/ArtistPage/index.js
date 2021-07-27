@@ -1,4 +1,4 @@
-﻿import React from "react";
+﻿import React, { useState, useEffect, useLayoutEffect } from "react";
 import {
   Image,
   ScrollView,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Linking,
+  Alert
 } from "react-native";
 import { Feather, EvilIcons } from "@expo/vector-icons";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
@@ -13,20 +14,19 @@ import Style from "./styles";
 import { ConvertWidth as cw } from "./../../components/Converter";
 import Accordion from "../../components/Accordion";
 import Icon from "../../components/Icon";
-import { useState, useEffect, useCallback, useLayoutEffect } from "react";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import PhotosGrid from "../../components/PhotosGrid";
 import { useUserContext } from "../../contexts/userContext";
 import ImageView from "react-native-image-viewing";
 
-import { useFocusEffect } from "@react-navigation/native";
-
 export default function ArtistPage({ navigation, route }) {
   const anunciante = route.params.anunciante;
   const [profileImage, setProfileImage] = useState('https://source.unsplash.com/featured/?woman,photo');
   const [bannerImage, setBannerImage] = useState("https://source.unsplash.com/featured/412x115/?craft");
   const [images, setImages] = useState('https://source.unsplash.com/featured/?woman,photo');
+  
+  const [editing, setEditing] = useState(false);
 
   const [products, setProducts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -96,6 +96,55 @@ export default function ArtistPage({ navigation, route }) {
       return false;
     }
   };
+
+  const deleteProduct = (product_id) => {
+    const product_name = products.find(prod => prod.id === product_id).titulo;
+    console.log(product_name);
+    //const ref = firebase.storage().ref("user_products/" + anunciante.id + "/" + product_name).listAll();
+    const ref = firebase.storage().ref("user_products/" + anunciante.id + "/" + product_name);
+    ref.listAll()
+      .then(dir => {
+        dir.items.forEach(fileRef => {
+          deleteFile(ref.fullPath, fileRef.name);
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        Alert.alert("Algo deu errado", "Não foi possível excluir este produto, tente novamente");
+      });
+
+    firebase.firestore().collection("produto").doc(product_id).delete()
+      .then(() => {
+        fetchProducts();
+      })
+      .catch(error => {
+        console.log(error);
+        Alert.alert("Algo deu errado", "Não foi possível excluir este produto, tente novamente");
+      });
+    
+  }
+
+  const deleteFile = (pathToFile, fileName) => {
+    const ref = firebase.storage().ref(pathToFile);
+    const childRef = ref.child(fileName);
+    childRef.delete()
+  }
+
+  const confirmDelete = (product_id) => {
+    Alert.alert("Deseja excluir este produto?", "Esta ação não pode ser desfeita", 
+    [
+      {
+        text: "Deletar",
+        onPress: () => deleteProduct(product_id),
+        style: "destructive"
+      },
+      {
+        text: "Cancelar",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "default"
+      },
+    ] )
+  }
 
   return (
     <>
@@ -263,6 +312,23 @@ export default function ArtistPage({ navigation, route }) {
           marginBottom: 0,
         }}
       >
+        { user.id === anunciante.id && 
+        <View style={{marginLeft: 'auto', marginRight: 10}}>
+          <RoundedButton
+            onPress={() => setEditing(!editing)}
+            style={{...Style.followingButton, backgroundColor: editing ? "#019B92" : "#FFF"}}
+            textStyle={{...Style.followingButtonText, color: editing ? "#FFF" : "#707070"}}
+            text="Editar"
+            disabled={false}
+          >
+            <Icon
+              name="lapis"
+              size={cw(15)}
+              color={editing ? "#FFF" : "#707070"}
+              style={Style.chevronDownIcon}
+            />
+          </RoundedButton>
+        </View> }
         <Text
           style={[Style.myProductsText, refreshing && { marginBottom: -5 }]}
         >
@@ -273,6 +339,8 @@ export default function ArtistPage({ navigation, route }) {
             products={products}
             refreshing={refreshing}
             navigation={navigation}
+            editing={editing}
+            deleteItem={confirmDelete}
           />
         </View>
       </View>
