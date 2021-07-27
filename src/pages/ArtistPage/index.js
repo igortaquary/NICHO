@@ -25,6 +25,8 @@ export default function ArtistPage({ navigation, route }) {
   const [profileImage, setProfileImage] = useState('https://source.unsplash.com/featured/?woman,photo');
   const [bannerImage, setBannerImage] = useState("https://source.unsplash.com/featured/412x115/?craft");
   const [images, setImages] = useState('https://source.unsplash.com/featured/?woman,photo');
+  
+  const [editing, setEditing] = useState(false);
 
   const [products, setProducts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -310,6 +312,23 @@ export default function ArtistPage({ navigation, route }) {
           marginBottom: 0,
         }}
       >
+        { user.id === anunciante.id && 
+        <View style={{marginLeft: 'auto', marginRight: 10}}>
+          <RoundedButton
+            onPress={() => setEditing(!editing)}
+            style={{...Style.followingButton, backgroundColor: editing ? "#019B92" : "#FFF"}}
+            textStyle={{...Style.followingButtonText, color: editing ? "#FFF" : "#707070"}}
+            text="Editar"
+            disabled={false}
+          >
+            <Icon
+              name="lapis"
+              size={cw(15)}
+              color={editing ? "#FFF" : "#707070"}
+              style={Style.chevronDownIcon}
+            />
+          </RoundedButton>
+        </View> }
         <Text
           style={[Style.myProductsText, refreshing && { marginBottom: -5 }]}
         >
@@ -320,7 +339,7 @@ export default function ArtistPage({ navigation, route }) {
             products={products}
             refreshing={refreshing}
             navigation={navigation}
-            editing={user.id === anunciante.id}
+            editing={editing}
             deleteItem={confirmDelete}
           />
         </View>
