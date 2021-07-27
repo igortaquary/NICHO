@@ -20,7 +20,7 @@ const FollowingCard = ({ artistId, navigation }) => {
     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
   );
   const [firstProduct, setFirstProduct] = useState(
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+    "https://images.unsplash.com/photo-1508614999368-9260051292e5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
   );
   const getAnuncianteData = async () => {
     const userDocument = await firebase
@@ -45,11 +45,15 @@ const FollowingCard = ({ artistId, navigation }) => {
     let titulo;
     querySnapshot.forEach((doc) => (titulo = doc.data().titulo));
 
-    const uri = await firebase
-      .storage()
-      .ref("user_products/" + artistId + "/" + titulo + "/0")
-      .getDownloadURL();
-    setFirstProduct(uri);
+    try{
+      const uri = await firebase
+        .storage()
+        .ref("user_products/" + artistId + "/" + titulo + "/0")
+        .getDownloadURL();
+      setFirstProduct(uri);
+    }catch(e){
+
+    }
   };
 
   useEffect(() => {
