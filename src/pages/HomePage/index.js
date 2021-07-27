@@ -22,9 +22,6 @@ import Icon from "../../components/Icon";
 // const categories = [ "Adesivos", "Para vestir", "Para sua casa", "Papelaria", "Cosméticos", "Impressões", "Esculturas", "Desenhos", "Acessórios", "Pinturas" ];
 
 const HomePage = ({ navigation, route }) => {
-  const { products, loading, filters, setFilters, search, setPage } =
-    useFilterContext();
-
   const {
     products,
     loading,
