@@ -312,8 +312,13 @@ export default function ArtistPage({ navigation, route }) {
           marginBottom: 0,
         }}
       >
+        <Text
+          style={[Style.myProductsText, refreshing && { marginBottom: -5 }]}
+        >
+          Meus produtos
+        </Text>
         { user.id === anunciante.id && 
-        <View style={{marginLeft: 'auto', marginRight: 10}}>
+        <View style={{marginLeft: 'auto', marginRight: 'auto'}}>
           <RoundedButton
             onPress={() => setEditing(!editing)}
             style={{...Style.followingButton, backgroundColor: editing ? "#019B92" : "#FFF"}}
@@ -329,11 +334,6 @@ export default function ArtistPage({ navigation, route }) {
             />
           </RoundedButton>
         </View> }
-        <Text
-          style={[Style.myProductsText, refreshing && { marginBottom: -5 }]}
-        >
-          Meus produtos
-        </Text>
         <View style={{ flex: 1, width: "100%" }}>
           <PhotosGrid
             products={products}
