@@ -1,4 +1,4 @@
-﻿import React from "react";
+﻿import React, { useState, useEffect, useLayoutEffect } from "react";
 import {
   Image,
   ScrollView,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Linking,
+  Alert
 } from "react-native";
 import { Feather, EvilIcons } from "@expo/vector-icons";
 import RoundedButton from "../../components/RoundedButton/RoundedButton";
@@ -13,14 +14,11 @@ import Style from "./styles";
 import { ConvertWidth as cw } from "./../../components/Converter";
 import Accordion from "../../components/Accordion";
 import Icon from "../../components/Icon";
-import { useState, useEffect, useCallback, useLayoutEffect } from "react";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import PhotosGrid from "../../components/PhotosGrid";
 import { useUserContext } from "../../contexts/userContext";
 import ImageView from "react-native-image-viewing";
-
-import { useFocusEffect } from "@react-navigation/native";
 
 export default function ArtistPage({ navigation, route }) {
   const anunciante = route.params.anunciante;
@@ -96,6 +94,55 @@ export default function ArtistPage({ navigation, route }) {
       return false;
     }
   };
+
+  const deleteProduct = (product_id) => {
+    const product_name = products.find(prod => prod.id === product_id).titulo;
+    console.log(product_name);
+    //const ref = firebase.storage().ref("user_products/" + anunciante.id + "/" + product_name).listAll();
+    const ref = firebase.storage().ref("user_products/" + anunciante.id + "/" + product_name);
+    ref.listAll()
+      .then(dir => {
+        dir.items.forEach(fileRef => {
+          deleteFile(ref.fullPath, fileRef.name);
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        Alert.alert("Algo deu errado", "Não foi possível excluir este produto, tente novamente");
+      });
+
+    firebase.firestore().collection("produto").doc(product_id).delete()
+      .then(() => {
+        fetchProducts();
+      })
+      .catch(error => {
+        console.log(error);
+        Alert.alert("Algo deu errado", "Não foi possível excluir este produto, tente novamente");
+      });
+    
+  }
+
+  const deleteFile = (pathToFile, fileName) => {
+    const ref = firebase.storage().ref(pathToFile);
+    const childRef = ref.child(fileName);
+    childRef.delete()
+  }
+
+  const confirmDelete = (product_id) => {
+    Alert.alert("Deseja excluir este produto?", "Esta ação não pode ser desfeita", 
+    [
+      {
+        text: "Deletar",
+        onPress: () => deleteProduct(product_id),
+        style: "destructive"
+      },
+      {
+        text: "Cancelar",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "default"
+      },
+    ] )
+  }
 
   return (
     <>
@@ -273,6 +320,8 @@ export default function ArtistPage({ navigation, route }) {
             products={products}
             refreshing={refreshing}
             navigation={navigation}
+            editing={user.id === anunciante.id}
+            deleteItem={confirmDelete}
           />
         </View>
       </View>
