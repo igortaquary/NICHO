@@ -17,7 +17,7 @@ import CreateExpositorPage from "../pages/CreateExpositorPage";
 import MensagemPage from "../pages/MensagemPage";
 import CreateEvent from "../pages/CreateEvent";
 import CreateSpace from "../pages/CreateSpace";
-import CreditsPage from "./../pages/CreditsPage/index";
+import CreditsPage from "../pages/CreditsPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import { useUserContext } from "../contexts/userContext";
 import TipsPage from "../pages/TipsPage";
