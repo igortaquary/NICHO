@@ -35,9 +35,13 @@ export default function EventBlock({
     "NOV",
     "DEZ",
   ];
+  const scheduleString = moment(schedule).format(
+    "dddd, [à partir de] HH:mm[h]"
+  );
   const onEventClick = async () => {
     const images = [];
     const recommendations = [];
+
     for (let i = 0; i < 3; i++) {
       if (events[i].id != event.id) {
         recommendations.push(events[i]);
@@ -66,7 +70,7 @@ export default function EventBlock({
       <View>
         <TouchableOpacity
           activeOpacity={0.7}
-          style={{ ...Style.iconContainer, top: cw(173) }}
+          style={{ ...Style.iconContainer }}
         >
           <Icon
             name="compartilhar"
@@ -96,7 +100,7 @@ export default function EventBlock({
           <Text style={Style.additionalEventLocationAddress}>{address}</Text>
 
           <Text style={Style.additionalEventLocationTime}>
-            {moment(schedule).format("dddd, [à partir de] HH:mm[h]")}
+            {scheduleString[0].toUpperCase() + scheduleString.slice(1)}
           </Text>
         </View>
       </View>

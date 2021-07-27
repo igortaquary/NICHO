@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   HeaderContainer,
   FilterContainer,
@@ -9,26 +9,33 @@ import {
   CategoryText,
 } from "./styles";
 import PhotosGrid from "../../components/PhotosGrid";
-import { ActivityIndicator, View, TextInput } from "react-native";
+import {
+  ActivityIndicator,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { useFilterContext } from "../../contexts/filterContext";
+import { useUserContext } from "../../contexts/userContext";
 import Icon from "../../components/Icon";
 
-const categories = [
-  "Adesivos",
-  "Para vestir",
-  "Para sua casa",
-  "Papelaria",
-  "Cosméticos",
-  "Impressões",
-  "Esculturas",
-  "Desenhos",
-  "Acessórios",
-  "Pinturas",
-];
+// const categories = [ "Adesivos", "Para vestir", "Para sua casa", "Papelaria", "Cosméticos", "Impressões", "Esculturas", "Desenhos", "Acessórios", "Pinturas" ];
 
 const HomePage = ({ navigation, route }) => {
   const { products, loading, filters, setFilters, search, setPage } =
     useFilterContext();
+
+  const {
+    products,
+    loading,
+    filters,
+    setFilters,
+    search,
+    clearAllFilters,
+    subCategoriesFilter,
+    categorias,
+  } = useFilterContext();
+  const [searchTerm, setSearchTerm] = useState();
 
   return (
     <View style={{ flex: 1, backgroundColor: "#FFF" }}>
@@ -36,11 +43,11 @@ const HomePage = ({ navigation, route }) => {
         <FilterContainer>
           <Filters showsHorizontalScrollIndicator={false} horizontal={true}>
             {filters.category && (
-              <CategoryContainer onPress={() => setFilters({})}>
+              <CategoryContainer onPress={clearAllFilters}>
                 <CategoryText selected={false}>Todos</CategoryText>
               </CategoryContainer>
             )}
-            {categories.map((item, i) => (
+            {categorias.map((item, i) => (
               <CategoryContainer
                 key={i}
                 onPress={() => setFilters({ category: item })}
@@ -61,16 +68,29 @@ const HomePage = ({ navigation, route }) => {
           <Icon name="busca" size={16} color={"#707070"} />
           <TextInput
             placeholder="Pesquise por itens"
-            style={{ marginLeft: 8, width: "100%" }}
+            style={{ marginLeft: 8, marginRight: 8, flexGrow: 90 }}
             returnKeyType="search"
             onSubmitEditing={(e) => search(e.nativeEvent.text)}
+            onChange={(e) => setSearchTerm(e.nativeEvent.text)}
+            value={searchTerm}
           />
+          {searchTerm !== null && searchTerm?.length > 0 && (
+            <TouchableOpacity
+              onPress={() => {
+                setSearchTerm();
+                clearAllFilters();
+              }}
+            >
+              <Icon name="x" size={12} color={"#707070"} />
+            </TouchableOpacity>
+          )}
         </SearchContainer>
       </HeaderContainer>
       {loading ? (
         <ActivityIndicator color="#019B92" style={{ marginTop: "50%" }} />
       ) : (
         <PhotosGrid
+          refreshFunction={clearAllFilters}
           products={products}
           refreshing={loading}
           navigation={

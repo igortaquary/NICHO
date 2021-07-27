@@ -10,10 +10,13 @@ const SavedPage = ({navigation}) => {
     const {collections} = useUserContext();
     const [searchText, setSeachText] = useState('');
 
+    // console.log('--------------------------------------------------')
+    // console.log(collections)
+
     const renderItem = (item, index) => {
     return (
         <SavedCard
-            onPress={() => navigation.navigate('Collection', {titulo: item.item.titulo, produtos: item.item.produtos})}
+            onPress={() => navigation.navigate('Collection', {titulo: item.item.titulo, produtos: item.item.produtos, colecao: item.item.ref})}
             images={item.item.produtos}
             label={item.item.titulo}
             labelStyle={{

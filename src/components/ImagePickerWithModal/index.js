@@ -12,7 +12,6 @@ import Style from "./styles";
 import { ConvertWidth as cw } from "../Converter";
 
 export async function pickImage(index, images, setImages) {
-  console.log("index: " + index);
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (status !== "granted") {
     Alert.alert(
@@ -47,16 +46,12 @@ export function addImage(newImage, images, setImages) {
 }
 
 export function removeImage(index, images, setImages) {
-  console.log("o que chegou no remove: " + index);
-  console.log(images);
-
   let auxImages = [...images];
   auxImages.splice(index, 1);
   setImages(auxImages);
 }
 
 export function changeImage(image, index, images, setImages) {
-  console.log("change");
   let auxImages = [...images];
   auxImages.splice(index, 1, image);
   setImages(auxImages);

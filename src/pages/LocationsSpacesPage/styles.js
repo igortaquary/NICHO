@@ -60,15 +60,16 @@ export default StyleSheet.create({
     marginLeft: cw(3),
   },
 
-  iconContainer: {
+  iconButtonsContainer: {
     position: "absolute",
-    top: cw(263.7),
-    left: cw(370),
-    marginRight: cw(16),
+    top: cw(168.7),
+    left: cw(355.17),
+  },
+
+  iconButton: {
     marginBottom: cw(10),
 
     justifyContent: "center",
-    alignItems: "center",
 
     zIndex: 1,
     width: cw(28),
@@ -111,6 +112,5 @@ export default StyleSheet.create({
 
   businessHoursTextDay: {
     fontFamily: "Raleway_600SemiBold",
-    fontSize: cw(10),
   },
 });

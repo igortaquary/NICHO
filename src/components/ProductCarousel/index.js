@@ -9,10 +9,11 @@ import {
   CurrentIndicator,
   LeftFixedIcons,
   RightFixedIcons,
-  IconContainer
+  IconContainer,
+  IconContainer2
 } from './styles';
 
-const ProductCarousel = ({ data, onSavePress, preco }) => {
+const ProductCarousel = ({ data, onSavePress, preco, onChatPress, onImagePress }) => {
 
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -40,14 +41,14 @@ const ProductCarousel = ({ data, onSavePress, preco }) => {
         </ScrollView>
         <LeftFixedIcons>
           <Text style={{padding: 10, color: 'white', backgroundColor: 'rgba(0,0,0,0.67)', borderRadius: 50, marginBottom: 10}}>R$ {preco}</Text>
-          <IconContainer>
-            <Icon name="comprar" size={16} color="black" style={{}} />
+          <IconContainer onPress={onChatPress}>
+            <Icon name="chat" size={16} color="black" style={{}} />
           </IconContainer>
         </LeftFixedIcons>
         <RightFixedIcons>
-          <IconContainer style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
+          <IconContainer2 style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
            <Icon name="compartilhar" size={16} color="white" />
-          </IconContainer>
+          </IconContainer2>
           <IconContainer onPress={onSavePress} style={{backgroundColor: 'rgba(0,0,0,0.67)'}}>
             <Icon name="salvar" size={16} color="white" />
           </IconContainer>

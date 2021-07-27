@@ -12,7 +12,11 @@ export default StyleSheet.create({
     alignItems: "center",
   },
 
-  coverContainer: {},
+  coverContainer: {
+    width: 414,
+    height: 115,
+    backgroundColor: "#F0F0F0",
+  },
 
   coverImage: {
     width: 414,
@@ -36,6 +40,7 @@ export default StyleSheet.create({
     width: cw(96),
     height: cw(96),
     borderRadius: cw(48),
+    backgroundColor: "#FFFFFF",
 
     position: "absolute",
     zIndex: 1,
@@ -82,7 +87,10 @@ export default StyleSheet.create({
   },
 
   networkIcon: {
-    top: cw(-6),
+
+    top: cw(-7.5),
+    right: cw(1),
+
   },
 
   dotIcon: {
@@ -103,7 +111,6 @@ export default StyleSheet.create({
   iconButton: {
     width: cw(22),
     height: cw(22),
-
     borderWidth: cw(1),
     borderRadius: cw(11),
     borderColor: "#019B92",

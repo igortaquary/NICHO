@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Feather } from "@expo/vector-icons";
 import {
   KeyboardAvoidingView,
@@ -37,7 +37,7 @@ import { useUserContext } from "../../contexts/userContext";
 const SignUpPage = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [user, setUser] = useState("");
+  const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const [gender, setGender] = useState("");
@@ -45,7 +45,20 @@ const SignUpPage = ({ navigation }) => {
   const [newsletter, setNewsletter] = useState(false);
   const [image, setImage] = useState("");
 
-  const { SignUp } = useUserContext();
+  const { SignUp, user, UpdateUser } = useUserContext();
+
+  useEffect(() => {
+    if (user) {
+      setName(user.nome);
+      setEmail(user.email);
+      setGender(user.genero);
+      setRegion(user.regiao);
+      setUsuario(user.usuario);
+      setImage(user.foto);
+      setPassword("placeholder");
+      setConfirmation("placeholder");
+    }
+  }, []);
 
   const handlePress = async () => {
     if (!email) {
@@ -58,7 +71,7 @@ const SignUpPage = ({ navigation }) => {
       await SignUp(
         name,
         email,
-        user,
+        usuario,
         password,
         gender,
         region,
@@ -70,6 +83,32 @@ const SignUpPage = ({ navigation }) => {
 
     setPassword("");
     setConfirmation("");
+  };
+
+  const handleUpdate = async () => {
+    if (!email) {
+      Alert.alert("Email field is required.");
+    } else if (!password) {
+      Alert.alert("Password field is required.");
+    } else if (password != confirmation) {
+      Alert.alert("Password and confirmation are not the same.");
+    } else {
+      await UpdateUser(
+        user.id,
+        name,
+        email,
+        usuario,
+        password,
+        gender,
+        region,
+        newsletter,
+        navigation,
+        image
+      ).then(Alert.alert("Dados attualizados com sucesso!"));
+    }
+
+    setPassword("placeholder");
+    setConfirmation("placeholder");
   };
 
   const pickImage = async () => {
@@ -152,7 +191,10 @@ const SignUpPage = ({ navigation }) => {
                 size={16}
                 color="#707070"
               />
-              <TextInput value={user} onChangeText={(user) => setUser(user)} />
+              <TextInput
+                value={usuario}
+                onChangeText={(user) => setUsuario(user)}
+              />
             </InputContainer>
           </Input>
 
@@ -214,8 +256,33 @@ const SignUpPage = ({ navigation }) => {
                 onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}
               >
                 <Pickerr.Item label="selecionar..." value={null} />
-                <Pickerr.Item label="Distrito Federal" value="DF" />
+                <Pickerr.Item label="Acre" value="AC" />
+                <Pickerr.Item label="Alagoas" value="AL" />
+                <Pickerr.Item label="Amapá" value="AP" />
+                <Pickerr.Item label="Amazonas" value="AM" />
                 <Pickerr.Item label="Bahia" value="BA" />
+                <Pickerr.Item label="Ceará" value="CE" />
+                <Pickerr.Item label="Espírito Santo" value="ES" />
+                <Pickerr.Item label="Goiás" value="GO" />
+                <Pickerr.Item label="Maranhão" value="MA" />
+                <Pickerr.Item label="Mato Grosso" value="MT" />
+                <Pickerr.Item label="Mato Grosso do Sul" value="MS" />
+                <Pickerr.Item label="Minas Gerais" value="MG" />
+                <Pickerr.Item label="Pará" value="PA" />
+                <Pickerr.Item label="Paraíba" value="PB" />
+                <Pickerr.Item label="Paraná" value="PR" />
+                <Pickerr.Item label="Pernambuco" value="PE" />
+                <Pickerr.Item label="Piauí" value="PI" />
+                <Pickerr.Item label="Rio de Janeiro" value="RJ" />
+                <Pickerr.Item label="Rio Grande do Norte" value="RN" />
+                <Pickerr.Item label="Rio Grande do Sul" value="RS" />
+                <Pickerr.Item label="Rondônia" value="RO" />
+                <Pickerr.Item label="Roraima" value="RR" />
+                <Pickerr.Item label="Santa Catarina" value="SC" />
+                <Pickerr.Item label="São Paulo" value="SP" />
+                <Pickerr.Item label="Sergipe" value="SE" />
+                <Pickerr.Item label="Tocantins" value="TO" />
+                <Pickerr.Item label="Distrito Federal" value="DF" />
               </Pickerr>
             </Option>
             <Option>
@@ -250,9 +317,15 @@ const SignUpPage = ({ navigation }) => {
             </NewsletterText>
           </Newsletter>
 
-          <Button onPress={handlePress}>
-            <ButtonText>Criar conta</ButtonText>
-          </Button>
+          {user ? (
+            <Button onPress={handleUpdate}>
+              <ButtonText>Atualizar</ButtonText>
+            </Button>
+          ) : (
+            <Button onPress={handlePress}>
+              <ButtonText>Criar conta</ButtonText>
+            </Button>
+          )}
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>
