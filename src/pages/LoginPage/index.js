@@ -43,9 +43,9 @@ const LoginPage = ({ navigation }) => {
 
   const handlePress = () => {
     if (!email) {
-      Alert.alert("Email field is required.");
+      Alert.alert("Email inválido", "Por favor, insira seu email.");
     } else if (!password) {
-      Alert.alert("Password field is required.");
+      Alert.alert("Senha incorreta", "Por favor, digite sua senha.");
     } else {
       SignIn(email, password, navigation);
     }

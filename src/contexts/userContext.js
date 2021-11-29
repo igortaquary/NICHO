@@ -12,6 +12,7 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { errors } from "../api/errors/errors";
 
 const UserContext = createContext({});
 
@@ -29,19 +30,18 @@ const UserProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const cat = []
+    const cat = [];
     firebase
       .firestore()
       .collection("usuario")
       .get()
-      .then(querySnapshot => {
+      .then((querySnapshot) => {
         // console.log(querySnapshot)
       });
-      // setCategories(cat)
+    // setCategories(cat)
   }, []);
 
   useEffect(() => {
-
     if (user) {
       loadCollections();
     }
@@ -89,28 +89,37 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const tempThreads = async () => {
-      const tempThreads1 = await Promise.all(threads1.map(async item => {
-        const img = await firebase.storage().ref("user_photo/" + item.uid2).getDownloadURL();
-        return {
-          ...item,
-          img: img,
-        }
-      }));
-      const tempThreads2 = await Promise.all(threads2.map(async (item) => {
-        const img = await firebase.storage().ref("user_photo/" + item.uid1).getDownloadURL();
-        return {
-          ...item,
-          img: img,
-        };
-      }));
-      return [...tempThreads1, ...tempThreads2].sort((x, y) => y.createdAt - x.createdAt);
-    }
-    tempThreads().then(result => {
-      setThreads(
-        result
+      const tempThreads1 = await Promise.all(
+        threads1.map(async (item) => {
+          const img = await firebase
+            .storage()
+            .ref("user_photo/" + item.uid2)
+            .getDownloadURL();
+          return {
+            ...item,
+            img: img,
+          };
+        })
       );
+      const tempThreads2 = await Promise.all(
+        threads2.map(async (item) => {
+          const img = await firebase
+            .storage()
+            .ref("user_photo/" + item.uid1)
+            .getDownloadURL();
+          return {
+            ...item,
+            img: img,
+          };
+        })
+      );
+      return [...tempThreads1, ...tempThreads2].sort(
+        (x, y) => y.createdAt - x.createdAt
+      );
+    };
+    tempThreads().then((result) => {
+      setThreads(result);
     });
-
   }, [threads1, threads2]);
 
   async function onAuthStateChanged(user_firebase) {
@@ -143,7 +152,9 @@ const UserProvider = ({ children }) => {
           .get();
         const firstImage = await firebase
           .storage()
-          .ref("user_products/" + product.anunciante + "/" + product.titulo + "/0")
+          .ref(
+            "user_products/" + product.anunciante + "/" + product.titulo + "/0"
+          )
           .getDownloadURL();
         auxProdutos.push({
           ...produto.data(),
@@ -174,15 +185,17 @@ const UserProvider = ({ children }) => {
 
   const removeProductFromCollection = async (id, doc) => {
     const products = await doc.get();
-    if(products.data().produtos.length === 1){
-      await doc.delete()
-    }else {
+    if (products.data().produtos.length === 1) {
+      await doc.delete();
+    } else {
       const res = await doc.update({
-        produtos: products.data().produtos.filter(product => product.id != id)
+        produtos: products
+          .data()
+          .produtos.filter((product) => product.id != id),
       });
     }
-    loadCollections()
-  }
+    loadCollections();
+  };
 
   const addProductToNewCollection = async (product, newCollectionTitle) => {
     await firebase
@@ -241,10 +254,16 @@ const UserProvider = ({ children }) => {
   };
 
   const SignIn = async (email, password, navigation) => {
-    const loggedUid = await signIn(email, password);
-    const currentUser = await fetchUser(loggedUid);
-    setUser(currentUser);
-    navigation.navigate("Main");
+    try {
+      const loggedUid = await signIn(email, password);
+      const currentUser = await fetchUser(loggedUid);
+      setUser(currentUser);
+      navigation.navigate("Main");
+    } catch (err) {
+      console.log(err);
+      const error = errors[err.code];
+      Alert.alert(error.header, error.message);
+    }
   };
 
   const SignUp = async (
@@ -313,7 +332,7 @@ const UserProvider = ({ children }) => {
           threads,
           followArtist,
           UpdateUser,
-          removeProductFromCollection
+          removeProductFromCollection,
         }}
       >
         {children}
